@@ -1,0 +1,50 @@
+/* Styles for divag speciel features */
+
+.sm2-inline-list {
+ display:none;
+}
+
+.myShortcut {
+color:black;
+text-decoration:none;
+}
+
+.myShortcut span {
+	padding-left: 23px;
+}
+
+.myShortcutPlaying {
+color:red;
+text-decoration:none;
+}
+.myShortcutPaused{
+color:red;
+text-decoration:blink;
+}
+
+.myShortcut {
+cursor:pointer;
+}
+
+.myShortcut span {
+background-position:left -2px;
+background-repeat:no-repeat;
+height:22px;
+background-image:url(originaux/360-button-play.gif);
+}
+.myShortcut span:hover {
+background-image:url(originaux/360-button-play-light.gif);
+}
+.myShortcutPlaying span {
+background-image:url(originaux/360-button-play-light.gif);
+}
+.myShortcutPlaying span:hover {
+background-image:url(originaux/360-button-pause-light.gif);
+}
+.myShortcutPaused span {
+background-image:url(originaux/360-button-pause.gif);
+}
+.myShortcutPaused span:hover {
+background-image:url(originaux/360-button-play-light.gif);
+}
+

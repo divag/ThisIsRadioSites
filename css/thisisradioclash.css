@@ -1,0 +1,279 @@
+body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #000000;
+	font-size: 12px;
+	width:800px;
+}
+
+img {
+	border-width: 0px;
+}
+
+a {
+	font-weight: bold;
+	color: #000000;
+	text-decoration: none;
+	outline:0;
+}
+
+a span {
+	text-decoration: underline;
+}
+
+.underline {
+	text-decoration: underline;
+}
+
+/* 
+ENTETE : 
+========
+*/
+
+h1.entete {
+	position: relative;
+    left:50px;
+}
+
+h1.entete span {
+	visibility:hidden;
+	display:none;
+}
+
+img.entete {
+	width:461px;
+	height:93px;
+}
+
+img.enteteSmall {
+	width:230px;
+	height:46px;
+}
+
+/* 
+MENU : 
+======
+*/
+
+div.menu ul li {
+	float: left;
+	list-style-type: none;
+	margin-bottom:15px;
+}
+
+div.menu ul li span {
+	visibility:hidden;
+	display:none;
+}
+
+ul.menu li {
+	margin-right:0px;
+	width: 125px;
+}
+ul.menu li img {
+	width: 125px;
+	height: 58px;
+}
+
+ul.menuSmall li {
+	margin-right:0px;
+	width: 125px;
+}
+
+ul.menuSmall li img {
+	width: 125px;
+	height: 58px;
+}
+
+/* 
+Page LISTEN : 
+=============
+*/
+
+ul.listeEmissions{
+	width: 100%;
+}
+
+ul.listeEmissions li img{
+	width: 126px;
+	height: 126px;
+}
+
+ul.listeEmissions li {
+	float: left;
+	list-style-type: none;
+	width: 126px;
+	margin-left:5px;
+	margin-bottom:15px;
+}
+
+span.lienEmission {
+	font-weight: bold;
+	text-decoration:uppercase;
+	font-variant: small-caps;
+}
+
+li.proposez {
+	text-align:center;
+}
+
+ul.listeEmissionsComingSoon li {
+	list-style-type: none;
+	margin-bottom:5px;
+}
+
+.titre {
+}
+
+.participants {
+	color:gray;
+}
+
+.sortie {
+	color:gray;
+	font-weight:bold;
+}
+
+/* 
+Page PLAYLIST : 
+===============
+*/
+.metadata {
+	position: absolute;
+	top: 4px;
+	left: 0px;
+	width: 250px;
+}
+
+/*
+Page NEWS :
+===========
+*/
+
+.imageNews  {
+	width:5%;
+	vertical-align:top;
+	padding-top:20px;
+	padding-left:10px;
+}
+
+/* 
+Textes et mises en formes : 
+===========================
+*/
+
+.pageContent {
+	width:100%;
+	padding-left:20px;
+	padding-right:20px;
+}
+
+table.maxSize {
+     width:100%
+}
+
+.texteAccueil {
+	text-align:right;
+}
+
+.presentation {
+	font-size: 13px;
+	font-weight:bold;
+}
+
+.translate {
+	font-weight:bold;
+	font-style:italic;
+}
+
+.red {
+	color:red;
+}
+
+.gris {
+	color:gray;
+}
+
+.gras {
+	font-weight:bold;
+}
+
+.italique {
+	font-style:italic;
+}
+
+.big {
+	font-size:14px;
+}
+
+.right {
+	text-align:right;
+	margin-right:5px;
+}
+
+.center {
+	text-align:center;
+}
+
+.top {
+	vertical-align:top;
+}
+
+/* 
+FOOTER : 
+========
+*/
+
+.footerHosting {
+	width:100%;
+	text-align:right;
+	font-size: 10px;
+}
+
+.metadataShortCut {
+	color:black;
+}
+.metadataShortCutPlaying {
+	color:red;
+}
+/*
+.titreEmission {
+	font-weight: bold;
+	float: none;
+	font-variant: small-caps;
+	color: rgb(0, 0, 0);
+	text-decoration: underline;
+	font-style: normal;
+}
+*/
+.nomEmission{
+	/*padding-top:0px;*/
+	vertical-align:top;
+	color: rgb(0, 0, 0);
+	font-style:normal;
+	text-decoration:none;
+}
+.nomEmission font{
+	position:relative;
+	top:-3px;
+}
+
+.linkTeaser {
+	text-decoration:none;
+}
+
+.playlistCell {
+	width:544px;
+	padding-left:5px;
+}
+.playerCell {
+	width:270px;
+}
+.mp3link {
+	font-size:12px;
+	position:relative;
+	top:2px;
+}
+.titreEmission {
+	margin-top:0px;
+	padding-top:0px;
+}
