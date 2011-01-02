@@ -157,7 +157,7 @@ function display(page)
 	document.getElementById('playlists').style.display = 'none';
 	document.getElementById('playlist').style.display = 'none';
 	document.getElementById('users').style.display = 'none';
-	document.getElementById('news').style.display = 'none';
+	document.getElementById('contenu').style.display = 'none';
 	document.getElementById('home').style.display = 'none';
 	
 	document.getElementById(page).style.display = 'block';
@@ -167,7 +167,7 @@ function display(page)
 		document.getElementById('buttonMenuhome').style.color = 'black';
 		document.getElementById('buttonMenuplaylists').style.color = 'black';
 		document.getElementById('buttonMenuusers').style.color = 'black';
-		document.getElementById('buttonMenunews').style.color = 'black';
+		document.getElementById('buttonMenucontenu').style.color = 'black';
 		
 		document.getElementById('texteChef').style.display = 'none';
 		document.getElementById('mailAdmin').style.display = 'none';
@@ -176,14 +176,14 @@ function display(page)
 			document.getElementById('buttonMenuusers').style.display = 'none';
 			
 		if (!haveContenuPages)
-			document.getElementById('buttonMenunews').style.display = 'none';
+			document.getElementById('buttonMenucontenu').style.display = 'none';
 	}
 	else
 	{
 		document.getElementById('buttonMenuhome').style.display = 'none';
 		document.getElementById('buttonMenuplaylists').style.display = 'none';
 		document.getElementById('buttonMenuusers').style.display = 'none';
-		document.getElementById('buttonMenunews').style.display = 'none';
+		document.getElementById('buttonMenucontenu').style.display = 'none';
 		
 		document.getElementById('ajoutEmission').style.display = 'none';
 		document.getElementById('txtEnvoiMail').value = '';
@@ -269,7 +269,7 @@ function display(page)
 		currentItem = '';
 	}	
 	
-	if (page == "news")
+	if (page == "contenu")
 	{
 		refreshNewsFormZone();
 	}
