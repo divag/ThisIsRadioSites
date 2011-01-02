@@ -289,6 +289,24 @@ function dbGetUtilisateurByMail($p_mail_utilisateur){
 		return 0;
 }
 
+//Checke le mot de passe d'un utilisateur :
+function dbCheckPass($p_nom_utilisateur, $p_password_utilisateur){
+
+    include('var.php');
+
+	$query = "SELECT id, nom, login_forum, url_site, mail, password FROM UTILISATEUR WHERE nom = '".urldecode($p_nom_utilisateur)."' AND password = '".urldecode($p_password_utilisateur)."';";
+	$link=mysql_connect($hote,$login,$passwd); 
+	mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+	mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+		return true;
+	else
+		return false;
+}
+
 //check si l'email exist :
 function dbExistsMail($p_mail_utilisateur){
 
