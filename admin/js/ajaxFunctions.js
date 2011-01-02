@@ -460,10 +460,12 @@ function hideCompleteParticipant(nomParticipant)
 function createLigneParticipantEmission(participantData)
 {
 	var col1 = document.createElement('td');
+	col1.style.width = '40px';
+	col1.style.textAlign = 'left';
 	
 	var radio = document.createElement('input');
 	radio.type = 'radio';
-	radio.style.textAlign = 'center';
+	radio.style.color = 'yellow';
 	radio.checked = (participantData.est_chef == 1);
 	radio.onclick = function () {
 		getDatas('dbUpdateChefEmission', '', 'numero=' + currentItem.numero + '&nom=' + encode(participantData.nom_utilisateur));
@@ -482,6 +484,7 @@ function createLigneParticipantEmission(participantData)
 	
 	var linkMonter = document.createElement('input');
 	linkMonter.type = 'button';
+	linkMonter.className = 'button';
 	linkMonter.value = '+';
 	linkMonter.disabled = (participantData.ordre == 1);
 	linkMonter.onclick = function () {
@@ -492,6 +495,7 @@ function createLigneParticipantEmission(participantData)
 	
 	var linkDescendre = document.createElement('input');
 	linkDescendre.type = 'button';
+	linkDescendre.className = 'button';
 	linkDescendre.value = '-';
 	linkDescendre.disabled = (participantData.ordre == participantsEmission.length);
 	linkDescendre.onclick = function () {
@@ -506,6 +510,7 @@ function createLigneParticipantEmission(participantData)
 	
 	var deleteParticipant = document.createElement('input');
 	deleteParticipant.type = 'button';
+	deleteParticipant.className = 'button';
 	deleteParticipant.value = 'Supprimer';
 	deleteParticipant.onclick = function() {
 		if (confirm('Etes-vous certain de vouloir supprimer ce participant ?'))
@@ -518,6 +523,7 @@ function createLigneParticipantEmission(participantData)
 	
 	var completeParticipant = document.createElement('input');
 	completeParticipant.type = 'button';
+	completeParticipant.className = 'button';
 	
 	if (participantData.existe == 0)
 	{
@@ -554,7 +560,8 @@ function createLigneParticipantEmission(participantData)
 	{
 		var envoyerInfosChef = document.createElement('input');
 		envoyerInfosChef.type = 'button';	
-		envoyerInfosChef.value = 'Envoyer infos de connexion CHEF';
+		envoyerInfosChef.className = 'button';	
+		envoyerInfosChef.value = 'Envoyer les infos CHEF';
 		envoyerInfosChef.onclick = function() {
 			showWait();
 			getDatas('sendMailAjax', '', 'nom=' + encode(participantData.nom_utilisateur));
@@ -578,17 +585,17 @@ function createLigneParticipantEmission(participantData)
 	{
 		if (participantData.est_chef_complet == 1)
 		{
-			col3.style.backgroundImage = 'url(css/chef_ok.gif)';
-			col3.style.backgroundPosition = 'center';
-			col3.style.backgroundRepeat = 'repeat-x';
-			col3.className = 'etat21';
+			col1.style.backgroundImage = 'url(css/chef_ok.gif)';
+			col1.style.backgroundPosition = 'right';
+			col1.style.backgroundRepeat = 'no-repeat';
+			//col1.className = 'etat21';
 		}
 		else
 		{
-			col3.style.backgroundImage = 'url(css/chef_ko.gif)';
-			col3.style.backgroundPosition = 'center';
-			col3.style.backgroundRepeat = 'repeat-x';
-			col3.className = 'etat22';
+			col1.style.backgroundImage = 'url(css/chef_ko.gif)';
+			col1.style.backgroundPosition = 'right';
+			col1.style.backgroundRepeat = 'no-repeat';
+			//col1.className = 'etat22';
 		}
 	}
 	
@@ -629,6 +636,7 @@ function createLigneUtilisateur(userData)
 		
 	var modifieUser = document.createElement('input');
 	modifieUser.type = 'button';
+	modifieUser.className = 'button';
 	modifieUser.value = 'Modifier';
 	modifieUser.onclick = function() {
 		showModifieUtilisateur(userData.nom);
@@ -637,6 +645,7 @@ function createLigneUtilisateur(userData)
 	
 	var envoyerInfosChef = document.createElement('input');
 	envoyerInfosChef.type = 'button';	
+	envoyerInfosChef.className = 'button';	
 	envoyerInfosChef.value = 'Envoyer infos de connexion CHEF';
 	envoyerInfosChef.onclick = function() {
 		showWait();
@@ -711,7 +720,7 @@ function createLigneEditUser(userData, nomParticipant)
 	var trNom = document.createElement('tr');
 	var tdNom1 = document.createElement('td');
 	tdNom1.width = '50%';
-	tdNom1.innerHTML = "<b><u>Nom (<font style='color:red;'>PAS D'ACCENT!!</font>) :</u></b>";
+	tdNom1.innerHTML = "<b><u>Nom :</u></b>";
 	var tdNom2 = document.createElement('td');
 	tdNom2.width = '50%';
 	
@@ -878,6 +887,7 @@ function createLigneEditUser(userData, nomParticipant)
 
 	var cancelButton = document.createElement('input');
 	cancelButton.type = "button";
+	cancelButton.className = "button";
 	cancelButton.value = "Annuler";
 	cancelButton.onclick = function() {
 		hideCompleteParticipant(nomUser);
@@ -886,6 +896,7 @@ function createLigneEditUser(userData, nomParticipant)
 	var validateButton = document.createElement('input');
 	validateButton.id = "formUserValidate" + nomUser;
 	validateButton.type = "button";
+	validateButton.className = "button";
 	if (nomParticipant != '' || nomUser == '')
 		validateButton.value = "Créer";
 	else
@@ -922,6 +933,7 @@ function createLigneEditUser(userData, nomParticipant)
 
 	var deleteButton = document.createElement('input');
 	deleteButton.type = "button";
+	deleteButton.className = "button";
 	deleteButton.value = "Supprimer";
 	deleteButton.style.color = "red";
 	deleteButton.style.display = "none";
@@ -1630,6 +1642,7 @@ function createLigneParticipantPlaylist(participantData)
 	
 	var btnValider = document.createElement('input');
 	btnValider.type = 'button';
+	btnValider.className = 'button';
 	btnValider.value = 'Valider';
 	btnValider.id = 'btnValiderPlaylist' + participantData.nom_utilisateur;
 	btnValider.onclick = function() {
@@ -1704,6 +1717,7 @@ function createLigneParticipantPlaylist(participantData)
 	
 	var btnCorriger = document.createElement('input');
 	btnCorriger.type = 'button';
+	btnCorriger.className = 'button';
 	btnCorriger.value = '<< Corriger';
 	btnCorriger.style.display = 'none';
 	btnCorriger.id = 'btnCorrigerPlaylist' + participantData.nom_utilisateur;
@@ -1718,6 +1732,7 @@ function createLigneParticipantPlaylist(participantData)
 	
 	var btnEnregistrer = document.createElement('input');
 	btnEnregistrer.type = 'button';
+	btnEnregistrer.className = 'button';
 	btnEnregistrer.value = '>> Enregistrer !';
 	btnEnregistrer.datas = new Array();
 	btnEnregistrer.style.display = 'none';

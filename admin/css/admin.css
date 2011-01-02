@@ -22,21 +22,28 @@
 	height:100%;
 	z-index:10;
 	position: absolute;
-	opacity: 0.5;
 	position: fixed;
 }
 
 #divWait img, #divWait span {
 	text-align:center;
 	opacity: 1;
-	font-weight:bolder;
 }
 
 #divWait div {
 	position:relative;
 	top:150px;
 	z-index:11;
+	background-color:#eee;
+	border-width:1px;
+	border-style:solid;
+	border-color:black;
+	width:400px;
+	margin-left:auto;
+	margin-right:auto;
+	padding:10px;
 }
+
 #adminContent {
 	width:auto;
 }
@@ -151,14 +158,26 @@ img.thumbEmission {
 }
 
 #menuAdmin {
+/*
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
+*/
 }
 
 #menuAdmin input {
 	border: 1px solid rgb(0, 0, 0);
-	background-color: rgb(218, 218, 218);
+	background-color:#eee;
 	margin-bottom: -1px;
+	padding-bottom: 3px;
+	height:22px;
+}
+
+h3 input {
+	border: 1px solid rgb(0, 0, 0);
+	background-color:#eee;
+	margin-bottom: -1px;
+	padding-bottom: 3px;
+	height:22px;
 }
 
 #listeParticipants {
