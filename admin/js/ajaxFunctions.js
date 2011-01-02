@@ -1749,7 +1749,7 @@ function createLigneParticipantPlaylist(participantData)
 	var br3 = document.createElement('br');
 	
 	var liParticipant = document.createElement('li');
-	liParticipant.innerHTML = participantData.nom_utilisateur;
+	liParticipant.innerHTML = "<b><u>" + participantData.nom_utilisateur + "</u></b>";
 	
 	liParticipant.appendChild(br1);
 	liParticipant.appendChild(txtMorceaux);

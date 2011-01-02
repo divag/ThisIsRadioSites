@@ -83,6 +83,13 @@ tr.etat11:hover, tr.etat12:hover, tr.etat21:hover, tr.etat22:hover, tr.etat31:ho
 
 fieldset {
 	width:90%;
+	border-width:12px;
+	border-style:double;
+	border-color:#000;
+}
+
+legend {
+	font-weight:bold;
 }
 
 td.titreEmission {
@@ -156,4 +163,15 @@ img.thumbEmission {
 
 #listeParticipants {
 	width:100%;
+}
+
+#listeMorceaux li {
+	list-style-type: none;
+	padding-left: 0px;
+	padding-bottom: 15px;
+}
+
+#listeMorceaux {
+	padding-left: 0px;
+	padding-bottom: 0px;
 }
