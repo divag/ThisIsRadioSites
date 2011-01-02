@@ -109,6 +109,11 @@
 		$fileContents = file_get_contents('../'.$pics.$nom_emission.'.jpg');
 		$radioclashZip -> addFile($fileContents, $nom_emission.'.jpg'); 
 	}
+	if (file_exists('../'.$pics.$nom_emission.'-toPrint.jpg'))
+	{
+		$fileContents = file_get_contents('../'.$pics.$nom_emission.'-toPrint.jpg');
+		$radioclashZip -> addFile($fileContents, $nom_emission.'-toPrint.jpg'); 
+	}
 	if (file_exists('../'.$pics.$nom_emission.'.gif'))
 	{
 		$fileContents = file_get_contents('../'.$pics.$nom_emission.'.gif');

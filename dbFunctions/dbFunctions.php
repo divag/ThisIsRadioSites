@@ -5,7 +5,7 @@ INDEX :
 =======
 */
 
-//Récupération de la dernière émission
+//Rï¿½cupï¿½ration de la derniï¿½re ï¿½mission
 function dbGetLastEmission(){
 
     include('var.php');
@@ -47,7 +47,7 @@ function dbGetMaxNumberEmission(){
 	return $row['numero'];
 }
 
-//Récupération de la liste de tous participants des émissions actives :
+//Rï¿½cupï¿½ration de la liste de tous participants des ï¿½missions actives :
 function dbGetNomsParticipantsActifs(){
 
     include('var.php');
@@ -60,7 +60,7 @@ function dbGetNomsParticipantsActifs(){
     return $res;
 }
 
-//Récupération de la liste de tous participants des émissions actives, en texte (avec leur nom sur le forum si possible) séparés par des virgules :
+//Rï¿½cupï¿½ration de la liste de tous participants des ï¿½missions actives, en texte (avec leur nom sur le forum si possible) sï¿½parï¿½s par des virgules :
 function listeParticipants()
 {
     $listeParticipants = dbGetNomsParticipantsActifs();
@@ -93,7 +93,7 @@ function dbGetListeEmissionsComingSoon(){
 	return $res;
 }
 
-//Récupération de la liste de tous les participants d'une émission :
+//Rï¿½cupï¿½ration de la liste de tous les participants d'une ï¿½mission :
 function dbGetParticipantsEmission($p_numero_emission){
 
     include('var.php');
@@ -106,7 +106,7 @@ function dbGetParticipantsEmission($p_numero_emission){
     return $res;
 }
 
-//Récupération d'un participant :
+//Rï¿½cupï¿½ration d'un participant :
 function dbGetParticipant($p_nom){
 
     include('var.php');
@@ -123,7 +123,7 @@ function dbGetParticipant($p_nom){
 	    return 0;
 }
 
-//Récupération d'un participant :
+//Rï¿½cupï¿½ration d'un participant :
 function dbGetMembreGroupe($p_nom){
 
     include('var.php');
@@ -156,7 +156,7 @@ function dbGetChefFlag($p_nom){
 	    return false;
 }
 
-//Récupération de la liste de tous les participants d'une émission, en texte séparés par des virgules :
+//Rï¿½cupï¿½ration de la liste de tous les participants d'une ï¿½mission, en texte sï¿½parï¿½s par des virgules :
 function listeParticipantsEmission($p_numero_emission)
 {
     $listeParticipants = dbGetParticipantsEmission($p_numero_emission);
@@ -175,7 +175,7 @@ PLAYLISTS :
 ===========
 */
 
-//Récupération de l'émission :
+//Rï¿½cupï¿½ration de l'ï¿½mission :
 function dbGetListeEmissions(){
 
     include('var.php');
@@ -194,7 +194,7 @@ PAGE D'UNE PLAYLIST :
 =====================
 */
 
-//Récupération de l'émission :
+//Rï¿½cupï¿½ration de l'ï¿½mission :
 function dbGetEmission($p_numero){
 
     include('var.php');
@@ -211,7 +211,7 @@ function dbGetEmission($p_numero){
 	    return 0;
 }
 
-//Récupération de l'émission suivante :
+//Rï¿½cupï¿½ration de l'ï¿½mission suivante :
 function dbGetNextEmission($p_numero){
 
     include('var.php');
@@ -236,7 +236,7 @@ function dbGetNextEmission($p_numero){
 	}
 }
 
-//Récupération de l'émission précédente :
+//Rï¿½cupï¿½ration de l'ï¿½mission prï¿½cï¿½dente :
 function dbGetPrevEmission($p_numero){
 
     include('var.php');
@@ -253,7 +253,7 @@ function dbGetPrevEmission($p_numero){
 	    return 0;
 }
 
-//Récupération d'un utilisateur :
+//Rï¿½cupï¿½ration d'un utilisateur :
 function dbGetUtilisateur($p_nom_utilisateur){
 
     include('var.php');
@@ -271,12 +271,12 @@ function dbGetUtilisateur($p_nom_utilisateur){
 		return 0;
 }
 
-//Récupération d'un utilisateur :
+//Rï¿½cupï¿½ration d'un utilisateur :
 function dbGetUtilisateurByMail($p_mail_utilisateur){
 
     include('var.php');
 
-	$query = "SELECT nom, login_forum, url_site, mail, password FROM UTILISATEUR WHERE mail = '".urldecode($p_mail_utilisateur)."';";
+	$query = "SELECT id, nom, login_forum, url_site, mail, password FROM UTILISATEUR WHERE mail = '".urldecode($p_mail_utilisateur)."';";
 	$link=mysql_connect($hote,$login,$passwd); 
 	mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
@@ -289,7 +289,24 @@ function dbGetUtilisateurByMail($p_mail_utilisateur){
 		return 0;
 }
 
-//Récupération d'un utilisateur :
+//check si l'email exist :
+function dbExistsMail($p_mail_utilisateur){
+
+    include('var.php');
+
+	$query = "SELECT mail FROM UTILISATEUR WHERE mail = '".urldecode($p_mail_utilisateur)."';";
+	$link=mysql_connect($hote,$login,$passwd); 
+	mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+	mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+		return true;
+	else
+		return false;
+}
+//Rï¿½cupï¿½ration d'un utilisateur :
 function dbDeleteUtilisateur($p_nom_utilisateur){
 
     include('var.php');
@@ -301,7 +318,7 @@ function dbDeleteUtilisateur($p_nom_utilisateur){
 	mysql_close($link);
 }
 
-//Récupération d'un groupe d'utilisateurs :
+//Rï¿½cupï¿½ration d'un groupe d'utilisateurs :
 function dbGetGroupeUtilisateurs($p_nom_groupe){
 
     include('var.php');
@@ -318,7 +335,7 @@ function dbGetGroupeUtilisateurs($p_nom_groupe){
 		return $res;
 }
 
-//Récupération de la playlist :
+//Rï¿½cupï¿½ration de la playlist :
 function dbGetPlaylist($p_numero_emission){
 
     include('var.php');
@@ -332,7 +349,7 @@ function dbGetPlaylist($p_numero_emission){
 	return $res;
 }
 
-//Récupération de la playlist :
+//Rï¿½cupï¿½ration de la playlist :
 function dbGetPlaylistParticipant($p_numero_emission, $nom_participant){
 
     include('var.php');
@@ -359,7 +376,7 @@ function dbGetMorceauxEmissionFlag($p_numero_emission){
 	return ($row=mysql_fetch_array($res));
 }
 
-//Formatage d'une durée :
+//Formatage d'une durï¿½e :
 function toTime($int)
 {
     if (strlen($int) == 1)
@@ -375,7 +392,7 @@ function toTime($int)
 */
 
 /* 
-Gestion des émissions :
+Gestion des ï¿½missions :
 */
 
 function dbListeAllEtatEmission(){
@@ -642,7 +659,7 @@ function dbGetEmissionCompleteFlag($numero)
 
 /**************************/
 
-//Récupération de l'émission :
+//Rï¿½cupï¿½ration de l'ï¿½mission :
 function dbGetListeAllParticipants(){
 
     include('var.php');
@@ -773,7 +790,7 @@ function dbInsertUtilisateur($nom, $login_forum, $url_site, $mail, $password)
 
     include('var.php');
 
-	$query = "INSERT INTO UTILISATEUR (nom, login_forum, url_site, mail, password) VALUES ('".urldecode($nom)."', '".urldecode($login_forum)."', '".urldecode($url_site)."', '".urldecode($mail)."', '".urldecode($password)."');";
+	$query = "INSERT INTO UTILISATEUR (id, nom, login_forum, url_site, mail, password) VALUES (null,'".urldecode($nom)."', '".urldecode($login_forum)."', '".urldecode($url_site)."', '".urldecode($mail)."', '".urldecode($password)."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	

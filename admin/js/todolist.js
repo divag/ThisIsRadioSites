@@ -74,11 +74,11 @@ function showTodoList()
 	holder.id = 'todoist_holder'; 
 	//holder.style.position = "absolute"; 
 	holder.style.position = "relative"; 
-	holder.style.width = width + "px"; 
+	holder.style.width = (width-2) + "px"; 
 	//holder.style.height = height + "px";
 	holder.style.height = "auto";
 	holder.style.backgroundColor = '#fff'; 
-	holder.style.border = "1px solid #555"; 
+	//holder.style.border = "1px solid #555"; 
 	holder.style.fontFamily = "sans-serif"; 
 	holder.style.fontSize = "12px"; 
 	holder.style.top = "0px"; 
@@ -87,8 +87,8 @@ function showTodoList()
 	iframe.blah = 'hello world'; 
 	//Create the top 
 	var top_frame = doc.createElement('div'); 
-	top_frame.style.color = "#fff"; 
-	top_frame.style.padding = "2px"; 
+	//top_frame.style.color = "#fff"; 
+	//top_frame.style.padding = "2px"; 
 	top_frame.style.border = "1px solid #999"; 
 	top_frame.style.backgroundColor = "#555"; 
 	top_frame.style.cursor = "pointer"; 
@@ -119,7 +119,7 @@ function showTodoList()
 	iframe.src = 'http://'+domain+'/?mini=1'; 
 	iframe.id = 'todoist_iframe'; 
 	iframe.frameBorder = 0; 
-	iframe.width = width-2; 
+	iframe.width = width-0; 
 	iframe.height = "500px";
 	iframe.border = 0; 
 	iframe.style.margin = '0px'; 

@@ -106,6 +106,16 @@ function showWait()
 	document.getElementById('divWait').style.display = 'block';
 }
 
+function initialiseWaitMessage()
+{	
+	document.getElementById('spanWait').innerHTML = "Veuillez patienter ...";
+}
+
+function changeWaitMessage(message)
+{	
+	document.getElementById('spanWait').innerHTML = message;
+}
+
 function getDatas(functionName, variableName, functionParams)
 {
 	showWait();
@@ -161,6 +171,12 @@ function display(page)
 		
 		document.getElementById('texteChef').style.display = 'none';
 		document.getElementById('mailAdmin').style.display = 'none';
+		
+		if (!haveParticipants)
+			document.getElementById('buttonMenuusers').style.display = 'none';
+			
+		if (!haveContenuPages)
+			document.getElementById('buttonMenunews').style.display = 'none';
 	}
 	else
 	{
@@ -216,7 +232,8 @@ function display(page)
 		document.getElementById('lblDateEmission').style.display = 'none';
 		document.getElementById('lblDateEmissionPublie').style.display = 'none';
 		document.getElementById('txtDateEmissionError').innerHTML = '';
-
+		document.getElementById('boutonUpdateZipEmission').style.display = 'none';
+		
 		if (currentItem.titre != '')
 			document.getElementById('emission').className = 'etat32';
 		else
@@ -227,6 +244,9 @@ function display(page)
 		else
 			document.getElementById('lblDateEmission').style.display = 'block';
 		
+		if (haveZip && admin == '' && currentItem.etat == 3)
+			document.getElementById('boutonUpdateZipEmission').style.display = 'block';
+
 		if (admin != '')
 		{
 			document.getElementById('txtNumeroEmission').disabled = true;
@@ -443,6 +463,7 @@ function createLigneParticipantEmission(participantData)
 	
 	var radio = document.createElement('input');
 	radio.type = 'radio';
+	radio.style.textAlign = 'center';
 	radio.checked = (participantData.est_chef == 1);
 	radio.onclick = function () {
 		getDatas('dbUpdateChefEmission', '', 'numero=' + currentItem.numero + '&nom=' + encode(participantData.nom_utilisateur));
@@ -480,7 +501,8 @@ function createLigneParticipantEmission(participantData)
 	col3.appendChild(linkDescendre);
 
 	var col4 = document.createElement('td');
-	col4.style.width = '100px';
+	col4.style.width = '190px';
+	col4.style.textAlign = 'right';
 	
 	var deleteParticipant = document.createElement('input');
 	deleteParticipant.type = 'button';
@@ -545,7 +567,8 @@ function createLigneParticipantEmission(participantData)
 	
 	var participant = document.createElement('tr');
 	participant.id='ligneParticipant' + participantData.nom_utilisateur;
-	
+	participant.style.width = '100%';
+
 	if (participantData.existe == 0)
 		participant.className = 'etat41';
 	else
@@ -556,11 +579,15 @@ function createLigneParticipantEmission(participantData)
 		if (participantData.est_chef_complet == 1)
 		{
 			col3.style.backgroundImage = 'url(css/chef_ok.gif)';
+			col3.style.backgroundPosition = 'center';
+			col3.style.backgroundRepeat = 'repeat-x';
 			col3.className = 'etat21';
 		}
 		else
 		{
 			col3.style.backgroundImage = 'url(css/chef_ko.gif)';
+			col3.style.backgroundPosition = 'center';
+			col3.style.backgroundRepeat = 'repeat-x';
 			col3.className = 'etat22';
 		}
 	}
@@ -957,6 +984,7 @@ function refreshImageFormZoneAfterUpload(reponse, statut)
 	refreshImageFormZone();
 	envoiMailAdmin(currentItem.numero, 'uploadé', 'Pochette JPG');
 	hideWait();
+	updateZipEmission();
 }
 
 function refreshImageToPrintFormZoneAfterUpload(reponse, statut)
@@ -964,6 +992,7 @@ function refreshImageToPrintFormZoneAfterUpload(reponse, statut)
 	document.getElementById('imgPochetteEmissionThumbToPrint').src = '../pochettes/comingsoon.jpg';
 	refreshImageToPrintFormZone();
 	hideWait();
+	updateZipEmission();
 }
 
 function refreshImageGifFormZoneAfterUpload(reponse, statut)
@@ -972,6 +1001,7 @@ function refreshImageGifFormZoneAfterUpload(reponse, statut)
 	refreshImageGifFormZone();
 	envoiMailAdmin(currentItem.numero, 'uploadé', 'Pochette GIF');
 	hideWait();
+	updateZipEmission();
 }
 
 function refreshNewsFormZone()
@@ -989,7 +1019,7 @@ function refreshNewsFormZone()
 
 function refreshImageFormZone()
 {
-	if (isNew)
+	if (isNew || !haveImageJpg)
 	{
 		document.getElementById('pochetteEmission').style.display = 'none';
 	}
@@ -1026,7 +1056,7 @@ function refreshImageFormZone()
 
 function refreshImageToPrintFormZone()
 {
-	if (isNew || admin != '')
+	if (isNew || admin != '' || !haveImageJpgToPrint)
 	{
 		document.getElementById('pochetteEmissionToPrint').style.display = 'none';
 	}
@@ -1043,12 +1073,14 @@ function refreshImageToPrintFormZone()
 			document.getElementById('pochetteEmissionToPrint').className = 'etat32';
 			document.getElementById('imgPochetteEmissionToPrint').href = document.getElementById('imgPochetteEmissionThumbToPrint').src;
 			document.getElementById('imgPochetteEmissionToPrint').style.display = 'block';
+			document.getElementById('filePochetteEmissionToPrintDeleteButton').disabled = false; 			
 		}
 		else
 		{
 			document.getElementById('imgPochetteEmissionThumbToPrint').src = '../pochettes/comingsoon.jpg';
 			document.getElementById('pochetteEmissionToPrint').className = 'etat42';
 			document.getElementById('imgPochetteEmissionToPrint').style.display = 'none';
+			document.getElementById('filePochetteEmissionToPrintDeleteButton').disabled = true;
 		}
 		document.getElementById('numeroEmissionForUploadPochetteToPrint').value = currentItem.numero + '-toPrint';
 		document.getElementById('filePochetteEmissionToPrint').value = '';
@@ -1066,6 +1098,13 @@ function deleteFile(typeFichier)
 		getDatas('deleteFile', '', 'file=' + '../pochettes/thisisradioclash-episode' + currentItem.numero + '.jpg');
 		objet = 'Pochette JPG';
 		refreshImageFormZone();
+	}		
+
+	if (typeFichier == 'pochetteToPrint')
+	{
+		getDatas('deleteFile', '', 'file=' + '../pochettes/thisisradioclash-episode' + currentItem.numero + '-toPrint.jpg');
+		objet = 'Pochette à imprimer';
+		refreshImageToPrintFormZone();
 	}		
 
 	if (typeFichier == 'pochetteGif')
@@ -1090,11 +1129,12 @@ function deleteFile(typeFichier)
 	}		
 		
 	envoiMailAdmin(currentItem.numero, 'supprimé', objet);
+	updateZipEmission();
 }
 
 function refreshImageGifFormZone()
 {
-	if (isNew)
+	if (isNew || !haveImageGif)
 	{
 		document.getElementById('pochetteEmissionGif').style.display = 'none';
 	}
@@ -1134,6 +1174,7 @@ function refreshMp3FormZoneAfterUpload(reponse, statut)
 	getDatas('dbUpdateTimeEmission', 'result', 'numero=' + currentItem.numero + '&time_min=' + currentItem.time_min + '&time_sec=' + currentItem.time_sec);
 	envoiMailAdmin(currentItem.numero, 'uploadé', 'Fichier MP3');
 	hideWait();
+	updateZipEmission();
 }
 
 function refreshMp3TeaserFormZoneAfterUpload(reponse, statut)
@@ -1141,6 +1182,7 @@ function refreshMp3TeaserFormZoneAfterUpload(reponse, statut)
 	refreshMp3TeaserFormZone();
 	envoiMailAdmin(currentItem.numero, 'uploadé', 'Teaser MP3');
 	hideWait();
+	updateZipEmission();
 }
 
 function refreshMp3FormZone()
@@ -1191,7 +1233,7 @@ function refreshMp3FormZone()
 
 function refreshMp3TeaserFormZone()
 {
-	if (isNew)
+	if (isNew || !haveTeaserMp3)
 	{
 		document.getElementById('mp3Teaser').style.display = 'none';
 	}
@@ -1235,6 +1277,18 @@ function updateVideoTeaser()
 	currentItem.teaser_video = currentEmissionDatas.teaser_video;
 	refreshVideoTeaserFormZone();
 	hideWait();
+	
+	updateZipEmission();
+}
+
+function updateZipEmission()
+{
+	if (haveZip && currentItem.etat == 3)
+	{
+		changeWaitMessage("<b>Regénération du ZIP de l'émission...</b><br />Parce que les données ont changées alors que l'émission déjà publiée !!");
+		getDatas('createZipEmission', 'result', 'numero=' + currentItem.numero);
+		initialiseWaitMessage();
+	}
 }
 
 function refreshVideoTeaserFormZone()
@@ -1243,7 +1297,7 @@ function refreshVideoTeaserFormZone()
 	document.getElementById('linkVideoTeaserValue').value = '';
 	document.getElementById('linkVideoTeaserSrc').src = '';
 
-	if (isNew)
+	if (isNew || !haveTeaserVideo)
 	{
 		document.getElementById('videoTeaser').style.display = 'none';
 	}
@@ -1396,7 +1450,10 @@ function createLigneEmission(emissionData)
 				if (confirm('Certain de vouloir publier cette émission ? Go ?'))
 				{
 					getDatas('dbUpdateEtatEmission', 'result', 'numero=' + emissionData.numero + '&etat=3');
-					getDatas('createZipEmission', 'result', 'numero=' + emissionData.numero);
+					
+					if (haveZip)
+						getDatas('createZipEmission', 'result', 'numero=' + emissionData.numero);
+					
 					display('playlists');
 					alert('Yeah ;)');
 				}
@@ -1469,6 +1526,7 @@ function formEnregistrer()
 
 	isNew = false;
 	alert('Enregistrement réussi !');
+	updateZipEmission();
 	display('playlists');
 }
 
@@ -1671,6 +1729,8 @@ function createLigneParticipantPlaylist(participantData)
 			getDatas('dbInsertMorceau', '', 'numero=' + currentItem.numero + '&nom=' + encode(participantData.nom_utilisateur) + '&time_min=' + this.datas[i].time_min + '&time_sec=' + this.datas[i].time_sec + '&nom_artiste=' + encode(this.datas[i].nom_artiste) + '&nom_morceau=' + encode(this.datas[i].nom_morceau));
 		
 		refreshParticipants();
+		
+		updateZipEmission();
 	}
 	
 	

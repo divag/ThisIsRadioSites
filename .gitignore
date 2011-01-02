@@ -1,14 +1,16 @@
 
-/site*.php
+/sitevars.php
 /dbFunctions/var.php
 /admin/test.php
+/css/news.gif
 /testDB.php
 /dbFunctions/DBAndDatas.sql
+/dbFunctions/dbFunctions.php
+/mails
 /mp3
 /pochettes
-/DEV
+/zip
 /theBrain
-/dbFunctions/createZipEmissionGet.php
-/dbFunctions/checkPass.php
-/dbFunctions/testMail.php
 /admin/thisisradioclashadmin.php
+Thumbs.db
+/dbFunctions/checkPass.php

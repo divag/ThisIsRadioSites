@@ -156,6 +156,11 @@ Page NEWS :
 	padding-left:10px;
 }
 
+.listeLiens a, .listeLiens a img {
+	margin-right:5px;
+	vertical-align:middle;
+}
+
 /* 
 Textes et mises en formes : 
 ===========================

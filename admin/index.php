@@ -1,26 +1,27 @@
 ﻿<?php
 include('../sitevars.php');
 include('../dbFunctions/dbFunctions.php');
-//include('../dbFunctions/sendMail.php');
+include('../dbFunctions/sendMail.php');
 
-if($_POST){
-	foreach($_POST as $var => $val)
-	{
-		$mail = $val;
-		$email = $val;
-	}
-  
-	if (isset($mail) && $mail =! '')
+if(isset($_POST['nomCompte']))
+{
+	$email=$_POST['nomCompte'];
+	if (isMail($_POST['nomCompte']) && dbExistsMail($_POST['nomCompte']))
 	{		
-		$utilisateur = dbGetUtilisateurByMail($email);
-		if ($utilisateur != 0 && $utilisateur['password'] != "")
+		$file_email=sendPassword($email);
+		if(!empty($file_email))
 		{
-			$result = file_get_contents($urlSendMail.'?from='.$mailAdmin.'&to='.$utilisateur['mail'].'&login='.addslashes(urlencode($utilisateur['nom'])).'&pass='.addslashes(urlencode($utilisateur['password'])));
-			//sendMail($utilisateur['mail'], $utilisateur['nom'], $utilisateur['password']);
-			if ($result != '')
-				echo '<script>alert("'.utf8_encode($result).'");</script>';
+			$result=sendEmailFile($file_email);
+			if (!$result)
+				echo '<script type="text/javascript">alert("Une erreur est survenue lors de l\'envoi de mail");</script>';
+				
+			echo '<script type="text/javascript">alert("result :  '.$result.'");</script>';			
 		}
+		else
+			echo '<script type="text/javascript">alert("Une erreur est survenue lors de la création du mail");</script>';
 	}
+	else
+		echo '<script type="text/javascript">alert("email invalide ou inexistant");</script>';
 }
 
 ?>
@@ -61,13 +62,14 @@ if($_POST){
 </td></tr>
 </table>
 	<script>
-		if (navigator.appName != 'Netscape')
-			location.href = 'noIE.html';
-		else
-		{
-			if (location.href.indexOf('www') == -1)
-				location.href = '<?php echo $radioclashHome ?>admin/';
-		}			
+	if (navigator.appName != 'Netscape')
+		location.href = 'noIE.html';
+	else
+	{
+		if (location.href.indexOf('www') == -1)
+			location.href = '<?php echo $radioclashHome ?>admin/';
+	}
+	
 	</script>
 </body>
 </html>

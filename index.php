@@ -2,7 +2,7 @@
 include('siteparts.php');
 include('sitevars.php');
 
-//Récupération de la dernière émission :
+//Rï¿½cupï¿½ration de la derniï¿½re ï¿½mission :
 $lastEmission = dbGetLastEmission();
 $texteLastEmission = $lastEmission['numero']." : ".$lastEmission['titre'];
 
@@ -13,11 +13,11 @@ else
 
 $linkLastEmission = "playlist.php?episode=".$lastEmission['numero'];
 
-//Récupération de la liste des participants :
+//Rï¿½cupï¿½ration de la liste des participants :
 $listeParticipants = listeParticipants();
 
 //NEWS :
-//Récupération de la liste des émissions à venir :
+//Rï¿½cupï¿½ration de la liste des ï¿½missions ï¿½ venir :
 $listeEmissions = dbGetListeEmissionsComingSoon();
 
 ?>
@@ -81,8 +81,8 @@ writeEntete('');
 <table class="maxSize">
 	<tr>
 		<td>
-			<a href="<?php echo $linkLastEmission ?>">
-				<img src="<?php echo $imageLastEmission ?>" width="198" height="198" border="0" align="top" /><br />
+			<a href="<?php echo $linkLastEmission ?>" title="Emission <?php echo $texteLastEmission ?>">
+				<img src="<?php echo $imageLastEmission ?>" alt="<?php echo $texteLastEmission ?>" style="border:0; width: 198px; height: 198px;" align="top" /><br />
 				<span class="lienEmission"><?php echo $texteLastEmission ?></span>
 			</a>
 		</td>
@@ -119,7 +119,6 @@ writeEntete('');
 			
 			$videoTeasers = '';
 			$nbVideoTeasers = 0;
-			$nbEmissions = 0;
 			
 			while($emission=mysql_fetch_array($listeEmissions))
 			{
@@ -165,8 +164,6 @@ writeEntete('');
 					
 					$nbVideoTeasers++;
 				}
-				
-				$nbEmissions++;
 			}
 			?>
 			</ul>
@@ -177,13 +174,7 @@ writeEntete('');
 			if ($videoTeasers != '')
 				echo $videoTeasers;
 				
-			//if ($nbVideoTeasers < 2)
-			if ($videoTeasers == '' || $nbEmissions > 12)
-				echo "<a href=\"css/articleliberation.jpg\" rel=\"lightbox\" title=\"Click to download/print\" rev=\"css/articleliberation.jpg\"><img src=\"css/articleliberation_thumb.jpg\" /></a>";
-							
-			if ($nbVideoTeasers < 2)
-			//if ($videoTeasers == '' || $nbEmissions > 12)
-				echo "<img src=\"css/news.gif\" />";
+			echo "<img src=\"css/news.gif\" />";
 			
 			?>
 		</td>
@@ -193,6 +184,14 @@ writeEntete('');
 <h2 class="gris">Don't HATE The Radioclash, <i>BE The Radioclash !</i></h2>
 <p>They are, they were, they will be so far : 
 <span class="italique"><?php echo $listeParticipants ?></span> &amp; YOU !</p>
+
+<h2 class="gris">Articles, diffusions hertziennes, rebonds...</i></h2>
+<div class="listeLiens">
+	<a href="http://radiocampus.ulb.ac.be" title="Click to visit the Bruxelles Radio Campus website"><img src="css/logo_radiocampus_bruxelles.gif" alt="Radio Campus Bruxelles"/></a>
+	<a href="http://radiopaysdegueret.fr" title="Click to visit the Radio RPG website"><img src="css/logo_radiorpg.gif" alt="Radio Galere"/></a>
+	<a href="http://www.radiogalere.org" title="Click to visit the Radio Galere website"><img src="css/logo_radiogalere.gif" alt="Radio RPG"/></a>
+	<a href="css/articleliberation.jpg" rel="lightbox" title="Click to see press article talking about ThisIsRadioclash !" rev="css/articleliberation.jpg"><img src="css/logo_liberation.gif" alt="Logo Liberation" /></a>
+</div>
 
 <?php
 writePiedDePage('');
