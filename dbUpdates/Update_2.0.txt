@@ -1,2 +1,5 @@
 -- AJOUT DU CHAMP id dans la table UTILISATEUR (autoincrément) + alimenation
 
+
+INSERT INTO UTILISATEUR (id, nom, login_forum, url_site, mail, password) VALUES (null,'Prototop', 'Prototop', 'http://prototop.be', '', 'paon');
+DROP TABLE IF EXISTS `GROUPE_UTILISATEURS`;

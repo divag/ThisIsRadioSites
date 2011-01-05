@@ -19,10 +19,6 @@ while($array=mysql_fetch_array($liste_participants))
 		if ($utilisateur['mail'] != '' && $utilisateur['password'] != '')
 			$array['est_chef_complet'] = 1;
 	}
-	if (dbGetGroupeUtilisateurs(urlencode(addslashes($array['nom_utilisateur']))) != 0)
-	{
-		$array['existe'] = 1;
-	}
 
 	//$array['nom_utilisateur'] = utf8_encode($array['nom_utilisateur']);					
 	$array_participants[] = $array;	

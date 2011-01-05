@@ -2,7 +2,7 @@
 
 include('dbFunctions.php');
 
-$liste_participants = dbGetListeAllParticipantsUsersAndGroupes();
+$liste_participants = dbGetListeAllParticipantsAndUsers();
 
 $array_participants = array();
 while($array=mysql_fetch_array($liste_participants))

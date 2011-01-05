@@ -52,7 +52,7 @@ function dbGetNomsParticipantsActifs(){
 
     include('var.php');
 
-	$query = "SELECT DISTINCT allUsers.login_forum FROM ((SELECT login_forum FROM UTILISATEUR, PARTICIPANT, EMISSION WHERE UTILISATEUR.nom = PARTICIPANT.nom_utilisateur AND PARTICIPANT.numero_emission = EMISSION.numero AND EMISSION.etat = 3) UNION (SELECT login_forum FROM UTILISATEUR, GROUPE_UTILISATEURS, PARTICIPANT, EMISSION WHERE UTILISATEUR.nom = GROUPE_UTILISATEURS.nom_utilisateur AND GROUPE_UTILISATEURS.nom = PARTICIPANT.nom_utilisateur AND PARTICIPANT.numero_emission = EMISSION.numero AND EMISSION.etat = 3)) as allUsers;";
+	$query = "SELECT DISTINCT login_forum FROM UTILISATEUR, PARTICIPANT, EMISSION WHERE UTILISATEUR.nom = PARTICIPANT.nom_utilisateur AND PARTICIPANT.numero_emission = EMISSION.numero AND EMISSION.etat = 3;";
     $link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -123,28 +123,11 @@ function dbGetParticipant($p_nom){
 	    return 0;
 }
 
-//R�cup�ration d'un participant :
-function dbGetMembreGroupe($p_nom){
-
-    include('var.php');
-
-    $query = "SELECT nom, nom_utilisateur FROM GROUPE_UTILISATEURS WHERE nom_utilisateur = '".urldecode($p_nom)."';";
-	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
-	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
-    mysql_close($link);
-
-	if ($row=mysql_fetch_array($res))
-	    return $row;
-    else
-	    return 0;
-}
-
 function dbGetChefFlag($p_nom){
 
     include('var.php');
 
-    $query = "SELECT PARTICIPANT.numero_emission FROM PARTICIPANT, GROUPE_UTILISATEURS WHERE PARTICIPANT.est_chef = 1 AND (PARTICIPANT.nom_utilisateur = '".urldecode($p_nom)."' OR (PARTICIPANT.nom_utilisateur = GROUPE_UTILISATEURS.nom AND GROUPE_UTILISATEURS.nom_utilisateur = '".urldecode($p_nom)."'));";
+    $query = "SELECT PARTICIPANT.numero_emission FROM PARTICIPANT WHERE PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($p_nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -336,23 +319,6 @@ function dbDeleteUtilisateur($p_nom_utilisateur){
 	mysql_close($link);
 }
 
-//R�cup�ration d'un groupe d'utilisateurs :
-function dbGetGroupeUtilisateurs($p_nom_groupe){
-
-    include('var.php');
-
-	$query = "SELECT UTILISATEUR.nom, UTILISATEUR.login_forum, UTILISATEUR.url_site, UTILISATEUR.mail, UTILISATEUR.password FROM UTILISATEUR, GROUPE_UTILISATEURS WHERE UTILISATEUR.nom = GROUPE_UTILISATEURS.nom_utilisateur AND GROUPE_UTILISATEURS.nom = '".urldecode($p_nom_groupe)."' ORDER BY UTILISATEUR.nom ASC;";
-	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
-	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
-	mysql_close($link);
-	
-	if (mysql_num_rows($res) == 0)
-		return 0;
-	else
-		return $res;
-}
-
 //R�cup�ration de la playlist :
 function dbGetPlaylist($p_numero_emission){
 
@@ -457,7 +423,7 @@ function dbListeAllEmissionForChef($admin){
 
     include('var.php');
 
-    $query = "SELECT DISTINCT numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION, GROUPE_UTILISATEURS, PARTICIPANT WHERE EMISSION.etat = 2 AND EMISSION.numero = PARTICIPANT.numero_emission AND PARTICIPANT.est_chef = 1 AND ((PARTICIPANT.nom_utilisateur = '".urldecode($admin)."') OR (PARTICIPANT.nom_utilisateur = GROUPE_UTILISATEURS.nom AND GROUPE_UTILISATEURS.nom_utilisateur = '".urldecode($admin)."')) ORDER BY numero ASC;";
+    $query = "SELECT DISTINCT numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION, PARTICIPANT WHERE EMISSION.etat = 2 AND EMISSION.numero = PARTICIPANT.numero_emission AND PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($admin)."' ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -668,7 +634,7 @@ function dbGetEmissionCompleteFlag($numero)
 	$liste_participants = dbGetListeParticipantsEmission($numero);
 	while($array=mysql_fetch_array($liste_participants))
 	{	
-		if (dbGetUtilisateur($array['nom_utilisateur']) == 0 && dbGetGroupeUtilisateurs($array['nom_utilisateur']) == 0)
+		if (dbGetUtilisateur($array['nom_utilisateur']) == 0)
 			return false;
 	}	
 	
@@ -691,11 +657,11 @@ function dbGetListeAllParticipants(){
 	return $res;
 }
 
-function dbGetListeAllParticipantsUsersAndGroupes(){
+function dbGetListeAllParticipantsAndUsers(){
 
 	include('var.php');
 
-	$query = "SELECT DISTINCT allUsers.nom FROM ((SELECT nom FROM UTILISATEUR) UNION (SELECT nom FROM GROUPE_UTILISATEURS) UNION (SELECT nom_utilisateur as nom FROM PARTICIPANT)) as allUsers ORDER BY allUsers.nom ASC;";
+	$query = "SELECT DISTINCT allUsers.nom FROM ((SELECT nom FROM UTILISATEUR) UNION (SELECT nom_utilisateur as nom FROM PARTICIPANT)) as allUsers ORDER BY allUsers.nom ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -831,12 +797,6 @@ function dbUpdateUtilisateur($nomWhere, $nom, $login_forum, $url_site, $mail, $p
 		dbUpdateNomParticipant($nomWhere, $nom);
 	
 		$query = "UPDATE MORCEAU SET nom_utilisateur = '".urldecode($nom)."' WHERE nom_utilisateur = '".urldecode($nomWhere)."';";
-		$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
-		$select_base=mysql_selectdb($db);
-		mysql_db_query ($db, $query);	
-		mysql_close($link);
-
-		$query = "UPDATE GROUPE_UTILISATEURS SET nom_utilisateur = '".urldecode($nom)."' WHERE nom_utilisateur = '".urldecode($nomWhere)."';";
 		$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 		$select_base=mysql_selectdb($db);
 		mysql_db_query ($db, $query);	

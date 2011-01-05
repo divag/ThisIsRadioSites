@@ -46,22 +46,10 @@ while($emission=mysql_fetch_array($listeEmissions))
 				$utilisateurEnCours = dbGetUtilisateur(urlencode(addslashes($array['nom_utilisateur'])));
 				$nomUtilisateurEnCours = strtoupper($array['nom_utilisateur']);
 				
-				if ($utilisateurEnCours != 0)
-				{
+				if ($utilisateurEnCours['url_site'] != "http://" && $utilisateurEnCours['url_site'] != "")
 					echo "<a href=\"".$utilisateurEnCours['url_site']."\"><b><u>".$nomUtilisateurEnCours."</u></b></a><br />";
-				}
 				else
-				{
-					$utilisateursEnCours = dbGetGroupeUtilisateurs(urlencode(addslashes($array['nom_utilisateur'])));
-					echo "<b>".$nomUtilisateurEnCours." (";
-					$separateur = "";
-					while($utilisateurEnCours=mysql_fetch_array($utilisateursEnCours))
-					{
-						echo $separateur."<a href=\"".$utilisateurEnCours['url_site']."\"><u>".strtoupper($utilisateurEnCours['nom'])."</u></a>";
-						$separateur = " + ";
-					}
-					echo ")</b><br />";
-				}
+					echo "<b><u>".$nomUtilisateurEnCours."</u></b><br />";
 			}
 			echo "<span>".toTime($array['time_min']).":".toTime($array['time_sec'])." ".$array['nom_artiste']." - ".$array['nom_morceau']."<br />";
 			$i++;

@@ -8,7 +8,7 @@ $array_utilisateurs = array();
 while($array=mysql_fetch_array($liste_utilisateurs))
 {	
 	$array['est_inutile'] = 0;
-	if (dbGetMembreGroupe(urlencode(addslashes($array['nom']))) == 0 && dbGetParticipant(urlencode(addslashes($array['nom']))) == 0)
+	if (dbGetParticipant(urlencode(addslashes($array['nom']))) == 0)
 		$array['est_inutile'] = 1;
 	
 	$array['est_chef'] = 0;

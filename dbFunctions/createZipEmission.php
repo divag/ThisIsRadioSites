@@ -49,22 +49,11 @@
 			$utilisateurEnCours = dbGetUtilisateur($array['nom_utilisateur']);
 			$nomUtilisateurEnCours = strtoupper($array['nom_utilisateur']);
 			
-			if ($utilisateurEnCours != 0)
-			{
+			if ($utilisateurEnCours['url_site'] != "http://" && $utilisateurEnCours['url_site'] != "")
 				$fichier_playlist.=$nomUtilisateurEnCours." (".$utilisateurEnCours['url_site'].")\r\n";
-			}
 			else
-			{
-				$utilisateursEnCours = dbGetGroupeUtilisateurs($array['nom_utilisateur']);
-				$fichier_playlist.=$nomUtilisateurEnCours." [";
-				$separateur = "";
-				while($utilisateurEnCours=mysql_fetch_array($utilisateursEnCours))
-				{
-				    $fichier_playlist.=strtoupper($utilisateurEnCours['nom'])." (".$utilisateurEnCours['url_site'].")\r\n";
-					$separateur = " + ";
-				}
-				$fichier_playlist.="]\r\n";
-			}
+				$fichier_playlist.=$nomUtilisateurEnCours."\r\n";
+
 			$fichier_playlist.="\r\n";
 		}
 		$fichier_playlist.=" ".toTime($array['time_min']).":".toTime($array['time_sec'])." ".$array['nom_artiste']." - ".$array['nom_morceau'].")\r\n";

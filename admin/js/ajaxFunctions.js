@@ -311,7 +311,7 @@ function showAddParticipant()
 	while (document.getElementById('listeAllUsersAndGroupes').hasChildNodes())
 		document.getElementById('listeAllUsersAndGroupes').removeChild(document.getElementById('listeAllUsersAndGroupes').firstChild);
 
-	getDatas('dbGetListeAllParticipantsUsersAndGroupes', 'allUsersAndGroupes', '');
+	getDatas('dbGetListeAllParticipantsAndUsers', 'allUsersAndGroupes', '');
 	document.getElementById('listeAllUsersAndGroupes').appendChild(createBlankOptionParticipant());
 	for(var i=0; i<allUsersAndGroupes.length; i++)
 		document.getElementById('listeAllUsersAndGroupes').appendChild(createOptionParticipant(allUsersAndGroupes[i]));			
@@ -544,14 +544,6 @@ function createLigneParticipantEmission(participantData)
 				showModifieParticipant(participantData.nom_utilisateur);
 			}
 		}
-		else
-		{
-			completeParticipant.value = 'Modifier';
-			completeParticipant.style.color = 'gray';
-			completeParticipant.onclick = function() {
-				alert(participantData.nom_utilisateur + " est un groupe !\nPour le modifier, aller dans le menu 'Gérer les utilisateurs'.");
-			}
-		}
 	}
 
 	col4.appendChild(completeParticipant);
@@ -632,6 +624,16 @@ function createLigneUtilisateur(userData)
 	var col1 = document.createElement('td');
 	col1.innerHTML = userData.nom;
 	
+	var col3 = document.createElement('td');
+	var iconeMail = document.createElement('img');
+	
+	if (userData.mail != '')
+		iconeMail.src = 'css/mail_ok.gif';
+	else
+		iconeMail.src = 'css/mail_ko.gif';
+	
+	col3.appendChild(iconeMail);
+	
 	var col2 = document.createElement('td');
 		
 	var modifieUser = document.createElement('input');
@@ -646,7 +648,7 @@ function createLigneUtilisateur(userData)
 	var envoyerInfosChef = document.createElement('input');
 	envoyerInfosChef.type = 'button';	
 	envoyerInfosChef.className = 'button';	
-	envoyerInfosChef.value = 'Envoyer infos de connexion CHEF';
+	envoyerInfosChef.value = 'Envoyer les infos CHEF';
 	envoyerInfosChef.onclick = function() {
 		showWait();
 		getDatas('sendMailAjax', '', 'nom=' + encode(userData.nom));
@@ -669,6 +671,7 @@ function createLigneUtilisateur(userData)
 	
 	utilisateur.appendChild(col0);
 	utilisateur.appendChild(col1);
+	utilisateur.appendChild(col3);
 	utilisateur.appendChild(col2);
 		
 	return utilisateur;

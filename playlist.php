@@ -152,7 +152,7 @@ writeEntete('playlist');
 					<li><p>This is Radioclash Jingle</p><span>00:00</span></li>
 					<?php 
 					 while($array=mysql_fetch_array($playlist))
-						echo "<li><p>".strtoupper($array['nom_utilisateur'])."<br />".$array['nom_artiste']." - ".$array['nom_morceau']."</p><span>".toTime($array['time_min']).":".toTime($array['time_sec'])."</span></li>";
+						echo "<li><p>".strtoupper($array['nom_utilisateur'])."<br />".$array['nom_artiste']." - ".$array['nom_morceau']."</p><span>".toTime($array['time_min']).":".toTime($array['time_sec'])."</span></li>\n";
 					?>
 				</ul>
 			   </div>
@@ -180,25 +180,13 @@ writeEntete('playlist');
 			{
 				$utilisateurEnCours = dbGetUtilisateur($array['nom_utilisateur']);
 				$nomUtilisateurEnCours = strtoupper($array['nom_utilisateur']);
-				
-				if ($utilisateurEnCours != 0)
-				{
-					echo "<a href=\"".$utilisateurEnCours['url_site']."\"><span>".$nomUtilisateurEnCours."</span></a><br />";
-				}
+
+				if ($utilisateurEnCours['url_site'] != "http://" && $utilisateurEnCours['url_site'] != "")
+					echo "<a href=\"".$utilisateurEnCours['url_site']."\"><span>".$nomUtilisateurEnCours."</span></a><br />\n";
 				else
-				{
-					$utilisateursEnCours = dbGetGroupeUtilisateurs($array['nom_utilisateur']);
-					echo "<strong>".$nomUtilisateurEnCours." (";
-					$separateur = "";
-					while($utilisateurEnCours=mysql_fetch_array($utilisateursEnCours))
-					{
-						echo $separateur."<a href=\"".$utilisateurEnCours['url_site']."\"><span>".strtoupper($utilisateurEnCours['nom'])."</span></a>";
-						$separateur = " + ";
-					}
-					echo ")</strong><br />";
-				}
+					echo "<span><strong><u>".$nomUtilisateurEnCours."</u></strong></span></a><br />\n";
 			}
-			echo "<span class=\"metadataShortCut\" id=\"metadataShortCut".$i."\">".toTime($array['time_min']).":".toTime($array['time_sec'])." ".$array['nom_artiste']." - ".$array['nom_morceau']."</span><br />";
+			echo "<span class=\"metadataShortCut\" id=\"metadataShortCut".$i."\">".toTime($array['time_min']).":".toTime($array['time_sec'])." ".$array['nom_artiste']." - ".$array['nom_morceau']."</span><br />\n";
 			$i++;
 		}
 		
