@@ -209,6 +209,8 @@ function display(page)
 		
 		if (listeEmissions.length == 0)
 			document.getElementById('spanChefNoEmission').style.display = 'block';
+		else
+			document.getElementById('spanChefNoEmission').style.display = 'none';
 		
 		alternate = 1;
 		
