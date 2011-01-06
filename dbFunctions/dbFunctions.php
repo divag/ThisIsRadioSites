@@ -163,7 +163,7 @@ function dbGetListeEmissions($id_site){
 
     include('var.php');
 
-	$query = "SELECT id, id_site, numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND etat = 2 OR etat = 3 ORDER BY numero ASC;";
+	$query = "SELECT id, id_site, numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND (etat = 2 OR etat = 3) ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
