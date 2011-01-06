@@ -5,7 +5,7 @@
      // Une fois la page prête (DOM ready), on prépare le formulaire d'Upload
       var optionsPochette = { 
         //target:        '#formUploadPochette #message',   // target element(s) to be updated with server response 
-        beforeSubmit:  fonctionAvantUL,      // pre-submit callback 
+        beforeSubmit:  fonctionAvantUploadImage,      // pre-submit callback 
         success:       refreshImageFormZoneAfterUpload,      // post-submit callback 
  
         // other available options: 
@@ -18,7 +18,7 @@
      // Une fois la page prête (DOM ready), on prépare le formulaire d'Upload
       var optionsPochetteToPrint = { 
         //target:        '#formUploadPochette #message',   // target element(s) to be updated with server response 
-        beforeSubmit:  fonctionAvantUL,      // pre-submit callback 
+        beforeSubmit:  fonctionAvantUploadImage,      // pre-submit callback 
         success:       refreshImageToPrintFormZoneAfterUpload,      // post-submit callback 
  
         // other available options: 
@@ -31,7 +31,7 @@
      // Une fois la page prête (DOM ready), on prépare le formulaire d'Upload
       var optionsPochetteGif = { 
         //target:        '#formUploadPochette #message',   // target element(s) to be updated with server response 
-        beforeSubmit:  fonctionAvantUL,      // pre-submit callback 
+        beforeSubmit:  fonctionAvantUploadImage,      // pre-submit callback 
         success:       refreshImageGifFormZoneAfterUpload,      // post-submit callback 
  
         // other available options: 
@@ -43,7 +43,7 @@
     }; 
       var optionsNews = { 
         //target:        '#formUploadPochette #message',   // target element(s) to be updated with server response 
-        beforeSubmit:  fonctionAvantUL,      // pre-submit callback 
+        beforeSubmit:  fonctionAvantUploadImage,      // pre-submit callback 
         success:       refreshNewsFormZoneAfterUpload,      // post-submit callback 
  
         // other available options: 
@@ -55,7 +55,7 @@
     }; 
       var optionsMp3 = { 
         //target:        '#upload #message',   // target element(s) to be updated with server response 
-        beforeSubmit:  fonctionAvantUL,      // pre-submit callback 
+        beforeSubmit:  fonctionAvantUploadMp3,      // pre-submit callback 
         success:       refreshMp3FormZoneAfterUpload,      // post-submit callback 
  
         // other available options: 
@@ -67,7 +67,7 @@
     }; 
       var optionsMp3Teaser = { 
         //target:        '#upload #message',   // target element(s) to be updated with server response 
-        beforeSubmit:  fonctionAvantUL,      // pre-submit callback 
+        beforeSubmit:  fonctionAvantUploadMp3Teaser,      // pre-submit callback 
         success:       refreshMp3TeaserFormZoneAfterUpload,      // post-submit callback 
  
         // other available options: 
@@ -90,7 +90,22 @@
  });   
 // --------------    UPLOAD
 // pre-submit callback 
-function fonctionAvantUL(formData, jqForm, options) { 
+function fonctionAvantUploadImage(formData, jqForm, options) { 
+	changeWaitMessage("<b>Upload de l'image sélectionnée ...</b><br /><br />Cela peut être long si le fichier est volumineux.<br /><br /> <span style=\"color:red;\">Si vous avez le temps de lire ce message, il faudrait penser à mettre un fichier moins lourd...!</span>");
+	showWait();
+    var queryString = $.param(formData); 
+    return true; 
+} 
+
+function fonctionAvantUploadMp3(formData, jqForm, options) { 
+	changeWaitMessage("<b>Upload du mp3 de l'émission en cours ...</b><br /><br />Cela peut durer jusqu'à 15 minutes, cela est normal car le fichier est volumineux.<br /><br /><span style=\"color:red;\"><b>Merci de vérifier que votre fichier pèse <u>moins de 150Mo</u> !!</b><br />Si ce n'est pas le cas, merci de fermer la fenêtre et de recommencer l'opération.</span>");
+	showWait();
+    var queryString = $.param(formData); 
+    return true; 
+} 
+
+function fonctionAvantUploadMp3Teaser(formData, jqForm, options) { 
+	changeWaitMessage("<b>Upload d uteaser MP3 de l'émission ...</b><br /><br />Cela peut être long si le fichier est volumineux.<br /> Ne pas s'inquiéter.");
 	showWait();
     var queryString = $.param(formData); 
     return true; 
@@ -630,6 +645,7 @@ function createLigneUtilisateur(userData)
 	}
 	
 	var col1 = document.createElement('td');
+	col1.style.paddingLeft = '5px';
 	col1.innerHTML = userData.nom;
 	
 	var col3 = document.createElement('td');
@@ -677,8 +693,8 @@ function createLigneUtilisateur(userData)
 	if (userData.est_chef_encours == 1)
 		utilisateur.className = 'etat21';
 	
-	utilisateur.appendChild(col0);
 	utilisateur.appendChild(col1);
+	utilisateur.appendChild(col0);
 	utilisateur.appendChild(col3);
 	utilisateur.appendChild(col2);
 		
@@ -997,33 +1013,34 @@ function createLigneEditUser(userData, nomParticipant)
 
 function refreshNewsFormZoneAfterUpload(reponse, statut)
 {
+	initialiseWaitMessage();
 	refreshNewsFormZone();
 	hideWait();
 }
 
 function refreshImageFormZoneAfterUpload(reponse, statut)
 {
+	initialiseWaitMessage();
 	document.getElementById('imgPochetteEmissionThumb').src = '../pochettes/comingsoon.jpg';
 	refreshImageFormZone();
 	envoiMailAdmin(currentItem.numero, 'uploadé', 'Pochette JPG');
-	hideWait();
 	updateZipEmission();
 }
 
 function refreshImageToPrintFormZoneAfterUpload(reponse, statut)
 {
+	initialiseWaitMessage();
 	document.getElementById('imgPochetteEmissionThumbToPrint').src = '../pochettes/comingsoon.jpg';
 	refreshImageToPrintFormZone();
-	hideWait();
 	updateZipEmission();
 }
 
 function refreshImageGifFormZoneAfterUpload(reponse, statut)
 {
+	initialiseWaitMessage();
 	document.getElementById('imgPochetteEmissionThumbGif').src = '../pochettes/comingsoon.jpg';
 	refreshImageGifFormZone();
 	envoiMailAdmin(currentItem.numero, 'uploadé', 'Pochette GIF');
-	hideWait();
 	updateZipEmission();
 }
 
@@ -1193,18 +1210,18 @@ function refreshImageGifFormZone()
 
 function refreshMp3FormZoneAfterUpload(reponse, statut)
 {
+	initialiseWaitMessage();
 	refreshMp3FormZone();
 	getDatas('dbUpdateTimeEmission', 'result', 'id=' + currentItem.id + '&time_min=' + currentItem.time_min + '&time_sec=' + currentItem.time_sec);
 	envoiMailAdmin(currentItem.numero, 'uploadé', 'Fichier MP3');
-	hideWait();
 	updateZipEmission();
 }
 
 function refreshMp3TeaserFormZoneAfterUpload(reponse, statut)
 {
+	initialiseWaitMessage();
 	refreshMp3TeaserFormZone();
 	envoiMailAdmin(currentItem.numero, 'uploadé', 'Teaser MP3');
-	hideWait();
 	updateZipEmission();
 }
 
@@ -1299,19 +1316,20 @@ function updateVideoTeaser()
 	getDatas('dbGetEmission', 'currentEmissionDatas', 'id=' + currentItem.id);
 	currentItem.teaser_video = currentEmissionDatas.teaser_video;
 	refreshVideoTeaserFormZone();
-	hideWait();
 	
 	updateZipEmission();
 }
 
 function updateZipEmission()
 {
+	initialiseWaitMessage();
 	if (siteHaveZip && currentItem.etat == 3)
 	{
 		changeWaitMessage("<b>Regénération du ZIP de l'émission...</b><br />Parce que les données ont changées alors que l'émission déjà publiée !!");
 		getDatas('createZipEmission', 'result', 'id=' + currentItem.id);
 		initialiseWaitMessage();
 	}
+	hideWait();
 }
 
 function refreshVideoTeaserFormZone()
