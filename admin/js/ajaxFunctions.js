@@ -172,10 +172,10 @@ function display(page)
 		document.getElementById('texteChef').style.display = 'none';
 		document.getElementById('mailAdmin').style.display = 'none';
 		
-		if (!haveParticipants)
+		if (!siteHaveParticipants)
 			document.getElementById('buttonMenuusers').style.display = 'none';
 			
-		if (!haveContenuPages)
+		if (!siteHaveContenuPages)
 			document.getElementById('buttonMenucontenu').style.display = 'none';
 	}
 	else
@@ -234,7 +234,7 @@ function display(page)
 		document.getElementById('txtDateEmissionError').innerHTML = '';
 		document.getElementById('boutonUpdateZipEmission').style.display = 'none';
 		
-		if (currentItem.titre != '')
+		if (currentItem.titre != '' || !siteHaveTitre)
 			document.getElementById('emission').className = 'etat32';
 		else
 			document.getElementById('emission').className = 'etat42';
@@ -244,7 +244,7 @@ function display(page)
 		else
 			document.getElementById('lblDateEmission').style.display = 'block';
 		
-		if (haveZip && admin == '' && currentItem.etat == 3)
+		if (siteHaveZip && currentItem.etat == 3)
 			document.getElementById('boutonUpdateZipEmission').style.display = 'block';
 
 		if (admin != '')
@@ -254,7 +254,13 @@ function display(page)
 			document.getElementById('trDateEmission').style.display = 'none';
 			document.getElementById('trBoutonsEmission').style.display = 'none';
 		}
+		
+		if (!siteHaveStatutAnnounced)
+			document.getElementById('trDateEmission').style.display = 'none';
 
+		if (!siteHaveTitre)
+			document.getElementById('trTitreEmission').style.display = 'none';
+				
 		refreshImageFormZone();
 		refreshImageToPrintFormZone();
 		refreshImageGifFormZone();
@@ -362,7 +368,7 @@ var listeParticipantsEmissionDatas = new Array();
 function refreshParticipants()
 {
 	hideAddParticipant();
-	if (isNew || admin != '')		
+	if (isNew || !siteHaveParticipants || admin != '')
 	{
 		document.getElementById('participants').style.display = 'none';
 	}
@@ -1034,7 +1040,7 @@ function refreshNewsFormZone()
 
 function refreshImageFormZone()
 {
-	if (isNew || !haveImageJpg)
+	if (isNew || !siteHaveImageJpg)
 	{
 		document.getElementById('pochetteEmission').style.display = 'none';
 	}
@@ -1042,8 +1048,8 @@ function refreshImageFormZone()
 	{
 		document.getElementById('pochetteEmission').style.display = 'block';
 
-		getDatas('getImageEmissionFlag', 'haveImage', 'numero=' + currentItem.numero);
-		if (haveImage)
+		getDatas('getImageEmissionFlag', 'emissionHaveImage', 'numero=' + currentItem.numero);
+		if (emissionHaveImage)
 		{
 			ImageThumb= new Image();
 			ImageThumb.src = '../pochettes/thisisradioclash-episode' + currentItem.numero + '.jpg?' + (new Date()).getTime();
@@ -1071,7 +1077,7 @@ function refreshImageFormZone()
 
 function refreshImageToPrintFormZone()
 {
-	if (isNew || admin != '' || !haveImageJpgToPrint)
+	if (isNew || !siteHaveImageJpgToPrint)
 	{
 		document.getElementById('pochetteEmissionToPrint').style.display = 'none';
 	}
@@ -1079,8 +1085,8 @@ function refreshImageToPrintFormZone()
 	{
 		document.getElementById('pochetteEmissionToPrint').style.display = 'block';
 
-		getDatas('getImageEmissionFlag', 'haveImageToPrint', 'numero=' + currentItem.numero + '-toPrint');
-		if (haveImageToPrint)
+		getDatas('getImageEmissionFlag', 'emissionHaveImageToPrint', 'numero=' + currentItem.numero + '-toPrint');
+		if (emissionHaveImageToPrint)
 		{
 			ImageThumb= new Image();
 			ImageThumb.src = '../pochettes/thisisradioclash-episode' + currentItem.numero + '-toPrint.jpg?' + (new Date()).getTime();
@@ -1093,7 +1099,7 @@ function refreshImageToPrintFormZone()
 		else
 		{
 			document.getElementById('imgPochetteEmissionThumbToPrint').src = '../pochettes/comingsoon.jpg';
-			document.getElementById('pochetteEmissionToPrint').className = 'etat42';
+			document.getElementById('pochetteEmissionToPrint').className = 'etat22';
 			document.getElementById('imgPochetteEmissionToPrint').style.display = 'none';
 			document.getElementById('filePochetteEmissionToPrintDeleteButton').disabled = true;
 		}
@@ -1149,7 +1155,7 @@ function deleteFile(typeFichier)
 
 function refreshImageGifFormZone()
 {
-	if (isNew || !haveImageGif)
+	if (isNew || !siteHaveImageGif)
 	{
 		document.getElementById('pochetteEmissionGif').style.display = 'none';
 	}
@@ -1157,11 +1163,11 @@ function refreshImageGifFormZone()
 	{
 		document.getElementById('pochetteEmissionGif').style.display = 'block';
 
-		getDatas('getImageEmissionGifFlag', 'haveImageGif', 'numero=' + currentItem.numero);
+		getDatas('getImageEmissionGifFlag', 'emissionHaveImageGif', 'numero=' + currentItem.numero);
 		
 		document.getElementById('imgPochetteEmissionGif').style.display = 'none';
 
-		if (haveImageGif)
+		if (emissionHaveImageGif)
 		{
 			ImageThumbGif= new Image();
 			ImageThumbGif.src = '../pochettes/thisisradioclash-episode' + currentItem.numero + '.gif?' + (new Date()).getTime();
@@ -1213,15 +1219,15 @@ function refreshMp3FormZone()
 		document.getElementById('yesMp3').style.display = 'none';
 		document.getElementById('noMp3').style.display = 'none';
 
-		getDatas('getTimeEmission', 'haveMp3', 'numero=' + currentItem.numero);
-		if (haveMp3 != 0)
+		getDatas('getTimeEmission', 'emissionHaveMp3', 'numero=' + currentItem.numero);
+		if (emissionHaveMp3 != 0)
 		{
 			document.getElementById('mp3Emission').className = 'etat32';
 			document.getElementById('yesMp3').style.display = 'block';
 			document.getElementById('linkMp3Emission').href = '../mp3/thisisradioclash-episode' + currentItem.numero + '.mp3';
 			document.getElementById('linkMp3Emission').innerHTML = 'This is radioclash n°' + currentItem.numero;
-			document.getElementById('timeMp3Emission').innerHTML = haveMp3;
-			var times = haveMp3.split(':');
+			document.getElementById('timeMp3Emission').innerHTML = emissionHaveMp3;
+			var times = emissionHaveMp3.split(':');
 			currentItem.time_min = times[0];
 			currentItem.time_sec = times[1];
 			
@@ -1248,7 +1254,7 @@ function refreshMp3FormZone()
 
 function refreshMp3TeaserFormZone()
 {
-	if (isNew || !haveTeaserMp3)
+	if (isNew || !siteHaveTeaserMp3)
 	{
 		document.getElementById('mp3Teaser').style.display = 'none';
 	}
@@ -1259,8 +1265,8 @@ function refreshMp3TeaserFormZone()
 		document.getElementById('yesMp3Teaser').style.display = 'none';
 		document.getElementById('noMp3Teaser').style.display = 'none';
 
-		getDatas('getTeaserEmissionFlag', 'haveMp3Teaser', 'numero=' + currentItem.numero);
-		if (haveMp3Teaser != 0)
+		getDatas('getTeaserEmissionFlag', 'emissionHaveMp3Teaser', 'numero=' + currentItem.numero);
+		if (emissionHaveMp3Teaser != 0)
 		{
 			document.getElementById('mp3Teaser').className = 'etat32';
 			document.getElementById('yesMp3Teaser').style.display = 'block';
@@ -1298,7 +1304,7 @@ function updateVideoTeaser()
 
 function updateZipEmission()
 {
-	if (haveZip && currentItem.etat == 3)
+	if (siteHaveZip && currentItem.etat == 3)
 	{
 		changeWaitMessage("<b>Regénération du ZIP de l'émission...</b><br />Parce que les données ont changées alors que l'émission déjà publiée !!");
 		getDatas('createZipEmission', 'result', 'id=' + currentItem.id);
@@ -1312,7 +1318,7 @@ function refreshVideoTeaserFormZone()
 	document.getElementById('linkVideoTeaserValue').value = '';
 	document.getElementById('linkVideoTeaserSrc').src = '';
 
-	if (isNew || !haveTeaserVideo)
+	if (isNew || !siteHaveTeaserVideo)
 	{
 		document.getElementById('videoTeaser').style.display = 'none';
 	}
@@ -1361,8 +1367,8 @@ function verifParticipants(idEmission)
 
 function verifMorceaux(idEmission)
 {
-	getDatas('dbGetMorceauxEmissionFlag', 'haveMorceaux', 'id=' + idEmission);
-	return haveMorceaux;
+	getDatas('dbGetMorceauxEmissionFlag', 'emissionHaveMorceaux', 'id=' + idEmission);
+	return emissionHaveMorceaux;
 }
 
 function createLigneEmission(emissionData)
@@ -1375,7 +1381,11 @@ function createLigneEmission(emissionData)
 	col1.appendChild(thumb);
 	var col2 = document.createElement('td');
 	col2.className = 'titreEmission';
-	col2.innerHTML = emissionData.numero + ' - ' + emissionData.titre;
+	if (siteHaveTitre)
+		col2.innerHTML = emissionData.numero + ' - ' + emissionData.titre;
+	else
+		col2.innerHTML = 'Emission n°' + emissionData.numero;
+		
 	var col3 = document.createElement('td');
 	col3.className = 'dateEmission';
 	if (emissionData.etat == 2 && emissionData.date_sortie != '??/??/????')
@@ -1404,7 +1414,7 @@ function createLigneEmission(emissionData)
 	//Pour une émission cachée :
 	if (emissionData.etat == 1)
 	{
-		if (emissionData.titre != '')
+		if (siteHaveStatutAnnounced && (emissionData.titre != '' || !siteHaveTitre))
 		{
 			var saut1 = document.createElement('span');
 			saut1.innerHTML = " / ";	
@@ -1451,7 +1461,7 @@ function createLigneEmission(emissionData)
 	}
 	
 	//Pour une émission annoncée :
-	if (emissionData.etat == 2 && admin == '')
+	if (admin == '' && (emissionData.etat == 2 || (!siteHaveStatutAnnounced && emissionData.etat == 1)))
 	{
 		var saut3 = document.createElement('span');
 		saut3.innerHTML = " / ";	
@@ -1460,13 +1470,13 @@ function createLigneEmission(emissionData)
 		linkPublish.innerHTML = 'Publier';
 		linkPublish.href = '#';
 		linkPublish.onclick = function () {
-			if (verifEmission(emissionData.id))
+			if (verifParticipants(emissionData.id) && verifEmission(emissionData.id))
 			{
 				if (confirm('Certain de vouloir publier cette émission ? Go ?'))
 				{
 					getDatas('dbUpdateEtatEmission', 'result', 'id=' + emissionData.id + '&etat=3');
 					
-					if (haveZip)
+					if (siteHaveZip)
 						getDatas('createZipEmission', 'result', 'id=' + emissionData.id);
 					
 					display('playlists');
@@ -1523,6 +1533,19 @@ function formAddParticipant()
 	refreshParticipants();
 }
 
+function addDefaultParticipantEmission(numero_emission)
+{
+	getDatas('dbGetEmissionByNumero', 'emissionToGet', 'id_site=' + id_site + '&numero=' + numero_emission);
+
+	var enreg = new Array();
+	enreg['id'] = emissionToGet.id;
+	enreg['nom'] = siteDefaultParticipant;
+	enreg['ordre'] = 0;
+	enreg['est_chef'] = 1;
+	
+	getDatas('dbInsertParticipant', 'result', 'id=' + enreg.id + '&nom=' + encode(enreg.nom) + '&ordre=' + enreg.ordre + '&est_chef=' + enreg.est_chef);
+}
+
 function formEnregistrer()
 {
 	var enreg = new Array();
@@ -1536,7 +1559,11 @@ function formEnregistrer()
 
 	//alert('numero=' + enreg.numero + '&titre=' + encode(enreg.titre) + '&date_sortie=' + enreg.date_sortie + '&etat=' + enreg.etat + '&time_min=' + enreg.time_min + '&time_sec=' + enreg.time_sec);
 	if (isNew)
+	{
 		getDatas('dbInsertEmission', 'result', 'id_site=' + id_site + '&numero=' + enreg.numero + '&titre=' + encode(enreg.titre) + '&date_sortie=' + enreg.date_sortie + '&etat=' + enreg.etat + '&time_min=' + enreg.time_min + '&time_sec=' + enreg.time_sec);
+		if (!siteHaveParticipants)
+			addDefaultParticipantEmission(enreg['numero']);
+	}
 	else
 		getDatas('dbUpdateEmission', 'result', 'id=' + enreg.id + '&id_site=' + id_site + '&numero=' + enreg.numero + '&titre=' + encode(enreg.titre) + '&date_sortie=' + enreg.date_sortie + '&etat=' + enreg.etat + '&time_min=' + enreg.time_min + '&time_sec=' + enreg.time_sec);
 
@@ -1559,7 +1586,7 @@ function newEmission()
 	currentItem['time_min'] = 0;
 	currentItem['time_sec'] = 0;
 	display('playlist');
-	document.getElementById('formEnregistrer').disabled = (!Verif_NonVide(document.getElementById('txtTitreEmission')));
+	document.getElementById('formEnregistrer').disabled = (siteHaveTitre && !Verif_NonVide(document.getElementById('txtTitreEmission')));
 }
 
 function validateExtension(control, extension)
@@ -1639,7 +1666,10 @@ function createLigneParticipantPlaylist(participantData)
 	var txtMorceaux = document.createElement('textarea');
 	txtMorceaux.id = 'txtMorceauPlaylist' + participantData.nom_utilisateur;
 	txtMorceaux.style.width = '100%';
-	txtMorceaux.style.height = '150px';
+	if (siteHaveParticipants)
+		txtMorceaux.style.height = '150px';
+	else
+		txtMorceaux.style.height = '350px';
 	
 	var spnError = document.createElement('span');
 	spnError.id = 'spnErrorPlaylist' + participantData.nom_utilisateur;	
@@ -1769,9 +1799,13 @@ function createLigneParticipantPlaylist(participantData)
 	var br3 = document.createElement('br');
 	
 	var liParticipant = document.createElement('li');
-	liParticipant.innerHTML = "<b><u>" + participantData.nom_utilisateur + "</u></b>";
 	
-	liParticipant.appendChild(br1);
+	if (siteHaveParticipants)
+	{
+		liParticipant.innerHTML = "<b><u>Playlist de " + participantData.nom_utilisateur + " :</u></b><br />";
+		liParticipant.appendChild(br1);
+	}
+	
 	liParticipant.appendChild(txtMorceaux);
 	liParticipant.appendChild(spnError);
 	liParticipant.appendChild(br2);
