@@ -2,6 +2,6 @@
 
 include('dbFunctions.php');
 
-dbUpdateChefEmission($_POST["numero"], $_POST["nom"]);
+dbUpdateChefEmission($_POST["id"], $_POST["nom"]);
 
 ?>

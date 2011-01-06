@@ -4,7 +4,7 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>';
 include('../dbFunctions/dbFunctions.php');
 include('../sitevars.php');
 
-$listeEmissions = dbListeEmissionsForFeed();
+$listeEmissions = dbListeEmissionsForFeed($id_site);
 
 echo '<rss version="2.0">';
 echo '  <channel>';
@@ -19,6 +19,7 @@ echo '    <language>en-us</language>';
 
 while($emission=mysql_fetch_array($listeEmissions))
 {
+	$idEmission = $emission['id'];
 	$numeroEmission = $emission['numero'];
 	$titreEmission = "This is Radioclash ".$numeroEmission." : ".$emission['titre'];
 	$imageEmission = $radioclashHome.$pics."thisisradioclash-episode".$numeroEmission.".jpg";
@@ -35,9 +36,9 @@ while($emission=mysql_fetch_array($listeEmissions))
 	echo '        00:00 This is radioclash - Introduction Jingle<br />';
 
 	
-		$playlist = dbGetPlaylist($numeroEmission);
+		$playlist = dbGetPlaylist($idEmission);
 		$nomUtilisateurEnCours = "";
-		$chef = dbGetChefEmission($numeroEmission);
+		$chef = dbGetChefEmission($idEmission);
 		$i = 1;
 		while($array=mysql_fetch_array($playlist))
 		{

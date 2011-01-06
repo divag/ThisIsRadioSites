@@ -3,8 +3,13 @@
 	include('dbFunctions.php');
 	include('../'.$zipModule);
 
-	$numero = $_POST['numero'];
-	//$numero = $_GET['numero'];
+	$id = $_POST['id'];
+	//$id = $_GET['id'];
+	
+	$emission = dbGetEmission($id);
+	$numero = $emission['numero'];
+	$id_site = $emission['id_site'];
+	
 	$nom_emission = 'thisisradioclash-episode'.$numero;
     $chemin_destination = '../'.$zips;
 	
@@ -27,9 +32,7 @@
 	// instanciation de l'objet createZip
 	$radioclashZip = new createZip;  
 
-	// On genere le fichier de la playlist :
-	$emission = dbGetEmission($numero);
-	
+	// On genere le fichier de la playlist :	
 	$fichier_playlist ="THIS IS RADIOCLASH N°".$numero." : ".$emission['titre']."\r\n";
 	$fichier_playlist.="\r\n";
 	$fichier_playlist.="\r\n";
@@ -37,9 +40,9 @@
 	
 	$fichier_playlist.=" 00:00 This is radioclash - Introduction Jingle\r\n";
 	
-	$playlist = dbGetPlaylist($numero);
+	$playlist = dbGetPlaylist($id);
 	$nomUtilisateurEnCours = "";
-	$chef = dbGetChefEmission($numero);
+	$chef = dbGetChefEmission($id);
 	$i = 1;
 	while($array=mysql_fetch_array($playlist))
 	{

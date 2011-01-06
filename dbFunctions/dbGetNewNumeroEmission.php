@@ -2,7 +2,7 @@
 
 include('dbFunctions.php');
 
-$maxNumber = dbGetMaxNumberEmission();
+$maxNumber = dbGetMaxNumberEmission($_POST["id_site"]);
 
 echo $_POST["variable"]." = ".($maxNumber + 1).";";
 

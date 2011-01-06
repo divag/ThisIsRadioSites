@@ -2,6 +2,6 @@
 
 include('dbFunctions.php');
 
-dbDeleteParticipant($_POST["numero"], $_POST["nom"])
+dbDeleteParticipant($_POST["id"], $_POST["nom"])
 
 ?>

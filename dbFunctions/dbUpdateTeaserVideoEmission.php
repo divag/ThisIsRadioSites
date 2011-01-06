@@ -2,6 +2,6 @@
 
 include('dbFunctions.php');
 
-dbUpdateTeaserVideoEmission($_POST["numero"], $_POST["teaser_video"]);
+dbUpdateTeaserVideoEmission($_POST["id"], $_POST["teaser_video"]);
 
 ?>

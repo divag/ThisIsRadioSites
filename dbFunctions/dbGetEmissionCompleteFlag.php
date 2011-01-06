@@ -2,7 +2,7 @@
 
 include('dbFunctions.php');
 
-$emissionComplete = dbGetEmissionCompleteFlag($_POST["numero"]);
+$emissionComplete = dbGetEmissionCompleteFlag($_POST["id"]);
 
 if ($emissionComplete)
 	echo $_POST["variable"]." = true;";

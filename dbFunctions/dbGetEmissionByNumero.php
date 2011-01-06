@@ -2,7 +2,7 @@
 
 include('dbFunctions.php');
 
-$emission = dbGetEmission($_POST["id"]);
+$emission = dbGetEmissionByNumero($_POST["id_site"], $_POST["numero"]);
 
 if ($emission == 0)
 	echo $_POST["variable"]." = 0;";

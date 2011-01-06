@@ -2,7 +2,7 @@
 
 include('dbFunctions.php');
 
-$liste_morceaux = dbGetPlaylistParticipant($_POST["numero"], $_POST["nom"]);
+$liste_morceaux = dbGetPlaylistParticipant($_POST["id"], $_POST["nom"]);
 
 $array_morceaux = array();
 while($array=mysql_fetch_array($liste_morceaux))

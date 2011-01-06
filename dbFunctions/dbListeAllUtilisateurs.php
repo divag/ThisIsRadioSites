@@ -2,6 +2,7 @@
 
 include('dbFunctions.php');
 
+$id_site = $_POST["id_site"];
 $liste_utilisateurs = dbGetListeAllUtilisateurs();
 
 $array_utilisateurs = array();
@@ -16,7 +17,7 @@ while($array=mysql_fetch_array($liste_utilisateurs))
 		$array['est_chef'] = 1;
 		
 	$array['est_chef_encours'] = 0;
-	if (mysql_num_rows(dbListeAllEmissionForChef(urlencode(addslashes($array['nom'])))) != 0)
+	if (mysql_num_rows(dbListeAllEmissionForChef($id_site, urlencode(addslashes($array['nom'])))) != 0)
 		$array['est_chef_encours'] = 1;
 	
 	//$array['nom'] = utf8_encode($array['nom']);					

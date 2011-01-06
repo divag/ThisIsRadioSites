@@ -1,5 +1,29 @@
--- AJOUT DU CHAMP id dans la table UTILISATEUR (autoincrément) + alimenation
+-- Ajout d'un ID à la table des utilisateurs
+ALTER TABLE `UTILISATEUR` DROP PRIMARY KEY;
+ALTER TABLE `UTILISATEUR` ADD `id` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
 
-
+-- Suppression de la notion de groupes :
 INSERT INTO UTILISATEUR (id, nom, login_forum, url_site, mail, password) VALUES (null,'Prototop', 'Prototop', 'http://prototop.be', '', 'paon');
 DROP TABLE IF EXISTS `GROUPE_UTILISATEURS`;
+
+-- Ajout d'un ID à la table des émissions
+ALTER TABLE `EMISSION` ADD `id` BIGINT( 20 ) UNSIGNED NOT NULL FIRST;
+UPDATE EMISSION SET id = numero;
+ALTER TABLE `EMISSION` MODIFY `numero` BIGINT( 20 ) UNSIGNED NOT NULL;
+ALTER TABLE `EMISSION` DROP PRIMARY KEY;
+ALTER TABLE `EMISSION` MODIFY `id` BIGINT( 20 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+
+ALTER TABLE `EMISSION` ADD `id_site` INT( 10 ) UNSIGNED NOT NULL AFTER `id`;
+UPDATE EMISSION SET id_site = 1;
+
+-- changement de l'id de l'émission pour un participant :
+ALTER TABLE `PARTICIPANT` ADD `id_emission` BIGINT( 20 ) UNSIGNED NOT NULL FIRST;
+UPDATE PARTICIPANT SET id_emission = numero_emission;
+ALTER TABLE `PARTICIPANT` DROP PRIMARY KEY;
+ALTER TABLE `PARTICIPANT` ADD PRIMARY KEY  (`id_emission`, `nom_utilisateur`);
+ALTER TABLE `PARTICIPANT` DROP numero_emission;
+
+-- changement de l'id de l'émission pour un morceau :
+ALTER TABLE `MORCEAU` ADD `id_emission` BIGINT( 20 ) UNSIGNED NOT NULL AFTER id;
+UPDATE MORCEAU SET id_emission = numero_emission;
+ALTER TABLE `MORCEAU` DROP numero_emission;

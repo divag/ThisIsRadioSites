@@ -3,7 +3,7 @@ include('siteparts.php');
 include('sitevars.php');
 
 //R�cup�ration de la derni�re �mission :
-$lastEmission = dbGetLastEmission();
+$lastEmission = dbGetLastEmission($id_site);
 $texteLastEmission = $lastEmission['numero']." : ".$lastEmission['titre'];
 
 if (file_exists($pics."thisisradioclash-episode".$lastEmission['numero'].".gif"))
@@ -14,11 +14,11 @@ else
 $linkLastEmission = "playlist.php?episode=".$lastEmission['numero'];
 
 //R�cup�ration de la liste des participants :
-$listeParticipants = listeParticipants();
+$listeParticipants = listeParticipants($id_site);
 
 //NEWS :
 //R�cup�ration de la liste des �missions � venir :
-$listeEmissions = dbGetListeEmissionsComingSoon();
+$listeEmissions = dbGetListeEmissionsComingSoon($id_site);
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -129,7 +129,7 @@ writeEntete('');
 				else
 					$dateEmission = date('d/m/Y', strtotime($emission['date_sortie']));
 					
-				$listeParticipantsEmission = listeParticipantsEmission($emission['numero']);
+				$listeParticipantsEmission = listeParticipantsEmission($emission['id']);
 				
 				$teaserLinkStart = '';
 				$teaserLinkEnd = '';

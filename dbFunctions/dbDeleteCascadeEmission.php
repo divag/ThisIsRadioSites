@@ -2,6 +2,6 @@
 
 include('dbFunctions.php');
 
-dbDeleteCascadeEmission($_POST["numero"]);
+dbDeleteCascadeEmission($_POST["id"]);
 
 ?>

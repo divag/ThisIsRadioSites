@@ -2,7 +2,7 @@
 
 include('dbFunctions.php');
 
-$liste_emissions = dbListeAllEmission();
+$liste_emissions = dbListeAllEmission($_POST["id_site"]);
 
 $array_emissions = array();
 while($array=mysql_fetch_array($liste_emissions))

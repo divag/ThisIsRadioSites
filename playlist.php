@@ -12,7 +12,7 @@ else
 	else
 	{
 		$numero = $_GET["episode"];
-		$emission = dbGetEmission($numero);
+		$emission = dbGetEmissionByNumero($id_site, $numero);
 		
 		if ($emission == 0 || $emission['etat'] != 3)
 			echo "<script>window.location.href = '".$radioclashHome."';</script>";
@@ -35,8 +35,8 @@ else
 			$audioEmission = $mp3s."thisisradioclash-episode".$numero.".mp3";
 			$zipEmission = $zips."thisisradioclash-episode".$numero.".zip";
 			$linkEmission = "playlist.php?episode=".$numero;
-			$playlist = dbGetPlaylist($numero);
-			$nextEmission = dbGetNextEmission($numero);
+			$playlist = dbGetPlaylist($id);
+			$nextEmission = dbGetNextEmission($id_site, $numero);
 			
 			$linkEmissionAutoRedirect = "playlist.php?episode=".$nextEmission['numero']."&auto=1";
 			
@@ -170,9 +170,9 @@ writeEntete('playlist');
 		
 		<span class="metadataShortCut" id="metadataShortCut0">00:00 This is radioclash - Introduction Jingle</span><br />
 		<?php 
-		$playlist = dbGetPlaylist($numero);
+		$playlist = dbGetPlaylist($id);
 		$nomUtilisateurEnCours = "";
-		$chef = dbGetChefEmission($numero);
+		$chef = dbGetChefEmission($id);
 		$i = 1;
 		while($array=mysql_fetch_array($playlist))
 		{

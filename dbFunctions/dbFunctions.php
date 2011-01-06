@@ -6,11 +6,11 @@ INDEX :
 */
 
 //R�cup�ration de la derni�re �mission
-function dbGetLastEmission(){
+function dbGetLastEmission($id_site){
 
     include('var.php');
 
-	$query = "SELECT numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE etat=3 ORDER BY date_sortie DESC LIMIT 0,1;";
+	$query = "SELECT id, id_site, numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND etat=3 ORDER BY date_sortie DESC LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -20,11 +20,11 @@ function dbGetLastEmission(){
 	return $row;
 }
 
-function dbListeEmissionsForFeed(){
+function dbListeEmissionsForFeed($id_site){
 
     include('var.php');
 
-	$query = "SELECT numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE etat=3 ORDER BY date_sortie DESC;";
+	$query = "SELECT id, id_site, numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site=".$id_site." AND etat=3 ORDER BY date_sortie DESC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -33,11 +33,11 @@ function dbListeEmissionsForFeed(){
 	return $res;
 }
 
-function dbGetMaxNumberEmission(){
+function dbGetMaxNumberEmission($id_site){
 
     include('var.php');
 
-	$query = "SELECT numero FROM EMISSION ORDER BY numero DESC LIMIT 0,1;";
+	$query = "SELECT numero FROM EMISSION WHERE id_site = ".$id_site." ORDER BY numero DESC LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -48,11 +48,11 @@ function dbGetMaxNumberEmission(){
 }
 
 //R�cup�ration de la liste de tous participants des �missions actives :
-function dbGetNomsParticipantsActifs(){
+function dbGetNomsParticipantsActifs($id_site){
 
     include('var.php');
 
-	$query = "SELECT DISTINCT login_forum FROM UTILISATEUR, PARTICIPANT, EMISSION WHERE UTILISATEUR.nom = PARTICIPANT.nom_utilisateur AND PARTICIPANT.numero_emission = EMISSION.numero AND EMISSION.etat = 3;";
+	$query = "SELECT DISTINCT login_forum FROM UTILISATEUR, PARTICIPANT, EMISSION WHERE UTILISATEUR.nom = PARTICIPANT.nom_utilisateur AND PARTICIPANT.id_emission = EMISSION.id AND EMISSION.id_site = ".$id_site." AND EMISSION.etat = 3;";
     $link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -61,9 +61,9 @@ function dbGetNomsParticipantsActifs(){
 }
 
 //R�cup�ration de la liste de tous participants des �missions actives, en texte (avec leur nom sur le forum si possible) s�par�s par des virgules :
-function listeParticipants()
+function listeParticipants($id_site)
 {
-    $listeParticipants = dbGetNomsParticipantsActifs();
+    $listeParticipants = dbGetNomsParticipantsActifs($id_site);
 	$separateur = "";
 	$liste = "";
     while($array=mysql_fetch_array($listeParticipants))
@@ -80,11 +80,11 @@ NEWS :
 ======
 */
 
-function dbGetListeEmissionsComingSoon(){
+function dbGetListeEmissionsComingSoon($id_site){
 
     include('var.php');
 
-	$query = "SELECT numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE etat = 2 ORDER BY numero ASC;";
+	$query = "SELECT id, id_site, numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND etat = 2 ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -94,11 +94,11 @@ function dbGetListeEmissionsComingSoon(){
 }
 
 //R�cup�ration de la liste de tous les participants d'une �mission :
-function dbGetParticipantsEmission($p_numero_emission){
+function dbGetParticipantsEmission($p_id_emission){
 
     include('var.php');
 
-    $query = "SELECT numero_emission, nom_utilisateur, ordre, est_chef FROM PARTICIPANT WHERE numero_emission = ".$p_numero_emission." ORDER BY ORDRE ASC;";
+    $query = "SELECT id_emission, nom_utilisateur, ordre, est_chef FROM PARTICIPANT WHERE id_emission = ".$p_id_emission." ORDER BY ORDRE ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -111,7 +111,7 @@ function dbGetParticipant($p_nom){
 
     include('var.php');
 
-    $query = "SELECT numero_emission, nom_utilisateur, ordre, est_chef FROM PARTICIPANT WHERE nom_utilisateur = '".urldecode($p_nom)."';";
+    $query = "SELECT id_emission, nom_utilisateur, ordre, est_chef FROM PARTICIPANT WHERE nom_utilisateur = '".urldecode($p_nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -127,7 +127,7 @@ function dbGetChefFlag($p_nom){
 
     include('var.php');
 
-    $query = "SELECT PARTICIPANT.numero_emission FROM PARTICIPANT WHERE PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($p_nom)."';";
+    $query = "SELECT PARTICIPANT.id_emission FROM PARTICIPANT WHERE PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($p_nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -140,9 +140,9 @@ function dbGetChefFlag($p_nom){
 }
 
 //R�cup�ration de la liste de tous les participants d'une �mission, en texte s�par�s par des virgules :
-function listeParticipantsEmission($p_numero_emission)
+function listeParticipantsEmission($p_id_emission)
 {
-    $listeParticipants = dbGetParticipantsEmission($p_numero_emission);
+    $listeParticipants = dbGetParticipantsEmission($p_id_emission);
 	$separateur = "";
 	$liste = "";
     while($array=mysql_fetch_array($listeParticipants))
@@ -159,11 +159,11 @@ PLAYLISTS :
 */
 
 //R�cup�ration de l'�mission :
-function dbGetListeEmissions(){
+function dbGetListeEmissions($id_site){
 
     include('var.php');
 
-	$query = "SELECT numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE etat = 2 OR etat = 3 ORDER BY numero ASC;";
+	$query = "SELECT id, id_site, numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND etat = 2 OR etat = 3 ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -178,11 +178,27 @@ PAGE D'UNE PLAYLIST :
 */
 
 //R�cup�ration de l'�mission :
-function dbGetEmission($p_numero){
+function dbGetEmission($p_id){
 
     include('var.php');
 
-	$query = "SELECT numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE numero = ".$p_numero.";";
+	$query = "SELECT id, id_site, numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id = ".$p_id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+	mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+	    return $row;
+    else
+	    return 0;
+}
+
+function dbGetEmissionByNumero($p_id_site, $p_numero){
+
+    include('var.php');
+
+	$query = "SELECT id, id_site, numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$p_id_site." AND numero = ".$p_numero.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -195,11 +211,11 @@ function dbGetEmission($p_numero){
 }
 
 //R�cup�ration de l'�mission suivante :
-function dbGetNextEmission($p_numero){
+function dbGetNextEmission($id_site, $p_numero){
 
     include('var.php');
 
-	$query = "SELECT numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE etat = 3 AND numero < ".$p_numero." ORDER BY numero DESC LIMIT 0,1;";
+	$query = "SELECT id, id_site, numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND etat = 3 AND numero < ".$p_numero." ORDER BY numero DESC LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -209,7 +225,7 @@ function dbGetNextEmission($p_numero){
 	    return $row;
     else
 	{
-		$query = "SELECT numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE etat = 3 ORDER BY numero DESC LIMIT 0,1;";
+		$query = "SELECT id, id_site, numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND etat = 3 ORDER BY numero DESC LIMIT 0,1;";
 		$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 		$select_base=mysql_selectdb($db);
 		$res=mysql_db_query ($db, $query);	
@@ -220,11 +236,11 @@ function dbGetNextEmission($p_numero){
 }
 
 //R�cup�ration de l'�mission pr�c�dente :
-function dbGetPrevEmission($p_numero){
+function dbGetPrevEmission($id_site, $p_numero){
 
     include('var.php');
 
-	$query = "SELECT numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE etat = 3 AND numero < ".$p_numero." ORDER BY numero ASC LIMIT 0,1;";
+	$query = "SELECT id, id_site, numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND etat = 3 AND numero < ".$p_numero." ORDER BY numero ASC LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -320,11 +336,11 @@ function dbDeleteUtilisateur($p_nom_utilisateur){
 }
 
 //R�cup�ration de la playlist :
-function dbGetPlaylist($p_numero_emission){
+function dbGetPlaylist($p_id_emission){
 
     include('var.php');
 
-	$query = "SELECT id, numero_emission, nom_utilisateur, time_min, time_sec, nom_artiste, nom_morceau FROM MORCEAU WHERE numero_emission = ".$p_numero_emission." ORDER BY time_min, time_sec ASC;";
+	$query = "SELECT id, id_emission, nom_utilisateur, time_min, time_sec, nom_artiste, nom_morceau FROM MORCEAU WHERE id_emission = ".$p_id_emission." ORDER BY time_min, time_sec ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -334,11 +350,11 @@ function dbGetPlaylist($p_numero_emission){
 }
 
 //R�cup�ration de la playlist :
-function dbGetPlaylistParticipant($p_numero_emission, $nom_participant){
+function dbGetPlaylistParticipant($p_id_emission, $nom_participant){
 
     include('var.php');
 
-	$query = "SELECT id, numero_emission, nom_utilisateur, time_min, time_sec, nom_artiste, nom_morceau FROM MORCEAU WHERE numero_emission = ".$p_numero_emission." AND nom_utilisateur = '".urldecode($nom_participant)."' ORDER BY time_min, time_sec ASC;";
+	$query = "SELECT id, id_emission, nom_utilisateur, time_min, time_sec, nom_artiste, nom_morceau FROM MORCEAU WHERE id_emission = ".$p_id_emission." AND nom_utilisateur = '".urldecode($nom_participant)."' ORDER BY time_min, time_sec ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -347,11 +363,11 @@ function dbGetPlaylistParticipant($p_numero_emission, $nom_participant){
 	return $res;
 }
 
-function dbGetMorceauxEmissionFlag($p_numero_emission){
+function dbGetMorceauxEmissionFlag($p_id_emission){
 
     include('var.php');
 
-	$query = "SELECT id FROM MORCEAU WHERE numero_emission = ".$p_numero_emission.";";
+	$query = "SELECT id FROM MORCEAU WHERE id_emission = ".$p_id_emission.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -407,11 +423,11 @@ function dbGetLibelleEtatEmission($id_etat){
 		return '?!?';
 }
 
-function dbListeAllEmission(){
+function dbListeAllEmission($id_site){
 
     include('var.php');
 
-    $query = "SELECT numero, titre, date_sortie, etat, libelle, time_min, time_sec, teaser_video FROM EMISSION, ETAT_EMISSION WHERE EMISSION.etat = ETAT_EMISSION.id ORDER BY numero ASC;";
+    $query = "SELECT EMISSION.id, EMISSION.id_site, numero, titre, date_sortie, etat, libelle, time_min, time_sec, teaser_video FROM EMISSION, ETAT_EMISSION WHERE EMISSION.id_site = ".$id_site." AND EMISSION.etat = ETAT_EMISSION.id ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -419,11 +435,11 @@ function dbListeAllEmission(){
     return $res;
 }
 
-function dbListeAllEmissionForChef($admin){
+function dbListeAllEmissionForChef($id_site, $admin){
 
     include('var.php');
 
-    $query = "SELECT DISTINCT numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION, PARTICIPANT WHERE EMISSION.etat = 2 AND EMISSION.numero = PARTICIPANT.numero_emission AND PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($admin)."' ORDER BY numero ASC;";
+    $query = "SELECT DISTINCT EMISSION.id, EMISSION.id_site, numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION, PARTICIPANT WHERE EMISSION.id_site = ".$id_site." AND EMISSION.etat = 2 AND EMISSION.id = PARTICIPANT.id_emission AND PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($admin)."' ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -431,59 +447,62 @@ function dbListeAllEmissionForChef($admin){
     return $res;
 }
 
-function dbDeleteEmission($numero){
+function dbDeleteEmission($id){
 
     include('var.php');
 
-    $query = "DELETE FROM EMISSION WHERE numero = ".$numero.";";
+    $query = "DELETE FROM EMISSION WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
     mysql_close($link);
 }
 
-function dbDeletePlaylistParticipant($numero, $nom){
+function dbDeletePlaylistParticipant($id, $nom){
 
     include('var.php');
 
-    $query = "DELETE FROM MORCEAU WHERE numero_emission = ".$numero." AND nom_utilisateur = '".urldecode($nom)."';";
+    $query = "DELETE FROM MORCEAU WHERE id_emission = ".$id." AND nom_utilisateur = '".urldecode($nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
     mysql_close($link);
 }
 
-function dbInsertMorceau($numero, $nom, $time_min, $time_sec, $nom_artiste, $nom_morceau)
+function dbInsertMorceau($id, $nom, $time_min, $time_sec, $nom_artiste, $nom_morceau)
 {
     include('var.php');
-    $query = "INSERT INTO MORCEAU (numero_emission, nom_utilisateur, time_min, time_sec, nom_morceau, nom_artiste) VALUES (".$numero.", '".urldecode($nom)."', ".$time_min.", ".$time_sec.", '".urldecode($nom_morceau)."', '".urldecode($nom_artiste)."');";
+    $query = "INSERT INTO MORCEAU (id_emission, nom_utilisateur, time_min, time_sec, nom_morceau, nom_artiste) VALUES (".$id.", '".urldecode($nom)."', ".$time_min.", ".$time_sec.", '".urldecode($nom_morceau)."', '".urldecode($nom_artiste)."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
     mysql_close($link);
 }
 
-function dbDeleteCascadeEmission($numero){
+function dbDeleteCascadeEmission($id){
 
     include('var.php');
 
-    $query = "DELETE FROM MORCEAU WHERE numero_emission = ".$numero.";";
+    $query = "DELETE FROM MORCEAU WHERE id_emission = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
     mysql_close($link);
 
-    $query = "DELETE FROM PARTICIPANT WHERE numero_emission = ".$numero.";";
+    $query = "DELETE FROM PARTICIPANT WHERE id_emission = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
     mysql_close($link);
 
-    $query = "DELETE FROM EMISSION WHERE numero = ".$numero.";";
+    $query = "DELETE FROM EMISSION WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
     mysql_close($link);
+	
+	$emission = dbGetEmission($id);
+	$numero = $emission["numero"];
 	
 	include('../sitevars.php');
 	if (file_exists("../".$pics."thisisradioclash-episode".$numero.".jpg"))
@@ -492,45 +511,44 @@ function dbDeleteCascadeEmission($numero){
 		unlink("../".$mp3s."thisisradioclash-episode".$numero.".mp3");
 }
 
-function dbInsertEmission($numero, $titre, $date_sortie, $etat, $time_min, $time_sec){
+function dbInsertEmission($id_site, $numero, $titre, $date_sortie, $etat, $time_min, $time_sec){
 
     include('var.php');
 
-    $query = "INSERT INTO EMISSION (numero, titre, date_sortie, etat, time_min, time_sec) VALUES (".$numero.", '".urldecode($titre)."', '".$date_sortie."', ".$etat.", ".$time_min.", ".$time_sec.");";
-    //$query = "INSERT INTO EMISSION (numero, titre, date_sortie, etat, time_min, time_sec) VALUES (".$numero.", '".utf8_decode($titre)."', '".$date_sortie."', ".$etat.", ".$time_min.", ".$time_sec.");";
+    $query = "INSERT INTO EMISSION (id_site, numero, titre, date_sortie, etat, time_min, time_sec) VALUES (".$id_site.", ".$numero.", '".urldecode($titre)."', '".$date_sortie."', ".$etat.", ".$time_min.", ".$time_sec.");";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
     mysql_close($link);
 }
 
-function dbUpdateTimeEmission($numero, $time_min, $time_sec){
+function dbUpdateTimeEmission($id, $time_min, $time_sec){
 
     include('var.php');
 
-    $query = "UPDATE EMISSION SET time_min = ".$time_min.", time_sec = ".$time_sec." WHERE numero = ".$numero.";";
+    $query = "UPDATE EMISSION SET time_min = ".$time_min.", time_sec = ".$time_sec." WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
     mysql_close($link);
 }
 
-function dbUpdateTeaserVideoEmission($numero, $teaser_video){
+function dbUpdateTeaserVideoEmission($id, $teaser_video){
 
     include('var.php');
 
-    $query = "UPDATE EMISSION SET teaser_video = '".urldecode($teaser_video)."' WHERE numero = ".$numero.";";
+    $query = "UPDATE EMISSION SET teaser_video = '".urldecode($teaser_video)."' WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
     mysql_close($link);
 }
 
-function dbUpdateEmission($numero, $titre, $date_sortie, $etat, $time_min, $time_sec){
+function dbUpdateEmission($id, $id_site, $numero, $titre, $date_sortie, $etat, $time_min, $time_sec){
 
     include('var.php');
 
-    $query = "UPDATE EMISSION SET titre = '".urldecode($titre)."', date_sortie = '".$date_sortie."', etat = ".$etat.", time_min = ".$time_min.", time_sec = ".$time_sec." WHERE numero = ".$numero.";";
+    $query = "UPDATE EMISSION SET id_site = ".$id_site.", numero = ".$numero.", titre = '".urldecode($titre)."', date_sortie = '".$date_sortie."', etat = ".$etat.", time_min = ".$time_min.", time_sec = ".$time_sec." WHERE id = ".$id.";";
     //$query = "UPDATE EMISSION SET titre = '".$titre."', date_sortie = '".$date_sortie."', WHERE numero = ".$numero.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
@@ -538,14 +556,14 @@ function dbUpdateEmission($numero, $titre, $date_sortie, $etat, $time_min, $time
     mysql_close($link);
 }
 
-function dbUpdateEtatEmission($numero_emission, $id_etat){
+function dbUpdateEtatEmission($id_emission, $id_etat){
 
     include('var.php');
 
 	if ($id_etat == '3')
-		$query = "UPDATE EMISSION SET etat = ".$id_etat.", date_sortie = '".date("Y-m-d H:i:s")."' WHERE numero = ".$numero_emission.";";
+		$query = "UPDATE EMISSION SET etat = ".$id_etat.", date_sortie = '".date("Y-m-d H:i:s")."' WHERE id = ".$id_emission.";";
 	else
-	    $query = "UPDATE EMISSION SET etat = ".$id_etat." WHERE numero = ".$numero_emission.";";
+	    $query = "UPDATE EMISSION SET etat = ".$id_etat." WHERE id = ".$id_emission.";";
 
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
@@ -616,9 +634,12 @@ function getBytesLengthEmission($numero)
 		return 0;
 }
 
-function dbGetEmissionCompleteFlag($numero)
+function dbGetEmissionCompleteFlag($id)
 {
 	include('../sitevars.php');
+	
+	$emission = dbGetEmission($id);
+	$numero = $emission["numero"];
 	
 	$filePath = "../".$mp3s."thisisradioclash-episode".$numero.".mp3";
 	if (!file_exists($filePath))
@@ -628,10 +649,10 @@ function dbGetEmissionCompleteFlag($numero)
 	if (!file_exists($filePath))
 		return false;
 	
-	if (listeParticipantsEmission($numero) == '')
+	if (listeParticipantsEmission($id) == '')
 		return false;
 		
-	$liste_participants = dbGetListeParticipantsEmission($numero);
+	$liste_participants = dbGetListeParticipantsEmission($id);
 	while($array=mysql_fetch_array($liste_participants))
 	{	
 		if (dbGetUtilisateur($array['nom_utilisateur']) == 0)
@@ -644,18 +665,6 @@ function dbGetEmissionCompleteFlag($numero)
 /**************************/
 
 //R�cup�ration de l'�mission :
-function dbGetListeAllParticipants(){
-
-    include('var.php');
-
-	$query = "SELECT DISTINCT nom_utilisateur FROM PARTICIPANT ORDER BY nom_utilisateur ASC;";
-	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
-	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
-	mysql_close($link);
-	
-	return $res;
-}
 
 function dbGetListeAllParticipantsAndUsers(){
 
@@ -670,35 +679,35 @@ function dbGetListeAllParticipantsAndUsers(){
 	return $res;
 }
 
-function dbInsertParticipant($numero, $nom, $ordre, $est_chef){
+function dbInsertParticipant($id, $nom, $ordre, $est_chef){
 
     include('var.php');
 
-    $query = "INSERT INTO PARTICIPANT (numero_emission, nom_utilisateur, ordre, est_chef) VALUES (".$numero.", '".urldecode($nom)."', ".$ordre.", ".$est_chef.");";
+    $query = "INSERT INTO PARTICIPANT (id_emission, nom_utilisateur, ordre, est_chef) VALUES (".$id.", '".urldecode($nom)."', ".$ordre.", ".$est_chef.");";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
     mysql_close($link);
 }
 
-function dbDeleteParticipant($numero, $nom){
+function dbDeleteParticipant($id, $nom){
 
     include('var.php');
 
-	dbDeletePlaylistParticipant($numero, $nom);
+	dbDeletePlaylistParticipant($id, $nom);
 	
-    $query = "DELETE FROM PARTICIPANT WHERE numero_emission = ".$numero." AND nom_utilisateur = '".urldecode($nom)."';";
+    $query = "DELETE FROM PARTICIPANT WHERE id_emission = ".$id." AND nom_utilisateur = '".urldecode($nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
     mysql_close($link);
 }
 
-function dbGetListeParticipantsEmission($numero){
+function dbGetListeParticipantsEmission($id){
 
     include('var.php');
 
-	$query = "SELECT nom_utilisateur, ordre, est_chef FROM PARTICIPANT WHERE numero_emission = ".$numero." ORDER BY ordre ASC;";
+	$query = "SELECT nom_utilisateur, ordre, est_chef FROM PARTICIPANT WHERE id_emission = ".$id." ORDER BY ordre ASC;";
 	$link=mysql_connect($hote,$login,$passwd); 
 	mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
@@ -708,11 +717,11 @@ function dbGetListeParticipantsEmission($numero){
 	return $res;
 }
 
-function dbGetChefEmission($numero)
+function dbGetChefEmission($id)
 {
     include('var.php');
 
-	$query = "SELECT nom_utilisateur FROM PARTICIPANT WHERE est_chef = 1 AND numero_emission = ".$numero.";";
+	$query = "SELECT nom_utilisateur FROM PARTICIPANT WHERE est_chef = 1 AND id_emission = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res = mysql_db_query ($db, $query);	
@@ -725,30 +734,30 @@ function dbGetChefEmission($numero)
 
 }
 
-function dbUpdateChefEmission($numero, $nom)
+function dbUpdateChefEmission($id, $nom)
 {
 
     include('var.php');
 
-	$query = "UPDATE PARTICIPANT SET est_chef = 0 WHERE numero_emission = ".$numero.";";
+	$query = "UPDATE PARTICIPANT SET est_chef = 0 WHERE id_emission = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
 	mysql_close($link);
 
-	$query = "UPDATE PARTICIPANT SET est_chef = 1 WHERE numero_emission = ".$numero." AND  nom_utilisateur = '".urldecode($nom)."';";
+	$query = "UPDATE PARTICIPANT SET est_chef = 1 WHERE id_emission = ".$id." AND  nom_utilisateur = '".urldecode($nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
 	mysql_close($link);
 }
 
-function dbUpdateOrdreParticipant($numero, $nom, $ordre)
+function dbUpdateOrdreParticipant($id, $nom, $ordre)
 {
 
     include('var.php');
 
-	$query = "UPDATE PARTICIPANT SET ordre = ".$ordre." WHERE numero_emission = ".$numero." AND  nom_utilisateur = '".urldecode($nom)."';";
+	$query = "UPDATE PARTICIPANT SET ordre = ".$ordre." WHERE id_emission = ".$id." AND  nom_utilisateur = '".urldecode($nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	

@@ -2,6 +2,6 @@
 
 include('dbFunctions.php');
 
-dbInsertParticipant($_POST["numero"], $_POST["nom"], $_POST["ordre"], $_POST["est_chef"]);
+dbInsertParticipant($_POST["id"], $_POST["nom"], $_POST["ordre"], $_POST["est_chef"]);
 
 ?>

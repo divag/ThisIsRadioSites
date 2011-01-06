@@ -203,9 +203,9 @@ function display(page)
 	if (page == 'playlists')
 	{
 		if (admin == '')
-			getDatas('dbListeAllEmission', 'listeEmissions', '');
+			getDatas('dbListeAllEmission', 'listeEmissions', 'id_site=' + id_site);
 		else
-			getDatas('dbListeAllEmissionForChef', 'listeEmissions', 'admin=' + encode(admin));
+			getDatas('dbListeAllEmissionForChef', 'listeEmissions', 'id_site=' + id_site + '&admin=' + encode(admin));
 		
 		if (listeEmissions.length == 0)
 			document.getElementById('spanChefNoEmission').style.display = 'block';
@@ -311,7 +311,7 @@ function showAddParticipant()
 	while (document.getElementById('listeAllUsersAndGroupes').hasChildNodes())
 		document.getElementById('listeAllUsersAndGroupes').removeChild(document.getElementById('listeAllUsersAndGroupes').firstChild);
 
-	getDatas('dbGetListeAllParticipantsAndUsers', 'allUsersAndGroupes', '');
+	getDatas('dbGetListeAllParticipantsAndUsers', 'allUsersAndGroupes', 'id_site=' + id_site);
 	document.getElementById('listeAllUsersAndGroupes').appendChild(createBlankOptionParticipant());
 	for(var i=0; i<allUsersAndGroupes.length; i++)
 		document.getElementById('listeAllUsersAndGroupes').appendChild(createOptionParticipant(allUsersAndGroupes[i]));			
@@ -348,7 +348,7 @@ function refreshUtilisateurs()
 	while (document.getElementById('listeUsers').hasChildNodes())
 		document.getElementById('listeUsers').removeChild(document.getElementById('listeUsers').firstChild);
 
-	getDatas('dbListeAllUtilisateurs', 'listeAllUsers', '');
+	getDatas('dbListeAllUtilisateurs', 'listeAllUsers', 'id_site=' + id_site);
 	alternate = 1;
 		
 	for(var i=0; i<listeAllUsers.length; i++)
@@ -371,7 +371,7 @@ function refreshParticipants()
 		document.getElementById('participants').style.display = 'block';
 		document.getElementById('noParticipants').style.display = 'none';
 		document.getElementById('listeParticipants').style.display = 'none';
-		if (!verifParticipants(currentItem.numero))
+		if (!verifParticipants(currentItem.id))
 		{
 			document.getElementById('noParticipants').style.display = 'block';
 			document.getElementById('participants').className = 'etat42';
@@ -384,7 +384,7 @@ function refreshParticipants()
 			while (document.getElementById('listeParticipants').hasChildNodes())
 				document.getElementById('listeParticipants').removeChild(document.getElementById('listeParticipants').firstChild);
 
-			getDatas('dbGetListeParticipantsEmission', 'participantsEmission', 'numero=' + currentItem.numero);
+			getDatas('dbGetListeParticipantsEmission', 'participantsEmission', 'id=' + currentItem.id);
 			alternate = 1;
 			ordreParticipant = 1;
 			
@@ -468,7 +468,7 @@ function createLigneParticipantEmission(participantData)
 	radio.style.color = 'yellow';
 	radio.checked = (participantData.est_chef == 1);
 	radio.onclick = function () {
-		getDatas('dbUpdateChefEmission', '', 'numero=' + currentItem.numero + '&nom=' + encode(participantData.nom_utilisateur));
+		getDatas('dbUpdateChefEmission', '', 'id=' + currentItem.id + '&nom=' + encode(participantData.nom_utilisateur));
 		refreshParticipants();
 	}
 	col1.appendChild(radio);
@@ -488,7 +488,7 @@ function createLigneParticipantEmission(participantData)
 	linkMonter.value = '+';
 	linkMonter.disabled = (participantData.ordre == 1);
 	linkMonter.onclick = function () {
-		getDatas('dbUpdateOrdreParticipant', 'result', 'numero=' + currentItem.numero + '&ordre=' + participantData.ordre + '&newvalue=' + (parseInt(participantData.ordre)-1));
+		getDatas('dbUpdateOrdreParticipant', 'result', 'id=' + currentItem.id + '&ordre=' + participantData.ordre + '&newvalue=' + (parseInt(participantData.ordre)-1));
 		refreshParticipants();
 	}
 	col3.appendChild(linkMonter);
@@ -499,7 +499,7 @@ function createLigneParticipantEmission(participantData)
 	linkDescendre.value = '-';
 	linkDescendre.disabled = (participantData.ordre == participantsEmission.length);
 	linkDescendre.onclick = function () {
-		getDatas('dbUpdateOrdreParticipant', 'result', 'numero=' + currentItem.numero + '&ordre=' + participantData.ordre + '&newvalue=' + (parseInt(participantData.ordre)+1));
+		getDatas('dbUpdateOrdreParticipant', 'result', 'id=' + currentItem.id + '&ordre=' + participantData.ordre + '&newvalue=' + (parseInt(participantData.ordre)+1));
 		refreshParticipants();
 	}
 	col3.appendChild(linkDescendre);
@@ -515,7 +515,7 @@ function createLigneParticipantEmission(participantData)
 	deleteParticipant.onclick = function() {
 		if (confirm('Etes-vous certain de vouloir supprimer ce participant ?'))
 		{
-			getDatas('dbDeleteParticipant', '', 'numero=' + currentItem.numero + '&nom=' + encode(participantData.nom_utilisateur));
+			getDatas('dbDeleteParticipant', '', 'id=' + currentItem.id + '&nom=' + encode(participantData.nom_utilisateur));
 			refreshParticipants();
 		}
 	}
@@ -1186,7 +1186,7 @@ function refreshImageGifFormZone()
 function refreshMp3FormZoneAfterUpload(reponse, statut)
 {
 	refreshMp3FormZone();
-	getDatas('dbUpdateTimeEmission', 'result', 'numero=' + currentItem.numero + '&time_min=' + currentItem.time_min + '&time_sec=' + currentItem.time_sec);
+	getDatas('dbUpdateTimeEmission', 'result', 'id=' + currentItem.id + '&time_min=' + currentItem.time_min + '&time_sec=' + currentItem.time_sec);
 	envoiMailAdmin(currentItem.numero, 'uploadé', 'Fichier MP3');
 	hideWait();
 	updateZipEmission();
@@ -1287,8 +1287,8 @@ function updateVideoTeaser()
 	showWait();
 	var urlTeaserVideo = document.getElementById('txtVideoTeaser').value;
 	urlTeaserVideo = urlTeaserVideo.replace('http://www.youtube.com/watch?v=', 'http://www.youtube.com/v/');
-	getDatas('dbUpdateTeaserVideoEmission', 'result', 'numero=' + currentItem.numero + '&teaser_video=' + encode(urlTeaserVideo));
-	getDatas('dbGetEmission', 'currentEmissionDatas', 'numero=' + currentItem.numero);
+	getDatas('dbUpdateTeaserVideoEmission', 'result', 'id=' + currentItem.id + '&teaser_video=' + encode(urlTeaserVideo));
+	getDatas('dbGetEmission', 'currentEmissionDatas', 'id=' + currentItem.id);
 	currentItem.teaser_video = currentEmissionDatas.teaser_video;
 	refreshVideoTeaserFormZone();
 	hideWait();
@@ -1301,7 +1301,7 @@ function updateZipEmission()
 	if (haveZip && currentItem.etat == 3)
 	{
 		changeWaitMessage("<b>Regénération du ZIP de l'émission...</b><br />Parce que les données ont changées alors que l'émission déjà publiée !!");
-		getDatas('createZipEmission', 'result', 'numero=' + currentItem.numero);
+		getDatas('createZipEmission', 'result', 'id=' + currentItem.id);
 		initialiseWaitMessage();
 	}
 }
@@ -1342,26 +1342,26 @@ function refreshVideoTeaserFormZone()
 	}
 }
 
-function verifEmission(numeroEmission)
+function verifEmission(idEmission)
 {
-	getDatas('dbGetEmissionCompleteFlag', 'isComplete', 'numero=' + numeroEmission);
+	getDatas('dbGetEmissionCompleteFlag', 'isComplete', 'id=' + idEmission);
 	if (!isComplete)
 	{	
 		return false;
 	}
 		
-	return verifMorceaux(numeroEmission);
+	return verifMorceaux(idEmission);
 }
 
-function verifParticipants(numeroEmission)
+function verifParticipants(idEmission)
 {
-	getDatas('dbGetParticipantsEmissionFlag', 'haveParticipants', 'numero=' + numeroEmission);
-	return haveParticipants;
+	getDatas('dbGetParticipantsEmissionFlag', 'emissionHaveParticipants', 'id=' + idEmission);
+	return emissionHaveParticipants;
 }
 
-function verifMorceaux(numeroEmission)
+function verifMorceaux(idEmission)
 {
-	getDatas('dbGetMorceauxEmissionFlag', 'haveMorceaux', 'numero=' + numeroEmission);
+	getDatas('dbGetMorceauxEmissionFlag', 'haveMorceaux', 'id=' + idEmission);
 	return haveMorceaux;
 }
 
@@ -1413,11 +1413,11 @@ function createLigneEmission(emissionData)
 			linkAnnonce.innerHTML = 'Annoncer';
 			linkAnnonce.href = '#';
 			linkAnnonce.onclick = function () {
-				if (verifParticipants(emissionData.numero))
+				if (verifParticipants(emissionData.id))
 				{
 					if (confirm('Certain de vouloir annoncer cette émission ?\n\nCelle-ci apparaitra alors dans la page des news...'))
 					{
-						getDatas('dbUpdateEtatEmission', 'result', 'numero=' + emissionData.numero + '&etat=2');
+						getDatas('dbUpdateEtatEmission', 'result', 'id=' + emissionData.id + '&etat=2');
 						display('playlists');
 					}
 				}
@@ -1442,7 +1442,7 @@ function createLigneEmission(emissionData)
 				{
 					if (confirm('Pas de regrets ?'))
 					{
-						getDatas('dbDeleteCascadeEmission', 'result', 'numero=' + emissionData.numero);
+						getDatas('dbDeleteCascadeEmission', 'result', 'id=' + emissionData.id);
 						display('playlists');
 					}
 				}
@@ -1460,14 +1460,14 @@ function createLigneEmission(emissionData)
 		linkPublish.innerHTML = 'Publier';
 		linkPublish.href = '#';
 		linkPublish.onclick = function () {
-			if (verifEmission(emissionData.numero))
+			if (verifEmission(emissionData.id))
 			{
 				if (confirm('Certain de vouloir publier cette émission ? Go ?'))
 				{
-					getDatas('dbUpdateEtatEmission', 'result', 'numero=' + emissionData.numero + '&etat=3');
+					getDatas('dbUpdateEtatEmission', 'result', 'id=' + emissionData.id + '&etat=3');
 					
 					if (haveZip)
-						getDatas('createZipEmission', 'result', 'numero=' + emissionData.numero);
+						getDatas('createZipEmission', 'result', 'id=' + emissionData.id);
 					
 					display('playlists');
 					alert('Yeah ;)');
@@ -1513,12 +1513,12 @@ function dateForDB(date)
 function formAddParticipant()
 {
 	var enreg = new Array();
-	enreg['numero'] = currentItem.numero;
+	enreg['id'] = currentItem.id;
 	enreg['nom'] = document.getElementById('txtNomParticipant').value;
 	enreg['ordre'] = 0;
 	enreg['est_chef'] = 0;
 	
-	getDatas('dbInsertParticipant', 'result', 'numero=' + enreg.numero + '&nom=' + encode(enreg.nom) + '&ordre=' + enreg.ordre + '&est_chef=' + enreg.est_chef);
+	getDatas('dbInsertParticipant', 'result', 'id=' + enreg.id + '&nom=' + encode(enreg.nom) + '&ordre=' + enreg.ordre + '&est_chef=' + enreg.est_chef);
 	
 	refreshParticipants();
 }
@@ -1526,6 +1526,7 @@ function formAddParticipant()
 function formEnregistrer()
 {
 	var enreg = new Array();
+	enreg['id'] = currentItem.id;
 	enreg['numero'] = document.getElementById('txtNumeroEmission').value;
 	enreg['titre'] = document.getElementById('txtTitreEmission').value;
 	enreg['date_sortie'] = dateForDB(document.getElementById('txtDateEmission').value);
@@ -1535,9 +1536,9 @@ function formEnregistrer()
 
 	//alert('numero=' + enreg.numero + '&titre=' + encode(enreg.titre) + '&date_sortie=' + enreg.date_sortie + '&etat=' + enreg.etat + '&time_min=' + enreg.time_min + '&time_sec=' + enreg.time_sec);
 	if (isNew)
-		getDatas('dbInsertEmission', 'result', 'numero=' + enreg.numero + '&titre=' + encode(enreg.titre) + '&date_sortie=' + enreg.date_sortie + '&etat=' + enreg.etat + '&time_min=' + enreg.time_min + '&time_sec=' + enreg.time_sec);
+		getDatas('dbInsertEmission', 'result', 'id_site=' + id_site + '&numero=' + enreg.numero + '&titre=' + encode(enreg.titre) + '&date_sortie=' + enreg.date_sortie + '&etat=' + enreg.etat + '&time_min=' + enreg.time_min + '&time_sec=' + enreg.time_sec);
 	else
-		getDatas('dbUpdateEmission', 'result', 'numero=' + enreg.numero + '&titre=' + encode(enreg.titre) + '&date_sortie=' + enreg.date_sortie + '&etat=' + enreg.etat + '&time_min=' + enreg.time_min + '&time_sec=' + enreg.time_sec);
+		getDatas('dbUpdateEmission', 'result', 'id=' + enreg.id + '&id_site=' + id_site + '&numero=' + enreg.numero + '&titre=' + encode(enreg.titre) + '&date_sortie=' + enreg.date_sortie + '&etat=' + enreg.etat + '&time_min=' + enreg.time_min + '&time_sec=' + enreg.time_sec);
 
 	isNew = false;
 	alert('Enregistrement réussi !');
@@ -1548,8 +1549,9 @@ function formEnregistrer()
 function newEmission()
 {
 	isNew = true;
-	getDatas('dbGetNewNumeroEmission', 'newNumber', '');
+	getDatas('dbGetNewNumeroEmission', 'newNumber', 'id_site=' + id_site);
 	currentItem = new Array();
+	currentItem['id_site'] = id_site;
 	currentItem['numero'] = newNumber;
 	currentItem['titre'] = '';
 	currentItem['date_sortie'] = '??/??/????';
@@ -1597,7 +1599,7 @@ function refreshMorceaux()
 		document.getElementById('noMorceaux').style.display = 'none';
 		document.getElementById('listeMorceaux').style.display = 'none';
 		
-		getDatas('dbGetListeParticipantsEmission', 'participantsEmission', 'numero=' + currentItem.numero);
+		getDatas('dbGetListeParticipantsEmission', 'participantsEmission', 'id=' + currentItem.id);
 		
 		if (participantsEmission.length == 0)
 		{
@@ -1741,10 +1743,10 @@ function createLigneParticipantPlaylist(participantData)
 	btnEnregistrer.style.display = 'none';
 	btnEnregistrer.id = 'btnEnregistrerPlaylist' + participantData.nom_utilisateur;
 	btnEnregistrer.onclick = function() {
-		getDatas('dbDeletePlaylistParticipant', '', 'numero=' + currentItem.numero + '&nom=' + encode(participantData.nom_utilisateur));
+		getDatas('dbDeletePlaylistParticipant', '', 'id=' + currentItem.id + '&nom=' + encode(participantData.nom_utilisateur));
 		//on les recrée à partir de this.datas[i].time_min, ...
 		for (var i=0; i<this.datas.length; i++)
-			getDatas('dbInsertMorceau', '', 'numero=' + currentItem.numero + '&nom=' + encode(participantData.nom_utilisateur) + '&time_min=' + this.datas[i].time_min + '&time_sec=' + this.datas[i].time_sec + '&nom_artiste=' + encode(this.datas[i].nom_artiste) + '&nom_morceau=' + encode(this.datas[i].nom_morceau));
+			getDatas('dbInsertMorceau', '', 'id=' + currentItem.id + '&nom=' + encode(participantData.nom_utilisateur) + '&time_min=' + this.datas[i].time_min + '&time_sec=' + this.datas[i].time_sec + '&nom_artiste=' + encode(this.datas[i].nom_artiste) + '&nom_morceau=' + encode(this.datas[i].nom_morceau));
 		
 		refreshParticipants();
 		
@@ -1752,7 +1754,7 @@ function createLigneParticipantPlaylist(participantData)
 	}
 	
 	
-	getDatas('dbGetPlaylistParticipant', 'listeMorceauxParticipant', 'numero=' + currentItem.numero + '&nom=' + encode(participantData.nom_utilisateur));
+	getDatas('dbGetPlaylistParticipant', 'listeMorceauxParticipant', 'id=' + currentItem.id + '&nom=' + encode(participantData.nom_utilisateur));
 
 	txtMorceaux.value = '';
 	
@@ -1873,7 +1875,7 @@ function Verif_Numero(control)
 	}
 	else
 	{
-		getDatas('dbGetEmission', 'emissionToCheck', 'numero=' + numero);
+		getDatas('dbGetEmissionByNumero', 'emissionToCheck', 'id_site=' + id_site + '&numero=' + numero);
 		if (emissionToCheck != 0)
 		{
 			erreur.innerHTML = "Ce numéro est déjà pris par une autre émission...";

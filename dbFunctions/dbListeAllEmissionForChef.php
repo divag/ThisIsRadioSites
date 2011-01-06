@@ -2,7 +2,7 @@
 
 include('dbFunctions.php');
 
-$liste_emissions = dbListeAllEmissionForChef($_POST["admin"]);
+$liste_emissions = dbListeAllEmissionForChef($_POST["id_site"], $_POST["admin"]);
 
 $array_emissions = array();
 while($array=mysql_fetch_array($liste_emissions))

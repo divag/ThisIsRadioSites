@@ -2,6 +2,6 @@
 
 include('dbFunctions.php');
 
-dbUpdateEtatEmission($_POST["numero"], $_POST["etat"]);
+dbUpdateEtatEmission($_POST["id"], $_POST["etat"]);
 
 ?>

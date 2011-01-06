@@ -1,7 +1,7 @@
 <?php
 
 include('dbFunctions.php');
-$listeParticipants = dbGetListeParticipantsEmission($_POST["numero"]);
+$listeParticipants = dbGetListeParticipantsEmission($_POST["id"]);
 
 $i = 1;
 while($array=mysql_fetch_array($listeParticipants))
@@ -12,7 +12,7 @@ while($array=mysql_fetch_array($listeParticipants))
 	if ($i == $_POST["newvalue"])
 		$newOrdre = $_POST["ordre"];
 	
-	dbUpdateOrdreParticipant($_POST["numero"], $array['nom_utilisateur'], $newOrdre);
+	dbUpdateOrdreParticipant($_POST["id"], $array['nom_utilisateur'], $newOrdre);
 	$i++;
 }
 

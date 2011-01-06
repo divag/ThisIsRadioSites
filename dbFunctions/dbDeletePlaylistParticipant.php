@@ -2,6 +2,6 @@
 
 include('dbFunctions.php');
 
-dbDeletePlaylistParticipant($_POST["numero"], $_POST["nom"]);
+dbDeletePlaylistParticipant($_POST["id"], $_POST["nom"]);
 
 ?>

@@ -2,7 +2,7 @@
 
 include('dbFunctions.php');
 
-$liste_participants = dbGetListeParticipantsEmission($_POST["numero"]);
+$liste_participants = dbGetListeParticipantsEmission($_POST["id"]);
 
 $array_participants = array();
 while($array=mysql_fetch_array($liste_participants))
