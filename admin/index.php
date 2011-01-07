@@ -88,7 +88,7 @@ if(isset($_POST['nomCompte']))
 		</form>
 		<br />
 		<form id="sendMotDePasse" method="post" action="index.php">
-			>> <a href="#" id="boutonEnvoiMotDePasse" onclick="this.style.display = 'none'; document.getElementById('divEnvoiMotDePasse').style.display = 'block';">Mot de passe oublié ?</a> <<
+			<span id="boutonEnvoiMotDePasse">>> <a href="#" onclick="document.getElementById('boutonEnvoiMotDePasse').style.display = 'none'; document.getElementById('divEnvoiMotDePasse').style.display = 'block';">Mot de passe oublié ?</a> <<</span>
 			<br />
 			<div style="display:none;" id="divEnvoiMotDePasse">
 				<table>
