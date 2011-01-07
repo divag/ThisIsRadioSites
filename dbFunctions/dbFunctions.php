@@ -616,6 +616,18 @@ function dbListeAllEmissionForChef($id_site, $admin){
     return $res;
 }
 
+function dbListeAllEmissionForChefSansAnnonce($id_site, $admin){
+
+    include('var.php');
+
+    $query = "SELECT DISTINCT EMISSION.id, EMISSION.id_site, numero, titre, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION, PARTICIPANT WHERE EMISSION.id_site = ".$id_site." AND EMISSION.etat = 1 AND EMISSION.id = PARTICIPANT.id_emission AND PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($admin)."' ORDER BY numero ASC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
 function dbDeleteEmission($id){
 
     include('var.php');

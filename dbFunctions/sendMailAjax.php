@@ -1,6 +1,4 @@
 <?php
-include('../dbFunctions/dbFunctions.php');
-include('../sitevars.php');
 include('../dbFunctions/sendMail.php');
 
 $utilisateur = dbGetUtilisateur($_POST["nom"]);

@@ -220,8 +220,12 @@ function display(page)
 		if (admin == '')
 			getDatas('dbListeAllEmission', 'listeEmissions', 'id_site=' + id_site);
 		else
-			getDatas('dbListeAllEmissionForChef', 'listeEmissions', 'id_site=' + id_site + '&admin=' + encode(admin));
-		
+		{
+			if (siteHaveStatutAnnounced)
+				getDatas('dbListeAllEmissionForChef', 'listeEmissions', 'id_site=' + id_site + '&admin=' + encode(admin));
+			else
+				getDatas('dbListeAllEmissionForChefSansAnnonce', 'listeEmissions', 'id_site=' + id_site + '&admin=' + encode(admin));
+		}
 		if (listeEmissions.length == 0)
 			document.getElementById('spanChefNoEmission').style.display = 'block';
 		else
@@ -1422,7 +1426,12 @@ function createLigneEmission(emissionData)
 	if (admin == '')
 		linkModifier.innerHTML = 'Modifier';
 	else
-		linkModifier.innerHTML = 'Uploader le teaser, la pochette, ou le mp3';
+	{
+		if (siteHaveTeaserMp3 || siteHaveTeaserVideo)
+			linkModifier.innerHTML = "Uploader le teaser, la pochette, ou le mp3 / Envoyer votre playlist à l'administrateur";
+		else
+			linkModifier.innerHTML = "Uploader la pochette ou le mp3 / Envoyer votre playlist à l'administrateur";
+	}
 	
 	linkModifier.href = '#';
 	linkModifier.onclick = function () {
@@ -1461,23 +1470,26 @@ function createLigneEmission(emissionData)
 			col5.appendChild(linkAnnonce);
 		}
 		
-		var saut2 = document.createElement('span');
-		saut2.innerHTML = " / ";	
-		col5.appendChild(saut2);
-		var linkDelete = document.createElement('a');
-		linkDelete.innerHTML = 'Supprimer';
-		linkDelete.href = '#';
-		linkDelete.onclick = function () {
-				if (confirm('Certain de vouloir supprimer cette émission ?'))
-				{
-					if (confirm('Pas de regrets ?'))
+		if (siteHaveStatutAnnounced || admin == '')
+		{
+			var saut2 = document.createElement('span');
+			saut2.innerHTML = " / ";	
+			col5.appendChild(saut2);
+			var linkDelete = document.createElement('a');
+			linkDelete.innerHTML = 'Supprimer';
+			linkDelete.href = '#';
+			linkDelete.onclick = function () {
+					if (confirm('Certain de vouloir supprimer cette émission ?'))
 					{
-						getDatas('dbDeleteCascadeEmission', 'result', 'id=' + emissionData.id);
-						display('playlists');
+						if (confirm('Pas de regrets ?'))
+						{
+							getDatas('dbDeleteCascadeEmission', 'result', 'id=' + emissionData.id);
+							display('playlists');
+						}
 					}
 				}
-			}
-		col5.appendChild(linkDelete);
+			col5.appendChild(linkDelete);
+		}
 	}
 	
 	//Pour une émission annoncée :

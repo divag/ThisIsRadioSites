@@ -93,6 +93,7 @@ fieldset {
 	border-width:12px;
 	border-style:double;
 	border-color:#000;
+	margin-bottom:10px;
 }
 
 legend {

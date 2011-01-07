@@ -100,6 +100,6 @@ CREATE TABLE IF NOT EXISTS `PARAMETRES_SITE` (
 INSERT INTO `PARAMETRES_SITE` (`id_site`, `mail_admin`, `have_titre`, `have_texte`, `have_participants`, `id_default_participant`, `have_image_jpg`, `have_image_jpg_toprint`, `have_image_gif`, `have_teaser_mp3`, `have_teaser_video`, `have_goodies`, `have_zip`, `have_contenu_pages`, `have_statut_announced`, `template_reference_emission`, `template_nommage_fichiers_emission`, `template_nommage_morceaux_emission`) VALUES 
 (1, 'contact@thisisradioclash.org', 1, 0, 1, 0,  1, 1, 1, 1, 1, 0, 1, 1, 1, 'ThisIsRadioclash n°{numero} : {titre}', 'thisisradioclash-episode{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}'),
 (2, 'contact@thebrainradio.com', 	0, 0, 0, 2,  1, 0, 1, 0, 0, 1, 0, 1, 0, 'The Brain #{numero}', 'thebrain{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau} - {nom_label} - {annee}'),
-(3, 'contact@thebrainradio.com', 	1, 1, 1, 0,  1, 0, 1, 0, 0, 0, 0, 1, 0, 'AMIX #{numero} by {nom_participant}', 'thebrain-amix{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}'),
+(3, 'contact@thebrainradio.com', 	0, 0, 1, 0,  1, 0, 1, 0, 0, 0, 0, 1, 0, 'AMIX #{numero} by {nom_participant}', 'thebrain-amix{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}'),
 (4, 'contact@prototop.be', 			0, 0, 0, 13, 1, 1, 0, 0, 0, 0, 1, 1, 0, 'Prototop #{numero}', 'prototop-{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}');
 
