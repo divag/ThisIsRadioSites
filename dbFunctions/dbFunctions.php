@@ -1,5 +1,174 @@
 <?php
 
+/*
+SITES :
+=======
+*/
+
+//Récupération de la liste de tous les sites :
+function dbGetListeSites(){
+
+    include('var.php');
+
+    $query = "SELECT id, nom, url, accroche_fr, accroche_en, est_actif FROM SITE ORDER BY ID ASC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+//Récupération des informations d'un site :
+function dbGetSite($id){
+
+    include('var.php');
+
+    $query = "SELECT id, nom, url, accroche_fr, accroche_en, est_actif FROM SITE WHERE id=".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+	    return $row;
+    else
+	    return 0;
+}
+
+//Mise à jour des informations d'un site :
+function dbUpdateSite($id, $nom, $url, $accroche_fr, $accroche_en, $est_actif){
+
+    include('var.php');
+
+    $query = "UPDATE SITE set nom = '".$nom."', url = '".$url."', accroche_fr = '".$accroche_fr."', accroche_en = '".$accroche_en."', est_actif = ".$est_actif." WHERE id=".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+//Mise à jour des informations d'un site :
+function dbUpdateStatutSite($id, $est_actif){
+
+    include('var.php');
+
+    $query = "UPDATE SITE set est_actif = ".$est_actif." WHERE id=".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+//Récupération de la liste des sites d'un administrateur :
+function dbGetListeSitesAdministrateur($id_utilisateur){
+
+    include('var.php');
+
+    $query = "SELECT id, nom, url, accroche_fr, accroche_en, est_actif FROM SITE, ADMINISTRATEUR WHERE SITE.id = ADMINISTRATEUR.id_site AND ADMINISTRATEUR.id_utilisateur = ".$id_utilisateur.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+//Récupération de la liste des administrateurs d'un site :
+function dbGetListeAdministrateursSite($id_site){
+
+    include('var.php');
+
+    $query = "SELECT UTILISATEUR.id, UTILISATEUR.nom FROM UTILISATEUR, ADMINISTRATEUR WHERE UTILISATEUR.id = ADMINISTRATEUR.id_utilisateur AND ADMINISTRATEUR.id_site = ".$id_site.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+//Récupération de la liste des administrateurs d'un site :
+function dbDeleteAdministrateursSite($id_site){
+
+    include('var.php');
+
+    $query = "DELETE FROM ADMINISTRATEUR WHERE id_site = ".$id_site.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+//Récupération de la liste des administrateurs d'un site :
+function dbAddAdministrateurSite($id_site, $id_utilisateur){
+
+    include('var.php');
+
+    $query = "INSERT INTO ADMINISTRATEUR (id_site, id_utilisateur) VALUES (".$id_site.", ".$id_utilisateur.");";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+function dbCheckAdministrateur($id_site, $id_utilisateur){
+
+    include('var.php');
+
+    $query = "SELECT id_site, id_utilisateur FROM ADMINISTRATEUR WHERE id_site = ".$id_site." AND id_utilisateur = ".$id_utilisateur.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+		return true;
+	else	
+		return false;
+}
+
+function dbCheckSuperAdministrateur($id_utilisateur){
+
+    include('var.php');
+
+    $query = "SELECT id_super_administrateur FROM PARAMETRES_APPLICATION;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+		if ($row[0] == $id_utilisateur)
+			return true;
+			
+	return false;
+}
+
+function dbGetParametresSite($id_site) {
+
+    include('var.php');
+	
+	$query = "SELECT id_site, mail_admin, have_titre, have_texte, have_participants, id_default_participant, have_image_jpg, have_image_jpg_toprint, have_image_gif, have_teaser_mp3, have_teaser_video, have_goodies, have_zip, have_contenu_pages, have_statut_announced, template_reference_emission, template_nommage_fichiers_emission, template_nommage_morceaux_emission FROM PARAMETRES_SITE WHERE id_site = ".$id_site.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+	    return $row;
+    else
+	    return 0;
+}
+
+function dbUpdateParametresSite($id_site, $mail_admin, $have_titre, $have_texte, $have_participants, $id_default_participant, $have_image_jpg, $have_image_jpg_toprint, $have_image_gif, $have_teaser_mp3, $have_teaser_video, $have_goodies, $have_zip, $have_contenu_pages, $have_statut_announced, $template_reference_emission, $template_nommage_fichiers_emission, $template_nommage_morceaux_emission) {
+
+    include('var.php');
+	$query = "INSERT INTO PARAMETRES_SITE (id_site, mail_admin, have_titre, have_texte, have_participants, id_default_participant, have_image_jpg, have_image_jpg_toprint, have_image_gif, have_teaser_mp3, have_teaser_video, have_goodies, have_zip, have_contenu_pages, have_statut_announced, template_reference_emission, template_nommage_fichiers_emission, template_nommage_morceaux_emission) VALUES (".$id_site.", '".$mail_admin."', ".$have_titre.", ".$have_texte.", ".$have_participants.", ".$id_default_participant.", ".$have_image_jpg.", ".$have_image_jpg_toprint.", ".$have_image_gif.", ".$have_teaser_mp3.", ".$have_teaser_video.", ".$have_goodies.", ".$have_zip.", ".$have_contenu_pages.", ".$have_statut_announced.", '".$template_reference_emission."' , '".$template_nommage_fichiers_emission."' , '".$template_nommage_morceaux_emission."');";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+
 /* 
 INDEX :
 =======
@@ -257,7 +426,7 @@ function dbGetUtilisateur($p_nom_utilisateur){
 
     include('var.php');
 
-	$query = "SELECT nom, login_forum, url_site, mail, password FROM UTILISATEUR WHERE nom = '".urldecode($p_nom_utilisateur)."';";
+	$query = "SELECT id, nom, login_forum, url_site, mail, password FROM UTILISATEUR WHERE nom = '".urldecode($p_nom_utilisateur)."';";
 	$link=mysql_connect($hote,$login,$passwd); 
 	mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
@@ -575,6 +744,8 @@ function dbUpdateEtatEmission($id_emission, $id_etat){
 function getImageEmissionFlag($numero)
 {
 	include('../sitevars.php');
+	//$fichier = str_replace("{numero}", $numero, $templateNommageFichiersEmission);	
+	//return file_exists("../".$pics.$fichier.".jpg");
 	return file_exists("../".$pics."thisisradioclash-episode".$numero.".jpg");
 }
 

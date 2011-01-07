@@ -1,6 +1,6 @@
 <?php      
-	include('../sitevars.php');
 	include('dbFunctions.php');
+	include('../sitevars.php');
 	include('../'.$zipModule);
 
 	$id = $_POST['id'];

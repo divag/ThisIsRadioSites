@@ -27,3 +27,79 @@ ALTER TABLE `PARTICIPANT` DROP numero_emission;
 ALTER TABLE `MORCEAU` ADD `id_emission` BIGINT( 20 ) UNSIGNED NOT NULL AFTER id;
 UPDATE MORCEAU SET id_emission = numero_emission;
 ALTER TABLE `MORCEAU` DROP numero_emission;
+
+-- Création de la table des sites :
+DROP TABLE IF EXISTS `SITE`;
+CREATE TABLE IF NOT EXISTS `SITE` (
+  `id` bigint(20) unsigned NOT NULL auto_increment,
+  `nom` varchar(255) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  `accroche_fr` varchar(255) NOT NULL,
+  `accroche_en` varchar(255) NOT NULL,
+  `est_actif` tinyint(1) unsigned NOT NULL default 0,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Table des sites' AUTO_INCREMENT=1 ;
+
+INSERT INTO `SITE` (`nom`, `url`, `accroche_fr`, `accroche_en`, `est_actif`) VALUES 
+('This Is Radioclash', 'http://www.thisisradioclash.org/', '', '', 1),
+('The Brain Radioshow', 'http://www.thebrainradio.com/', '', '', 1),
+('The Brain Radioshow : AMIX', 'http://www.thebrainradio.com/amix/', '', '', 1),
+('Prototop', 'http://www.prototop.be/', '', '', 1);
+
+
+
+DROP TABLE IF EXISTS `ADMINISTRATEUR`;
+CREATE TABLE IF NOT EXISTS `ADMINISTRATEUR` (
+  `id_site` bigint(20) unsigned NOT NULL,
+  `id_utilisateur` int(10) NOT NULL,
+  PRIMARY KEY  (`id_site`, `id_utilisateur`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Table des administrateurs des sites' ;
+
+INSERT INTO `ADMINISTRATEUR` (`id_site`, `id_utilisateur`) VALUES 
+(1, 2),
+(2, 2),
+(3, 2),
+(4, 13),
+(4, 17),
+(1, 18),
+(2, 18),
+(3, 18),
+(4, 18);
+
+DROP TABLE IF EXISTS `PARAMETRES_APPLICATION`;
+CREATE TABLE IF NOT EXISTS `PARAMETRES_APPLICATION` (
+  `id_super_administrateur` int(10) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Table des parametres de l application' ;
+
+INSERT INTO `PARAMETRES_APPLICATION` (`id_super_administrateur`) VALUES 
+(18);
+
+DROP TABLE IF EXISTS `PARAMETRES_SITE`;
+CREATE TABLE IF NOT EXISTS `PARAMETRES_SITE` (
+  `id_site` bigint(20) unsigned NOT NULL,
+  `mail_admin` varchar(255) NOT NULL,
+  `have_titre` tinyint(1) unsigned NOT NULL default 0,
+  `have_texte` tinyint(1) unsigned NOT NULL default 0,
+  `have_participants` tinyint(1) unsigned NOT NULL default 0,
+  `id_default_participant` int(10) NOT NULL,
+  `have_image_jpg` tinyint(1) unsigned NOT NULL default 0,
+  `have_image_jpg_toprint` tinyint(1) unsigned NOT NULL default 0,
+  `have_image_gif` tinyint(1) unsigned NOT NULL default 0,
+  `have_teaser_mp3` tinyint(1) unsigned NOT NULL default 0,
+  `have_teaser_video` tinyint(1) unsigned NOT NULL default 0,
+  `have_goodies` tinyint(1) unsigned NOT NULL default 0,
+  `have_zip` tinyint(1) unsigned NOT NULL default 0,
+  `have_contenu_pages` tinyint(1) unsigned NOT NULL default 0,
+  `have_statut_announced` tinyint(1) unsigned NOT NULL default 0,
+  `template_reference_emission` varchar(255) NOT NULL,
+  `template_nommage_fichiers_emission` varchar(255) NOT NULL,
+  `template_nommage_morceaux_emission` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id_site`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Table des parametres des sites' ;
+
+INSERT INTO `PARAMETRES_SITE` (`id_site`, `mail_admin`, `have_titre`, `have_texte`, `have_participants`, `id_default_participant`, `have_image_jpg`, `have_image_jpg_toprint`, `have_image_gif`, `have_teaser_mp3`, `have_teaser_video`, `have_goodies`, `have_zip`, `have_contenu_pages`, `have_statut_announced`, `template_reference_emission`, `template_nommage_fichiers_emission`, `template_nommage_morceaux_emission`) VALUES 
+(1, 'contact@thisisradioclash.org', 1, 0, 1, 0,  1, 1, 1, 1, 1, 0, 1, 1, 1, 'ThisIsRadioclash n°{numero} : {titre}', 'thisisradioclash-episode{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}'),
+(2, 'contact@thebrainradio.com', 	0, 0, 0, 2,  1, 0, 1, 0, 0, 1, 0, 1, 0, 'The Brain #{numero}', 'thebrain{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau} - {nom_label} - {annee}'),
+(3, 'contact@thebrainradio.com', 	1, 1, 1, 0,  1, 0, 1, 0, 0, 0, 0, 1, 0, 'AMIX #{numero} by {nom_participant}', 'thebrain-amix{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}'),
+(4, 'contact@prototop.be', 			0, 0, 0, 13, 1, 1, 0, 0, 0, 0, 1, 1, 0, 'Prototop #{numero}', 'prototop-{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}');
+

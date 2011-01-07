@@ -1,4 +1,5 @@
 <?php
+include('../dbFunctions/dbFunctions.php');
 include('../sitevars.php');
 include('../dbFunctions/sendMail.php');
 

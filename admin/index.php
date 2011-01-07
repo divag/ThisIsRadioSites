@@ -1,7 +1,7 @@
 ﻿<?php
-include('../sitevars.php');
-include('../dbFunctions/dbFunctions.php');
 include('../dbFunctions/sendMail.php');
+// - inclu indirectement : include('../dbFunctions/dbFunctions.php');
+// - inclu indirectement : include('../sitevars.php');
 
 if(isset($_POST['nomCompte']))
 {
@@ -29,38 +29,77 @@ if(isset($_POST['nomCompte']))
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>This is Radioclash administration</title>
+	<title><?php echo $site['nom'] ?> : Administration</title>
 	<style>
 	body {
 		background-color:#FFF;
 	}
+#divWait {
+	text-align: center;
+}
+
+#divWait div form {
+	text-align: center;
+}
+
+#divWait div form table {
+	text-align: left;
+	margin-left: auto;
+	margin-right: auto;
+	border: 2px double rgb(199, 199, 199);
+	padding: 4px;
+	background-color: rgb(242, 242, 242);
+}
+
+#divWait div form table input {
+	width: 170px;
+}
+
+.libelle {
+	text-align: right;
+}
+
+#body {
+	font-family: sans-serif;
+	font-size: 9pt;
+}
+
+#divWait div form table tbody tr td.libelle {
+	font-size: 9pt;
+	color: rgb(94, 94, 94);
+}
+
 	</style>
 </head>
 <body>
-<img src="../css/bandeau.gif" />
-<br />
-<table>
-<tr><td style="padding-left:15px;">
-		<h3 style="margin-bottom:0px;margin-top:0px;">COME ON BABY :</h3> 
-</td><td>
-	<form method="post" action="thisisradioclashadmin.php">
-		<input type="text" name="login" />
-		<input type="password" name="password" />
-		<input type="submit" value=" >>>>>>>>  G O  >>>>>>>>" />	
-	</form>  
-</td></tr>
-<tr><td>
-</td><td style="text-align:right;">
-	<form method="post" action="index.php">
-		<input type="button" id="boutonEnvoiMotDePasse" value=">> Mot de passe oublié ?" onclick="this.style.display = 'none'; document.getElementById('divEnvoiMotDePasse').style.display = 'block';" />
-		<div style="display:none;" id="divEnvoiMotDePasse">
-			Ton adresse mail : 
-			<input type="text" id="nomCompte" name="nomCompte" />
-			<input type="submit" value="Envoyer le mot de passe" />
-		</div>
-	</form>
-</td></tr>
-</table>
+<div id="divWait" class="divWait">
+	<div>
+	<br /><br />
+	<br /><br />
+	<img src="css/logo_site<?php echo $id_site ?>.jpg" />
+	<br />
+	<br />
+		<form id="identification" method="post" action="thisisradioclashadmin.php">
+			<table>
+				<tr><td class="libelle">Nom : </td><td><input type="text" name="login" /></td></tr>
+				<tr><td class="libelle">Mot de passe : </td><td><input type="password" name="password" /></td></tr>
+				<tr><td class="libelle"></td><td><input type="submit" value=" >>>>>  G O  >>>>>" /></td></tr>
+			</table>			
+		</form>
+		<br />
+		<form id="sendMotDePasse" method="post" action="index.php">
+			>> <a href="#" id="boutonEnvoiMotDePasse" onclick="this.style.display = 'none'; document.getElementById('divEnvoiMotDePasse').style.display = 'block';">Mot de passe oublié ?</a> <<
+			<br />
+			<div style="display:none;" id="divEnvoiMotDePasse">
+				<table>
+					<tr><td class="libelle">Adresse mail : </td><td><input type="text" id="nomCompte" name="nomCompte" /></td></tr>
+					<tr><td class="libelle"></td><td><input type="submit" value="Envoyer le mot de passe" /></td></tr>
+				</table>
+			</div>
+		</form>
+	</div>
+</div>
+
 	<script>
 	if (navigator.appName != 'Netscape')
 		location.href = 'noIE.html';
