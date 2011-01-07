@@ -40,7 +40,7 @@ function dbUpdateSite($id, $nom, $url, $accroche_fr, $accroche_en, $est_actif){
 
     include('var.php');
 
-    $query = "UPDATE SITE set nom = '".$nom."', url = '".$url."', accroche_fr = '".$accroche_fr."', accroche_en = '".$accroche_en."', est_actif = ".$est_actif." WHERE id=".$id.";";
+    $query = "UPDATE SITE set nom = '".urldecode($nom)."', url = '".urldecode($url)."', accroche_fr = '".urldecode($accroche_fr)."', accroche_en = '".urldecode($accroche_en)."', est_actif = ".$est_actif." WHERE id=".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -86,7 +86,7 @@ function dbGetListeAdministrateursSite($id_site){
 }
 
 //Récupération de la liste des administrateurs d'un site :
-function dbDeleteAdministrateursSite($id_site){
+function dbDeleteAllAdministrateursSite($id_site){
 
     include('var.php');
 
@@ -161,7 +161,7 @@ function dbGetParametresSite($id_site) {
 function dbUpdateParametresSite($id_site, $mail_admin, $have_titre, $have_texte, $have_participants, $id_default_participant, $have_image_jpg, $have_image_jpg_toprint, $have_image_gif, $have_teaser_mp3, $have_teaser_video, $have_goodies, $have_zip, $have_contenu_pages, $have_statut_announced, $template_reference_emission, $template_nommage_fichiers_emission, $template_nommage_morceaux_emission) {
 
     include('var.php');
-	$query = "INSERT INTO PARAMETRES_SITE (id_site, mail_admin, have_titre, have_texte, have_participants, id_default_participant, have_image_jpg, have_image_jpg_toprint, have_image_gif, have_teaser_mp3, have_teaser_video, have_goodies, have_zip, have_contenu_pages, have_statut_announced, template_reference_emission, template_nommage_fichiers_emission, template_nommage_morceaux_emission) VALUES (".$id_site.", '".$mail_admin."', ".$have_titre.", ".$have_texte.", ".$have_participants.", ".$id_default_participant.", ".$have_image_jpg.", ".$have_image_jpg_toprint.", ".$have_image_gif.", ".$have_teaser_mp3.", ".$have_teaser_video.", ".$have_goodies.", ".$have_zip.", ".$have_contenu_pages.", ".$have_statut_announced.", '".$template_reference_emission."' , '".$template_nommage_fichiers_emission."' , '".$template_nommage_morceaux_emission."');";
+	$query = "INSERT INTO PARAMETRES_SITE (id_site, mail_admin, have_titre, have_texte, have_participants, id_default_participant, have_image_jpg, have_image_jpg_toprint, have_image_gif, have_teaser_mp3, have_teaser_video, have_goodies, have_zip, have_contenu_pages, have_statut_announced, template_reference_emission, template_nommage_fichiers_emission, template_nommage_morceaux_emission) VALUES (".$id_site.", '".urldecode($mail_admin)."', ".$have_titre.", ".$have_texte.", ".$have_participants.", ".$id_default_participant.", ".$have_image_jpg.", ".$have_image_jpg_toprint.", ".$have_image_gif.", ".$have_teaser_mp3.", ".$have_teaser_video.", ".$have_goodies.", ".$have_zip.", ".$have_contenu_pages.", ".$have_statut_announced.", '".urldecode($template_reference_emission)."' , '".urldecode($template_nommage_fichiers_emission)."' , '".urldecode($template_nommage_morceaux_emission)."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	

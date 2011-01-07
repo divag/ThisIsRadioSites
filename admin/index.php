@@ -79,7 +79,7 @@ if(isset($_POST['nomCompte']))
 	<img src="css/logo_site<?php echo $id_site ?>.jpg" />
 	<br />
 	<br />
-		<form id="identification" method="post" action="thisisradioclashadmin.php">
+		<form id="identification" method="post" action="admin.php">
 			<table>
 				<tr><td class="libelle">Nom : </td><td><input type="text" name="login" /></td></tr>
 				<tr><td class="libelle">Mot de passe : </td><td><input type="password" name="password" /></td></tr>
