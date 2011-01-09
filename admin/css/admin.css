@@ -198,3 +198,15 @@ h3 input {
 	padding-left: 0px;
 	padding-bottom: 0px;
 }
+
+td.padded {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+td.actionEmission {
+	padding-left: 5px;
+	padding-right: 5px;
+	text-align: center;
+}
+

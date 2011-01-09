@@ -425,7 +425,8 @@ function createLignePageSite(pageSite, haveContenu)
 	tr1.id = "trLignePageSiteVide_" + pageSite;
 		
 	var td1 = document.createElement('td');
-	td1.innerHTML = "<b><u>" + pageSite + "</u></b>";
+	td1.className = 'padded';
+	td1.innerHTML = "<b><u>Page \"" + pageSite + "\" :</u></b>";
 	
 	//var btnAjouter = document.createElement('input');
 	var spanAjouter1 = document.createElement('span');
@@ -449,13 +450,14 @@ function createLignePageSite(pageSite, haveContenu)
 			
 	var td2 = document.createElement('td');
 	td2.colSpan = "4";
+	td2.className = 'padded';
 	if (!haveContenu)
 	{
-		td2.innerHTML = "<font style='color:white;'><i>Pas de contenu pour cette page...</i></font>";
-		tr1.className = 'etat11';
+		td2.innerHTML = "<font style='color:gray;'><i>Pas de contenu pour cette page...</i></font>";
+		tr1.className = 'etat22';
 	}
 	else
-		tr1.className = 'etat12';
+		tr1.className = 'etat21';
 
 		
 	tr1.appendChild(td1);
@@ -605,14 +607,18 @@ function displayFormEditContenu(contenuData, postAction, postActionCancel)
 	var tdType1 = document.createElement('td');
 	tdType1.style.width = "200px";
 	tdType1.innerHTML = "<b><u>Type de contenu :</u></b>";
+	tdType1.className = 'padded';
 	var tdType2 = document.createElement('td');
 	tdType2.style.textAlign = "left";
+	tdType2.className = 'padded';
 	var tdType3 = document.createElement('td');
 	tdType3.style.textAlign = "right";
 	tdType3.style.width = "50px";
+	tdType3.className = 'padded';
 	var tdType4 = document.createElement('td');
 	tdType4.style.textAlign = "left";
 	tdType4.style.width = "50px";
+	tdType2.className = 'padded';
 	
 	var ddlTypeContenu = document.createElement('select');
 	//ddlTypeContenu.id = 'formContenuType' + contenuData.id_contenu;
@@ -699,12 +705,12 @@ function createLigneContenuPageSite(contenuPageSiteData, nomPage)
 		creation = true;
 		
 	var tr = document.createElement('tr');
-	tr.className = 'etat23';
+	tr.className = 'etat32';
 
 	
 	var td1 = document.createElement('td');
+	td1.className = 'padded';
 	td1.style.paddingLeft = '15px';
-	td1.style.paddingright = '5px';
 	td1.style.textAlign = 'right';
 	var spanType = document.createElement('span');
 	if (!creation)
@@ -754,6 +760,7 @@ function createLigneContenuPageSite(contenuPageSiteData, nomPage)
 	tr.appendChild(td1);
 	
 	var td2 = document.createElement('td');
+	td2.className = 'padded';
 	var spanZone = document.createElement('span');
 	if (creation)
 		spanZone.style.display = "none";
@@ -769,14 +776,19 @@ function createLigneContenuPageSite(contenuPageSiteData, nomPage)
 	tr.appendChild(td2);
 
 	var td4 = document.createElement('td');
+	td4.className = 'actionEmission';
 	var td5 = document.createElement('td');	
+	td5.className = 'actionEmission';
 	if (!creation)
 	{
 		var boutonModifier = document.createElement('input');
 		boutonModifier.type = "button";
 		boutonModifier.className = "button";
 		if (contenuPageSiteData.id_type_contenu == 0)
+		{
 			boutonModifier.value = "Compléter";
+			boutonModifier.style.fontWeight = "bold";
+		}
 		else
 			boutonModifier.value = "Modifier";
 			
@@ -810,6 +822,7 @@ function createLigneContenuPageSite(contenuPageSiteData, nomPage)
 	}
 
 	var td3 = document.createElement('td');	
+	td3.className = 'actionEmission';
 	
 	var boutonDeplacerOk = document.createElement('input');
 	boutonDeplacerOk.value = "Valider";
@@ -1208,7 +1221,7 @@ function createLigneUtilisateur(userData)
 	}
 	
 	var col1 = document.createElement('td');
-	col1.style.paddingLeft = '5px';
+	col1.className = 'padded';
 	col1.innerHTML = userData.nom;
 	
 	var col3 = document.createElement('td');
@@ -1965,43 +1978,47 @@ function createLigneEmission(emissionData)
 	col1.appendChild(thumb);
 	var col2 = document.createElement('td');
 	col2.className = 'titreEmission';
+	col2.className = 'padded';
 	if (siteHaveTitre)
 		col2.innerHTML = emissionData.numero + ' - ' + emissionData.titre;
 	else
 		col2.innerHTML = 'Emission n°' + emissionData.numero;
 		
 	var col3 = document.createElement('td');
-	col3.className = 'dateEmission';
+	col3.className = 'padded, dateEmission';
 	
 	if (emissionData.etat == 1)
 		col3.innerHTML = emissionData.libelle;
 
-	//if (emissionData.etat == 2 && emissionData.date_sortie != '??/??/????')
 	if (emissionData.etat == 2)
 		col3.innerHTML = emissionData.libelle + ' pour le : ' + emissionData.date_sortie;
-	//else
-	//	col3.innerHTML = 'Annoncée pour le : ' + emissionData.date_sortie;
 		
 	if (emissionData.etat == 3)
 		col3.innerHTML = emissionData.libelle + ' le : ' + emissionData.date_sortie;
 		
-	//var col4 = document.createElement('td');
-	//col4.className = 'etatEmission';
-	//col4.innerHTML = emissionData.libelle;
 	var col5 = document.createElement('td');
 	col5.className = 'actionEmission';
-	var linkModifier = document.createElement('a');
+	var col6 = document.createElement('td');
+	col6.className = 'actionEmission';
+	var col7 = document.createElement('td');
+	col7.className = 'actionEmission';
+	//var linkModifier = document.createElement('a');
+	var linkModifier = document.createElement('input');
+	linkModifier.type = 'button';
 	if (admin == '')
-		linkModifier.innerHTML = 'Modifier';
+		//linkModifier.innerHTML = 'Modifier';
+		linkModifier.value = 'Modifier';
 	else
 	{
 		if (siteHaveTeaserMp3 || siteHaveTeaserVideo)
-			linkModifier.innerHTML = "Uploader le teaser, la pochette, ou le mp3 / Envoyer votre playlist à l'administrateur";
+			//linkModifier.innerHTML = "Uploader le teaser, la pochette, ou le mp3 / Envoyer votre playlist à l'administrateur";
+			linkModifier.value = "Uploader le teaser, la pochette, ou le mp3 / Envoyer votre playlist à l'administrateur";
 		else
-			linkModifier.innerHTML = "Uploader la pochette ou le mp3 / Envoyer votre playlist à l'administrateur";
+			//linkModifier.innerHTML = "Uploader la pochette ou le mp3 / Envoyer votre playlist à l'administrateur";
+			linkModifier.value = "Uploader la pochette ou le mp3 / Envoyer votre playlist à l'administrateur";
 	}
 	
-	linkModifier.href = '#';
+	//linkModifier.href = '#';
 	linkModifier.onclick = function () {
 		currentItem = emissionData;
 		display('playlist');
@@ -2013,12 +2030,15 @@ function createLigneEmission(emissionData)
 	{
 		if (siteHaveStatutAnnounced && (emissionData.titre != '' || !siteHaveTitre))
 		{
-			var saut1 = document.createElement('span');
-			saut1.innerHTML = " / ";	
-			col5.appendChild(saut1);
-			var linkAnnonce = document.createElement('a');
-			linkAnnonce.innerHTML = 'Annoncer';
-			linkAnnonce.href = '#';
+			//var saut1 = document.createElement('span');
+			//saut1.innerHTML = " / ";	
+			//col5.appendChild(saut1);
+			//var linkAnnonce = document.createElement('a');
+			var linkAnnonce = document.createElement('input');
+			linkAnnonce.type = 'button';
+			//linkAnnonce.innerHTML = 'Annoncer';
+			linkAnnonce.value = 'Annoncer';
+			//linkAnnonce.href = '#';
 			linkAnnonce.onclick = function () {
 				if (verifParticipants(emissionData.id))
 				{
@@ -2035,17 +2055,20 @@ function createLigneEmission(emissionData)
 					display('playlist');
 				}
 			}
-			col5.appendChild(linkAnnonce);
+			col6.appendChild(linkAnnonce);
 		}
 		
 		if (siteHaveStatutAnnounced || admin == '')
 		{
-			var saut2 = document.createElement('span');
-			saut2.innerHTML = " / ";	
-			col5.appendChild(saut2);
-			var linkDelete = document.createElement('a');
-			linkDelete.innerHTML = 'Supprimer';
-			linkDelete.href = '#';
+			//var saut2 = document.createElement('span');
+			//saut2.innerHTML = " / ";	
+			//col5.appendChild(saut2);
+			//var linkDelete = document.createElement('a');
+			var linkDelete = document.createElement('input');
+			linkDelete.type = 'button';
+			//linkDelete.innerHTML = 'Supprimer';
+			linkDelete.value = 'Supprimer';
+			//linkDelete.href = '#';
 			linkDelete.onclick = function () {
 					if (confirm('Certain de vouloir supprimer cette émission ?'))
 					{
@@ -2056,29 +2079,36 @@ function createLigneEmission(emissionData)
 						}
 					}
 				}
-			col5.appendChild(linkDelete);
+			col7.appendChild(linkDelete);
 		}
 	}
 	
 	//Pour une émission annoncée :
 	if (admin == '' && (emissionData.etat == 2 || (!siteHaveStatutAnnounced && emissionData.etat == 1)))
 	{
-		var saut3 = document.createElement('span');
-		saut3.innerHTML = " / ";	
-		col5.appendChild(saut3);
+		//var saut3 = document.createElement('span');
+		//saut3.innerHTML = " / ";	
+		//col5.appendChild(saut3);
 
-		var linkPreview = document.createElement('a');
-		linkPreview.innerHTML = 'Preview';
-		linkPreview.href = urlPreview.replace("{id}", emissionData.id);
-		linkPreview.target = 'blank';
-		col5.appendChild(linkPreview);
+		//var linkPreview = document.createElement('a');
+		var linkPreview = document.createElement('input');
+		linkPreview.type = 'button';
+		//linkPreview.innerHTML = 'Preview';
+		linkPreview.value = 'Preview';
+		//linkPreview.href = urlPreview.replace("{id}", emissionData.id);
+		linkPreview.onclick = function () { window.open(urlPreview.replace("{id}", emissionData.id)); };
+		//linkPreview.target = 'blank';
+		col6.appendChild(linkPreview);
 	
-		var saut4 = document.createElement('span');
-		saut4.innerHTML = " / ";	
-		col5.appendChild(saut4);
-		var linkPublish = document.createElement('a');
-		linkPublish.innerHTML = 'Publier';
-		linkPublish.href = '#';
+		//var saut4 = document.createElement('span');
+		//saut4.innerHTML = " / ";	
+		//col5.appendChild(saut4);
+		//var linkPublish = document.createElement('a');
+		var linkPublish = document.createElement('input');
+		linkPublish.type = 'button';
+		//linkPublish.innerHTML = 'Publier';
+		linkPublish.value = 'Publier';
+		//linkPublish.href = '#';
 		linkPublish.onclick = function () {
 			if (verifParticipants(emissionData.id) && verifEmission(emissionData.id))
 			{
@@ -2100,7 +2130,7 @@ function createLigneEmission(emissionData)
 				display('playlist');
 			}
 			}
-		col5.appendChild(linkPublish);
+		col7.appendChild(linkPublish);
 	}
 	
 	var emission = document.createElement('tr');
@@ -2113,6 +2143,8 @@ function createLigneEmission(emissionData)
 		//emission.appendChild(col4);
 	}
 	emission.appendChild(col5);
+	emission.appendChild(col6);
+	emission.appendChild(col7);
 		
 	if (alternate == 1)
 		alternate = 2;
