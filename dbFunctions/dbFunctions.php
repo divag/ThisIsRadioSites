@@ -1,8 +1,620 @@
 <?php
+/*
+CONTENU :
+=========
+*/
+
+//Récupération d un contenu :
+function dbGetContenu($id_contenu){
+
+    include('var.php');
+
+    $query = "SELECT id, id_type_contenu, url, contenu_fr, contenu_en, contenu_txt_fr, contenu_txt_en FROM CONTENU WHERE id = ".$id_contenu.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+	    return $row;
+    else
+	    return 0;
+}
+
+//Enregistrement d'un contenu :
+function dbInsertContenu($id_type_contenu, $url, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en){
+
+    include('var.php');
+
+    $query = "INSERT INTO CONTENU (id_type_contenu, url, contenu_fr, contenu_en, contenu_txt_fr, contenu_txt_en) VALUES (".$id_type_contenu.", '".urldecode($url)."', '".urldecode($contenu_fr)."', '".urldecode($contenu_en)."', '".urldecode($contenu_txt_fr)."', '".urldecode($contenu_txt_en)."');";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+	$new_id = mysql_insert_id();
+    mysql_close($link);
+	
+	return $new_id;
+}
+
+function dbInsertContenuTexte($contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en){
+	return dbInsertContenu(1, '', $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en);
+}
+
+function dbInsertContenuLien($url){
+	return dbInsertContenu(2, $url, '', '', '', '');
+}
+
+function dbInsertContenuImage($url_relative){
+	return dbInsertContenu(3, $url_relative, '', '', '', '');
+}
+
+function dbInsertContenuMp3($url_relative){
+	return dbInsertContenu(4, $url_relative, '', '', '', '');
+}
+
+function dbInsertContenuFlash($url_relative){
+	return dbInsertContenu(5, $url_relative, '', '', '', '');
+}
+
+function dbInsertContenuLienYoutube($url){
+	return dbInsertContenu(6, $url, '', '', '', '');
+}
+
+//Enregistrement d'un contenu :
+function dbUpdateContenu($id, $id_type_contenu, $url, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en){
+
+    include('var.php');
+
+    $query = "UPDATE CONTENU set id_type_contenu = ".$id_type_contenu.", url = '".urldecode($url)."', contenu_fr = '".urldecode($contenu_fr)."', contenu_en = '".urldecode($contenu_en)."', contenu_txt_fr = '".urldecode($contenu_txt_fr)."', contenu_txt_en = '".urldecode($contenu_txt_en)."' WHERE id = ".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+function dbUpdateContenuTexte($id, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en){
+	return dbUpdateContenu($id, 1, '', $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en);
+}
+
+function dbUpdateContenuLien($id, $url){
+	return dbUpdateContenu($id, 2, $url, '', '', '', '');
+}
+
+function dbUpdateContenuImage($id, $url_relative){
+	return dbUpdateContenu($id, 3, $url_relative, '', '', '', '');
+}
+
+function dbUpdateContenuMp3($id, $url_relative){
+	return dbUpdateContenu($id, 4, $url_relative, '', '', '', '');
+}
+
+function dbUpdateContenuFlash($id, $url_relative){
+	return dbUpdateContenu($id, 5, $url_relative, '', '', '', '');
+}
+
+function dbUpdateContenuLienYoutube($id, $url){
+	return dbUpdateContenu($id, 6, $url, '', '', '', '');
+}
+
+//Suppression d'un contenu :
+function dbDeleteContenu($id){
+
+    include('var.php');
+
+    $query = "DELETE FROM CONTENU WHERE id = ".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
 
 /*
-SITES :
+TYPE_CONTENU :
+==============
+*/
+
+function dbListeAllTypeContenu(){
+
+    include('var.php');
+
+    $query = "SELECT id, libelle FROM TYPE_CONTENU ORDER BY id ASC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+function dbGetLibelleTypeContenu($id_type_contenu){
+
+    include('var.php');
+
+	$query = "SELECT libelle FROM TYPE_CONTENU WHERE id = ".$id_type_contenu.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+	mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+		return $row['libelle'];
+	else
+		return '?!?';
+}
+
+/*
+PAGES (fichiers .php à la racine du site, sans "siteparts.php" et "sitevars.php") :
+===================================================================================
+*/
+
+function getListePagesSite()
+{
+	$array_pages = array();
+	$dir = opendir("../");
+	while ($File = readdir($dir))
+	{
+		if($File != "." && $File != ".." && strpos($File,".php")
+		&& $File != "sitevars.php" 
+		&& $File != "siteparts.php")
+		{
+			$array_pages[] = str_replace(".php", "", $File);
+		}
+	}
+	closedir($dir);
+	//sort($array_pages);
+	sort($array_pages);
+	return $array_pages;
+}
+
+/*
+CONTENU_PAGE_SITE :
+===================
+*/
+
+//Récupération d'un contenu d'une page d'un site :
+function dbGetContenuPageSiteById($id){
+
+    include('var.php');
+
+    $query = "SELECT CONTENU_PAGE_SITE.id, CONTENU_PAGE_SITE.id_site, CONTENU_PAGE_SITE.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, CONTENU_PAGE_SITE.page, CONTENU_PAGE_SITE.zone FROM CONTENU_PAGE_SITE, CONTENU WHERE CONTENU_PAGE_SITE.id_contenu = CONTENU.id AND CONTENU_PAGE_SITE.id = ".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+	    return $row;
+    else
+	    return 0;
+}
+
+//Récupération d'un contenu d'une page d'un site :
+function dbGetContenuPageSite($id_site, $page, $zone){
+
+    include('var.php');
+
+    $query = "SELECT CONTENU_PAGE_SITE.id, CONTENU_PAGE_SITE.id_site, CONTENU_PAGE_SITE.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, CONTENU_PAGE_SITE.page, CONTENU_PAGE_SITE.zone FROM CONTENU_PAGE_SITE, CONTENU WHERE CONTENU_PAGE_SITE.id_contenu = CONTENU.id AND CONTENU_PAGE_SITE.id_site = ".$id_site." AND CONTENU_PAGE_SITE.page = '".urldecode($page)."' AND CONTENU_PAGE_SITE.zone = '".urldecode($zone)."' ORDER BY CONTENU_PAGE_SITE.zone ASC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+	    return $row;
+    else
+	    return 0;
+}
+
+//Récupération de la liste des contenu d'un page d'une emission :
+function dbGetListeContenuPageSite($id_site, $page){
+
+    include('var.php');
+
+    $query = "SELECT CONTENU_PAGE_SITE.id, CONTENU_PAGE_SITE.id_site, CONTENU_PAGE_SITE.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, CONTENU_PAGE_SITE.page, CONTENU_PAGE_SITE.zone, TYPE_CONTENU.libelle FROM CONTENU_PAGE_SITE, CONTENU, TYPE_CONTENU WHERE CONTENU_PAGE_SITE.id_contenu = CONTENU.id AND CONTENU_PAGE_SITE.id_site = ".$id_site." AND CONTENU_PAGE_SITE.page = '".urldecode($page)."' AND CONTENU.id_type_contenu = TYPE_CONTENU.id ORDER BY CONTENU_PAGE_SITE.zone ASC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+//Enregistrement d'un contenu d'un page pour une émission :
+function dbInsertContenuPageSite($id_site, $page, $zone){
+//function dbInsertContenuPageSite($id_site, $page, $zone, $id_type_contenu, $url, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en){
+
+    include('var.php');
+
+	//Enregistrement du contenu : 
+    $id_contenu = dbInsertContenu(0, '', '', '', '', '');
+
+	//Enregistrement de la newsletter :
+    $query = "INSERT INTO CONTENU_PAGE_SITE (id_site, id_contenu, page, zone) VALUES (".$id_site.", ".$id_contenu.", '".urldecode($page)."', '".urldecode($zone)."');";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+//Enregistrement d'un contenu d'un page pour une émission :
+function dbUpdateContenuPageSite($id, $page, $zone){
+
+    include('var.php');
+
+    $query = "UPDATE CONTENU_PAGE_SITE set page = '".urldecode($page)."', zone = '".urldecode($zone)."' WHERE id = ".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+function dbDeleteContenuPageSite($id)
+{
+    include('var.php');
+	$contenuPageSite = dbGetContenuPageSiteById($id);
+	dbDeleteContenu($contenuPageSite['id_contenu']);
+
+	$query = "DELETE FROM CONTENU_PAGE_SITE WHERE id = ".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	mysql_db_query ($db, $query);	
+	mysql_close($link);
+}
+
+/*
+GOODIES_EMISSION :
+==================
+*/
+
+//Récupération de la liste des goodies d'une emission :
+function dbGetListeGoodiesEmission($id_emission){
+
+    include('var.php');
+
+    $query = "SELECT GOODIES_EMISSION.id_emission, GOODIES_EMISSION.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, GOODIES_EMISSION.ordre, TYPE_CONTENU.libelle FROM GOODIES_EMISSION, CONTENU, TYPE_CONTENU WHERE GOODIES_EMISSION.id_contenu = CONTENU.id AND GOODIES_EMISSION.id_emission = ".$id_emission." AND CONTENU.id_type_contenu = TYPE_CONTENU.id ORDER BY GOODIES_EMISSION.ordre ASC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+//Enregistrement d'un goodies pour une émission :
+function dbInsertGoodiesEmission($id_emission, $id_type_contenu, $url, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en){
+
+    include('var.php');
+
+	//Enregistrement du contenu : 
+    $id_contenu = dbInsertContenu($id_type_contenu, $url, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en);
+
+	//Enregistrement de la newsletter :
+    $query = "INSERT INTO GOODIES_EMISSION (id_emission, id_contenu, ordre) VALUES (".$id_emission.", ".$id_contenu.", 0);";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+function dbUpdateOrdreGoodiesEmission($id_emission, $id_contenu, $ordre)
+{
+
+    include('var.php');
+
+	$query = "UPDATE GOODIES_EMISSION SET ordre = ".$ordre." WHERE id_emission = ".$id_emission." AND  id_contenu = ".$id_contenu.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	mysql_db_query ($db, $query);	
+	mysql_close($link);
+}
+
+function dbDeleteGoodiesEmission($id_emission, $id_contenu, $ordre)
+{
+    include('var.php');
+	
+	dbDeleteContenu($id_contenu);
+
+	$query = "DELETE FROM GOODIES_EMISSION WHERE id_emission = ".$id_emission." AND id_contenu = ".$id_contenu." AND ordre = ".$ordre.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	mysql_db_query ($db, $query);	
+	mysql_close($link);
+}
+
+/*
+NEWS :
+======
+*/
+
+//Récupération d'une news :
+function dbGetNews($id){
+
+    include('var.php');
+
+    $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.id_contenu = CONTENU.id AND NEWS.id = ".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+	    return $row;
+    else
+	    return 0;
+}
+
+//Récupération de la dernière news d'un site :
+function dbGetLastNews($id_site){
+
+    include('var.php');
+
+    $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY date DESC LIMIT 0,1;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+	    return $row;
+    else
+	    return 0;
+}
+
+//Récupération de la liste des news d'un site :
+function dbGetListeNews($id_site){
+
+    include('var.php');
+
+    $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY date DESC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+//Enregistrement d'une news pour un site :
+function dbInsertNews($id_site, $titre, $id_utilisateur, $date, $id_type_contenu, $url, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en){
+
+    include('var.php');
+
+	//Enregistrement du contenu : 
+    $id_contenu = dbInsertContenu($id_type_contenu, $url, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en);
+
+	//Enregistrement de la news :
+    $query = "INSERT INTO NEWS (id_site, titre, id_contenu, id_utilisateur, zone) VALUES (".$id_site.", '".urldecode($titre)."', ".$id_contenu.", ".$id_utilisateur.", '".date("Y-m-d H:i:s")."');";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+//Enregistrement d'un contenu d'un page pour une émission :
+function dbUpdateNews($id, $id_site, $titre, $id_contenu, $id_utilisateur, $date){
+
+    include('var.php');
+
+    $query = "UPDATE NEWS set id_site = ".$id_site.", titre = '".urldecode($titre)."', id_contenu = ".$id_contenu.", id_utilisateur = ".$id_utilisateur.", date = '".urldecode($date)."' WHERE id = ".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+function dbDeleteNews($id)
+{
+    include('var.php');
+	$News = dbGetNews($id);
+	dbDeleteContenu($News['id_contenu']);
+
+	$query = "DELETE FROM NEWS WHERE id = ".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	mysql_db_query ($db, $query);	
+	mysql_close($link);
+}
+
+/*
+BONUS :
 =======
+*/
+
+//Récupération d'une bonus :
+function dbGetBonus($id){
+
+    include('var.php');
+
+    $query = "SELECT BONUS.id, BONUS.id_site, BONUS.titre, BONUS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, BONUS.id_utilisateur, BONUS.date FROM BONUS, CONTENU WHERE BONUS.id_contenu = CONTENU.id AND BONUS.id = ".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+	    return $row;
+    else
+	    return 0;
+}
+
+//Récupération de la liste des bonus d'un site :
+function dbGetListeBonus($id_site){
+
+    include('var.php');
+
+    $query = "SELECT BONUS.id, BONUS.id_site, BONUS.titre, BONUS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, BONUS.id_utilisateur, BONUS.date, TYPE_CONTENU.libelle FROM BONUS, CONTENU, TYPE_CONTENU WHERE BONUS.id_contenu = CONTENU.id AND BONUS.id_site = ".$id_site." AND CONTENU.id_type_contenu = TYPE_CONTENU.id ORDER BY date DESC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+//Enregistrement d'une bonus pour un site :
+function dbInsertBonus($id_site, $titre, $id_utilisateur, $date, $id_type_contenu, $url, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en){
+
+    include('var.php');
+
+	//Enregistrement du contenu : 
+    $id_contenu = dbInsertContenu($id_type_contenu, $url, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en);
+
+	//Enregistrement de la bonus :
+    $query = "INSERT INTO BONUS (id_site, titre, id_contenu, id_utilisateur, zone) VALUES (".$id_site.", '".urldecode($titre)."', ".$id_contenu.", ".$id_utilisateur.", '".date("Y-m-d H:i:s")."');";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+//Enregistrement d'un contenu d'un page pour une émission :
+function dbUpdateBonus($id, $id_site, $titre, $id_contenu, $id_utilisateur, $date){
+
+    include('var.php');
+
+    $query = "UPDATE BONUS set id_site = ".$id_site.", titre = '".urldecode($titre)."', id_contenu = ".$id_contenu.", id_utilisateur = ".$id_utilisateur.", date = '".urldecode($date)."' WHERE id = ".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+function dbDeleteBonus($id)
+{
+    include('var.php');
+	$Bonus = dbGetBonus($id);
+	dbDeleteContenu($Bonus['id_contenu']);
+
+	$query = "DELETE FROM BONUS WHERE id = ".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	mysql_db_query ($db, $query);	
+	mysql_close($link);
+}
+
+/*
+MAILING_LIST :
+==============
+*/
+
+//Récupération de la liste des inscriptions a la mailinglist d'un site :
+function dbGetListeMailingList($id_site){
+
+    include('var.php');
+
+    $query = "SELECT mail, id_site, est_annule FROM MAILING_LIST WHERE id_site = ".$id_site." ORDER BY mail ASC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+//Récupération de la liste des inscriptions actives a la mailinglist d'un site :
+function dbGetListeMailingListActive($id_site){
+
+    include('var.php');
+
+    $query = "SELECT mail, id_site, est_annule FROM MAILING_LIST WHERE id_site = ".$id_site." AND est_annule = 0;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+//Enregistrement d'une newsletter :
+function dbInsertMailingList($mail, $id_site){
+
+    include('var.php');
+
+	//Enregistrement du mail :
+    $query = "INSERT INTO MAILING_LIST (mail, id_site, est_annule) VALUES ('".urldecode($mail)."', ".$id_site.", 0);";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+//Enregistrement d'une newsletter :
+function dbUpdateMailingList($old_mail, $new_mail){
+
+    include('var.php');
+
+	//Update du mail :
+    $query = "UPDATE MAILING_LIST set mail = '".urldecode($new_mail)."' WHERE mail = '".urldecode($old_mail)."';";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+/*
+NEWSLETTER :
+============
+*/
+
+//Récupération de la liste des newsletter d'un site :
+function dbGetListeNewsletter($id_site){
+
+    include('var.php');
+
+    $query = "SELECT id, id_site, destinataires, titre, contenu_fr, contenu_en, contenu_txt_fr, contenu_txt_en, date_envoi FROM NEWSLETTER, CONTENU WHERE NEWSLETTER.id_contenu = CONTENU.id AND NEWSLETTER.id_site = ".$id_site." ORDER BY date_envoi DESC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+//Récupération de la derniere newsletter d'un site :
+function dbGetLastNewsletter($id_site){
+
+    include('var.php');
+
+    $query = "SELECT id, id_site, destinataires, titre, contenu_fr, contenu_en, contenu_txt_fr, contenu_txt_en, date_envoi FROM NEWSLETTER, CONTENU WHERE NEWSLETTER.id_contenu = CONTENU.id AND NEWSLETTER.id_site = ".$id_site." ORDER BY date_envoi DESC LIMIT 0,1;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+	    return $row;
+    else
+	    return 0;
+}
+
+//Récupération d une newsletter :
+function dbGetNewsletter($id){
+
+    include('var.php');
+
+    $query = "SELECT id, id_site, destinataires, titre, contenu_fr, contenu_en, contenu_txt_fr, contenu_txt_en, date_envoi FROM NEWSLETTER, CONTENU WHERE NEWSLETTER.id_contenu = CONTENU.id AND NEWSLETTER.id = ".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+	    return $row;
+    else
+	    return 0;
+}
+
+//Enregistrement d'une newsletter :
+function dbInsertNewsletter($id_site, $destinataires, $titre, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en){
+
+    include('var.php');
+
+	//Enregistrement du contenu : 
+    $id_contenu = dbInsertContenuTexte($contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en);
+
+	//Enregistrement de la newsletter :
+    $query = "INSERT INTO NEWSLETTER (id_site, destinataires, titre, id_contenu, date_envoi) VALUES (".$id_site.", '".urldecode($destinataires)."', '".urldecode($titre)."', ".$id_contenu.", '".date("Y-m-d H:i:s")."');";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+/*
+SITE :
+======
 */
 
 //Récupération de la liste de tous les sites :
@@ -58,6 +670,11 @@ function dbUpdateStatutSite($id, $est_actif){
 	$res=mysql_db_query ($db, $query);	
     mysql_close($link);
 }
+
+/*
+ADMINISTRATEURS :
+=================
+*/
 
 //Récupération de la liste des sites d'un administrateur :
 function dbGetListeSitesAdministrateur($id_utilisateur){
@@ -125,6 +742,11 @@ function dbCheckAdministrateur($id_site, $id_utilisateur){
 		return false;
 }
 
+/*
+PARAMETRES APPLICATION :
+========================
+*/
+
 function dbCheckSuperAdministrateur($id_utilisateur){
 
     include('var.php');
@@ -141,6 +763,11 @@ function dbCheckSuperAdministrateur($id_utilisateur){
 			
 	return false;
 }
+
+/*
+PARAMETRES SITE :
+=================
+*/
 
 function dbGetParametresSite($id_site) {
 

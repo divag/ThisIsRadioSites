@@ -41,10 +41,10 @@
         type: 'POST',                     // 'get' or 'post', override for form's 'method' attribute 
         contentType: 'multipart/form-data'
     }; 
-      var optionsNews = { 
+      var optionsContenuImage = { 
         //target:        '#formUploadPochette #message',   // target element(s) to be updated with server response 
-        beforeSubmit:  fonctionAvantUploadImage,      // pre-submit callback 
-        success:       refreshNewsFormZoneAfterUpload,      // post-submit callback 
+        beforeSubmit:  fonctionAvantUploadContenuImage,      // pre-submit callback 
+        success:       refreshContenuImageFormZoneAfterUpload,      // post-submit callback 
  
         // other available options: 
 		//upload_image.php
@@ -79,7 +79,7 @@
     }; 
  
     // bind form using 'ajaxForm' 
-    $('#formUploadNews').ajaxForm(optionsNews); 
+    $('#formUploadContenuImage').ajaxForm(optionsContenuImage); 
     $('#formUploadPochette').ajaxForm(optionsPochette); 
     $('#formUploadPochetteToPrint').ajaxForm(optionsPochetteToPrint); 
     $('#formUploadPochetteGif').ajaxForm(optionsPochetteGif); 
@@ -90,6 +90,13 @@
  });   
 // --------------    UPLOAD
 // pre-submit callback 
+function fonctionAvantUploadContenuImage(formData, jqForm, options) { 
+	changeWaitMessage("<b>Upload de l'image sélectionnée ...</b><br /><br />Cela peut être long si le fichier est volumineux.<br /><br /> <span style=\"color:red;\">Si vous avez le temps de lire ce message, il faudrait penser à mettre un fichier moins lourd...!</span>");
+	showWait();
+    var queryString = $.param(formData); 
+    return true; 
+} 
+
 function fonctionAvantUploadImage(formData, jqForm, options) { 
 	changeWaitMessage("<b>Upload de l'image sélectionnée ...</b><br /><br />Cela peut être long si le fichier est volumineux.<br /><br /> <span style=\"color:red;\">Si vous avez le temps de lire ce message, il faudrait penser à mettre un fichier moins lourd...!</span>");
 	showWait();
@@ -172,8 +179,9 @@ function display(page)
 	document.getElementById('playlists').style.display = 'none';
 	document.getElementById('playlist').style.display = 'none';
 	document.getElementById('users').style.display = 'none';
-	document.getElementById('contenu').style.display = 'none';
+	document.getElementById('contenuPageSite').style.display = 'none';
 	document.getElementById('home').style.display = 'none';
+	document.getElementById('editeurContenu').style.display = 'none';
 	
 	document.getElementById(page).style.display = 'block';
 	
@@ -182,7 +190,7 @@ function display(page)
 		document.getElementById('buttonMenuhome').style.color = 'black';
 		document.getElementById('buttonMenuplaylists').style.color = 'black';
 		document.getElementById('buttonMenuusers').style.color = 'black';
-		document.getElementById('buttonMenucontenu').style.color = 'black';
+		document.getElementById('buttonMenucontenuPageSite').style.color = 'black';
 		
 		document.getElementById('texteChef').style.display = 'none';
 		document.getElementById('mailAdmin').style.display = 'none';
@@ -191,14 +199,14 @@ function display(page)
 			document.getElementById('buttonMenuusers').style.display = 'none';
 			
 		if (!siteHaveContenuPages)
-			document.getElementById('buttonMenucontenu').style.display = 'none';
+			document.getElementById('buttonMenucontenuPageSite').style.display = 'none';
 	}
 	else
 	{
 		document.getElementById('buttonMenuhome').style.display = 'none';
 		document.getElementById('buttonMenuplaylists').style.display = 'none';
 		document.getElementById('buttonMenuusers').style.display = 'none';
-		document.getElementById('buttonMenucontenu').style.display = 'none';
+		document.getElementById('buttonMenucontenuPageSite').style.display = 'none';
 		
 		document.getElementById('ajoutEmission').style.display = 'none';
 		document.getElementById('txtEnvoiMail').value = '';
@@ -296,9 +304,10 @@ function display(page)
 		currentItem = '';
 	}	
 	
-	if (page == "contenu")
+	if (page == "contenuPageSite")
 	{
-		refreshNewsFormZone();
+		refreshContenuPageSite();		
+		//refreshNewsFormZone();
 	}
 	
 	if (page == 'users')
@@ -312,6 +321,7 @@ function display(page)
 	}
 	
 	hideWait();
+	window.location.href = "#top";
 }
 
 function envoiPlaylistAdmin()
@@ -382,6 +392,555 @@ function refreshUtilisateurs()
 	{
 		document.getElementById('listeUsers').appendChild(createLigneUtilisateur(listeAllUsers[i]));			
 	}
+}
+
+function refreshContenuPageSite()
+{
+	document.getElementById('listeContenuPageSite').style.display = 'block';
+		
+	while (document.getElementById('listeContenuPageSite').hasChildNodes())
+		document.getElementById('listeContenuPageSite').removeChild(document.getElementById('listeContenuPageSite').firstChild);
+
+	getDatas('getListePagesSite', 'listePagesSite', '');
+	alternate = 1;
+		
+	for(var i=0; i<listePagesSite.length; i++)
+	{	
+		//Récupération et affichage de la liste des contenus existants :
+		getDatas('dbGetListeContenuPageSite', 'listeContenuPageSite', "id_site=" + id_site + "&page=" + encode(listePagesSite[i]));
+		alternate = 1;
+		
+		document.getElementById('listeContenuPageSite').appendChild(createLignePageSite(listePagesSite[i], (listeContenuPageSite.length != 0)));			
+			
+		for(var j=0; j<listeContenuPageSite.length; j++)
+		{
+			document.getElementById('listeContenuPageSite').appendChild(createLigneContenuPageSite(listeContenuPageSite[j]));			
+		}
+	}
+}
+
+function createLignePageSite(pageSite, haveContenu)
+{
+	var tr1 = document.createElement('tr');
+	tr1.id = "trLignePageSiteVide_" + pageSite;
+		
+	var td1 = document.createElement('td');
+	td1.innerHTML = "<b><u>" + pageSite + "</u></b>";
+	
+	//var btnAjouter = document.createElement('input');
+	var spanAjouter1 = document.createElement('span');
+	spanAjouter1.innerHTML = "&nbsp;(";
+	var spanAjouter2 = document.createElement('span');
+	spanAjouter2.innerHTML = ")&nbsp;";
+	var btnAjouter = document.createElement('a');
+	btnAjouter.type = "button";
+	//btnAjouter.value = "Ajouter un contenu à cette page";
+	btnAjouter.innerHTML = "Ajouter un contenu";
+	btnAjouter.href = "#";
+	btnAjouter.className = "button";
+	btnAjouter.onclick = function () {
+		document.getElementById("trLignePageSiteVide_" + pageSite).parentNode.insertBefore(createLigneContenuPageSite('', pageSite), document.getElementById("trLignePageSiteVide_" + pageSite).nextSibling);
+		this.onclick = function () { return false };
+		//this.disabled = true;
+	}
+	td1.appendChild(spanAjouter1);
+	td1.appendChild(btnAjouter);
+	td1.appendChild(spanAjouter2);
+			
+	var td2 = document.createElement('td');
+	td2.colSpan = "4";
+	if (!haveContenu)
+	{
+		td2.innerHTML = "<font style='color:white;'><i>Pas de contenu pour cette page...</i></font>";
+		tr1.className = 'etat11';
+	}
+	else
+		tr1.className = 'etat12';
+
+		
+	tr1.appendChild(td1);
+	tr1.appendChild(td2);
+
+	return tr1;
+}
+
+function initialiseFormEditFormEditContenu(id_contenu, id_type_contenu, url, contenu_fr, contenu_en, contenu_txt_fr, contenu_txt_en)
+{
+	document.getElementById('fileContenuImageId').value = id_contenu;
+	document.getElementById('fileContenuImageUrl').value = url;
+
+	document.getElementById('formContenuUrl').value = url;
+	document.getElementById('formContenuContenuFr').value = contenu_fr;
+	document.getElementById('formContenuContenuEn').value = contenu_en;
+	document.getElementById('formContenuContenuTxtFr').value = contenu_txt_fr;
+	document.getElementById('formContenuContenuTxtEn').value = contenu_txt_en;
+}
+
+function refreshTypeContenu(id_contenu, id_type_contenu, bouton_valider)
+{
+	//var typeContenu = document.getElementById('formContenuType' + id_contenu).value;
+	var typeContenu;
+	
+	if (id_type_contenu == undefined)
+		typeContenu = document.getElementById('formContenuType').value;
+	else
+		typeContenu = id_type_contenu;
+	
+	if (bouton_valider == undefined)
+		var bouton_valider = document.getElementById('boutonValiderContenu');
+	
+	//Affichage du formulaire correspondant au type de contenu :
+	//==========================================================
+	
+	bouton_valider.style.display = 'none';
+	document.getElementById('fileContenuImageButton').style.display = 'none';
+	//document.getElementById('fileContenuImageButton').style.display = 'none';
+	
+	document.getElementById('formContenuType_0').style.display = 'none';
+	document.getElementById('formContenuType_1').style.display = 'none';
+	document.getElementById('formContenuType_2').style.display = 'none';
+	document.getElementById('formContenuType_3').style.display = 'none';
+	document.getElementById('formContenuType_4').style.display = 'none';
+	document.getElementById('formContenuType_5').style.display = 'none';
+	document.getElementById('formContenuType_6').style.display = 'none';
+	
+	document.getElementById('formContenuType_' + typeContenu).style.display = 'block';
+	
+	//Actions d'initialisation spécifique au type de contenu
+	//Et on renvoie la fonction à exécuter avant la mise à jour du contenu 
+	//====================================================================
+	
+	if (typeContenu == 0)
+	{
+		bouton_valider.style.display = 'none';
+		return function () {return true;};
+	}
+	//Texte enrichi :
+	if (typeContenu == 1)
+	{
+		bouton_valider.style.display = 'block';
+		return function () {
+			//l'Url n'est pas utilisée pour ce type :
+			document.getElementById('formContenuUrl').value = '';
+			return true;
+		};
+	}
+	//Lien :
+	if (typeContenu == 2)
+	{
+		bouton_valider.style.display = 'block';
+		if (document.getElementById('fileContenuImageUrl').value == document.getElementById('formContenuUrl').value)
+			document.getElementById('formContenuUrl').value = '';
+		
+		return function () { 
+			//les contenu textes ne sont pas utilisés pour ce type :
+			document.getElementById('formContenuContenuFr').value = '';
+			document.getElementById('formContenuContenuEn').value = '';
+			document.getElementById('formContenuContenuTxtFr').value = '';
+			document.getElementById('formContenuContenuTxtEn').value = '';
+		};
+	}
+	//Image :
+	if (typeContenu == 3)
+	{
+		document.getElementById('fileContenuImageButton').style.display = 'block';
+
+		//l'id du contenu doit être chargé dans le formulaire d'upload :
+		document.getElementById('fileContenuImageId').value = id_contenu;
+		document.getElementById('formContenuUrl').value = document.getElementById('fileContenuImageUrl').value;
+		
+		//on initialise le formulaire d'upload avec son preview :
+		refreshContenuImageFormZone();		
+		
+		//Pour ce type, l'URL est utilisée pour stocker le nom du fichier sur le serveur :
+		return function () {
+			document.getElementById('formContenuUrl').value = document.getElementById('fileContenuImageFolder').value + document.getElementById('fileContenuImageId').value + document.getElementById('fileContenuImage').value.substring(document.getElementById('fileContenuImage').value.lastIndexOf('.'));
+			document.getElementById('fileContenuImageUrl').value = document.getElementById('fileContenuImageFolder').value + document.getElementById('fileContenuImageId').value + document.getElementById('fileContenuImage').value.substring(document.getElementById('fileContenuImage').value.lastIndexOf('.'));
+			//On doit également renseigner l'extension du fichier dans la zone du formulaire d'upload :
+			document.getElementById('fileContenuImageExtension').value = document.getElementById('fileContenuImage').value.substring(document.getElementById('fileContenuImage').value.lastIndexOf('.'));
+			
+			//Les contenus textes ne sont pas utilisés pour ce type :
+			document.getElementById('formContenuContenuFr').value = '';
+			document.getElementById('formContenuContenuEn').value = '';
+			document.getElementById('formContenuContenuTxtFr').value = '';
+			document.getElementById('formContenuContenuTxtEn').value = '';
+		};
+	}
+	if (typeContenu == 4)
+	{
+		bouton_valider.style.display = 'block';
+		return function () {return true;};
+	}
+	if (typeContenu == 5)
+	{
+		bouton_valider.style.display = 'block';
+		return function () {return true;};
+	}
+	if (typeContenu == 6)
+	{
+		bouton_valider.style.display = 'block';
+		return function () {return true;};
+	}
+}
+
+function displayFormEditContenu(contenuData, postAction, postActionCancel)
+{
+	window.location.href = "#top";
+	showWait();
+	
+	while (document.getElementById('formContenuTypeTable').hasChildNodes())
+		document.getElementById('formContenuTypeTable').removeChild(document.getElementById('formContenuTypeTable').firstChild);
+
+	var fieldsetContenu = document.getElementById('formContenuFieldset');
+	fieldsetContenu.className = 'etat42';
+
+	var legend = document.getElementById('formContenuLegend');
+	
+	if (contenuData.id_type_contenu == 0)
+		legend.innerHTML = "Création d'un contenu :";
+	else
+		legend.innerHTML = "Modification d'un contenu :";
+	
+	var trType = document.createElement('tr');
+	var tdType1 = document.createElement('td');
+	tdType1.style.width = "200px";
+	tdType1.innerHTML = "<b><u>Type de contenu :</u></b>";
+	var tdType2 = document.createElement('td');
+	tdType2.style.textAlign = "left";
+	var tdType3 = document.createElement('td');
+	tdType3.style.textAlign = "right";
+	tdType3.style.width = "50px";
+	var tdType4 = document.createElement('td');
+	tdType4.style.textAlign = "left";
+	tdType4.style.width = "50px";
+	
+	var ddlTypeContenu = document.createElement('select');
+	//ddlTypeContenu.id = 'formContenuType' + contenuData.id_contenu;
+	ddlTypeContenu.id = 'formContenuType';
+
+	while (ddlTypeContenu.hasChildNodes())
+		ddlTypeContenu.removeChild(ddlTypeContenu.firstChild);
+		
+	getDatas('dbListeAllTypeContenu', 'listeAllTypeContenu', '');
+	
+	for(var i=0; i<listeAllTypeContenu.length; i++)
+	{
+		var optionTypeContenu = document.createElement("option");
+		optionTypeContenu.value = listeAllTypeContenu[i].id;
+		optionTypeContenu.text = listeAllTypeContenu[i].libelle;
+		ddlTypeContenu.appendChild(optionTypeContenu);
+	}
+	
+	ddlTypeContenu.value = contenuData.id_type_contenu;		
+
+	var boutonValider = document.createElement('input');
+
+	//Initialisation de la zone de contenu :
+	initialiseFormEditFormEditContenu(contenuData.id_contenu, contenuData.id_type_contenu, contenuData.url, contenuData.contenu_fr, contenuData.contenu_en, contenuData.contenu_txt_fr, contenuData.contenu_txt_en);
+	
+	var actionsBeforeValidate = refreshTypeContenu(contenuData.id_contenu, contenuData.id_type_contenu, boutonValider);	
+	var validateFunction = function () {
+		actionsBeforeValidate();
+		getDatas('dbUpdateContenu', '', 'id=' + contenuData.id_contenu + '&id_type_contenu=' + ddlTypeContenu.value + '&url=' + encode(document.getElementById('formContenuUrl').value) + '&contenu_fr=' + encode(document.getElementById('formContenuContenuFr').value) + '&contenu_en=' + encode(document.getElementById('formContenuContenuEn').value) + '&contenu_txt_fr=' + encode(document.getElementById('formContenuContenuTxtFr').value) + '&contenu_txt_en=' + encode(document.getElementById('formContenuContenuTxtEn').value));
+		postAction();
+	}
+	
+	ddlTypeContenu.onchange = function() {
+		actionsBeforeValidate = refreshTypeContenu(contenuData.id_contenu);
+		validateFunction = function () {
+			actionsBeforeValidate();
+			getDatas('dbUpdateContenu', '', 'id=' + contenuData.id_contenu + '&id_type_contenu=' + ddlTypeContenu.value + '&url=' + encode(document.getElementById('formContenuUrl').value) + '&contenu_fr=' + encode(document.getElementById('formContenuContenuFr').value) + '&contenu_en=' + encode(document.getElementById('formContenuContenuEn').value) + '&contenu_txt_fr=' + encode(document.getElementById('formContenuContenuTxtFr').value) + '&contenu_txt_en=' + encode(document.getElementById('formContenuContenuTxtEn').value));
+			postAction();
+		}
+	}
+	
+	tdType2.appendChild(ddlTypeContenu);
+	
+	//création du bouton valider :
+	boutonValider.id = 'boutonValiderContenu';
+	boutonValider.type = "button";
+	boutonValider.className = "button";
+	boutonValider.value = "Valider";
+	boutonValider.onclick = validateFunction;
+	tdType3.appendChild(boutonValider);
+	
+	//On initialise l'action des boutons des formulaires extérieurs :
+	document.getElementById('fileContenuImageButton').onclick = function () {
+		validateFunction();
+	}
+	/*
+	document.getElementById('fileContenuMp3Button').onclick = function () {
+		validateFunction();
+	}
+	*/
+	
+	var boutonAnnuler = document.createElement('input');
+	boutonAnnuler.type = "button";
+	boutonAnnuler.className = "button";
+	boutonAnnuler.value = "Retour";
+	boutonAnnuler.onclick = postActionCancel;
+	tdType4.appendChild(boutonAnnuler);	
+	
+	trType.appendChild(tdType1);
+	trType.appendChild(tdType2);
+	trType.appendChild(tdType3);
+	trType.appendChild(tdType4);
+			
+	document.getElementById('formContenuTypeTable').appendChild(trType);
+		
+	display('editeurContenu');
+	hideWait();
+}
+
+function createLigneContenuPageSite(contenuPageSiteData, nomPage)
+{
+	var creation = false;
+	if (contenuPageSiteData == undefined || contenuPageSiteData.id_contenu == undefined)
+		creation = true;
+		
+	var tr = document.createElement('tr');
+	tr.className = 'etat23';
+
+	
+	var td1 = document.createElement('td');
+	td1.style.paddingLeft = '15px';
+	td1.style.paddingright = '5px';
+	td1.style.textAlign = 'right';
+	var spanType = document.createElement('span');
+	if (!creation)
+	{
+		if (contenuPageSiteData.id_type_contenu != 0)
+			spanType.innerHTML = "<u>" + contenuPageSiteData.libelle + " :</u> ";
+		else
+		{
+			//spanType.innerHTML = "<font style='color:red;'><u>A compléter :</u></font> ";
+			spanType.innerHTML = "<u>A compléter :</u> ";
+			tr.className = 'etat42';
+		}
+	}
+	else
+	{
+		if (nomPage != undefined)
+			spanType.innerHTML = "<u>Saisissez une référence :</u> ";
+		else
+			spanType.style.display = "none";
+	}
+	td1.appendChild(spanType);
+	
+	var ddlListePagesSite = document.createElement("select");	
+	
+	if (!creation || nomPage != undefined)
+		ddlListePagesSite.style.display = "none";
+		
+	if (creation)
+	{
+		while (ddlListePagesSite.hasChildNodes())
+			ddlListePagesSite.removeChild(ddlListePagesSite.firstChild);
+		getDatas('getListePagesSite', 'listePagesSite', '');
+		for(var i=0; i<listePagesSite.length; i++)
+		{
+			var optionListePagesSite = document.createElement("option");
+			optionListePagesSite.value = listePagesSite[i];
+			optionListePagesSite.text = listePagesSite[i];
+			ddlListePagesSite.appendChild(optionListePagesSite);
+		}
+	
+		//On initialise les zones de saisies :
+		if (nomPage != undefined)
+			ddlListePagesSite.value = nomPage;
+	}
+	td1.appendChild(ddlListePagesSite);
+	
+	tr.appendChild(td1);
+	
+	var td2 = document.createElement('td');
+	var spanZone = document.createElement('span');
+	if (creation)
+		spanZone.style.display = "none";
+	else
+		spanZone.innerHTML = "<b>" + contenuPageSiteData.zone + "</b>";
+	td2.appendChild(spanZone);
+	var txtZonePage = document.createElement('input');
+	txtZonePage.type = "text";
+	if (!creation)
+		txtZonePage.style.display = "none";
+	td2.appendChild(txtZonePage);
+
+	tr.appendChild(td2);
+
+	var td4 = document.createElement('td');
+	var td5 = document.createElement('td');	
+	if (!creation)
+	{
+		var boutonModifier = document.createElement('input');
+		boutonModifier.type = "button";
+		boutonModifier.className = "button";
+		if (contenuPageSiteData.id_type_contenu == 0)
+			boutonModifier.value = "Compléter";
+		else
+			boutonModifier.value = "Modifier";
+			
+		boutonModifier.onclick = function () {
+			var postAction = function() {
+				//Pas d'action après mise à jour.
+			}
+			var postActionCancel = function() {
+				//Retour à la page des contenus :
+				display('contenuPageSite');
+				window.location.href = "#top";
+			}
+			displayFormEditContenu(contenuPageSiteData, postAction, postActionCancel);
+		}
+		
+		td4.appendChild(boutonModifier);
+		
+		var boutonSupprimer = document.createElement('input');
+		boutonSupprimer.value = "Supprimer";
+		boutonSupprimer.type = "button";
+		boutonSupprimer.className = "button";
+		boutonSupprimer.style.color = "red";
+		boutonSupprimer.onclick = function () {
+			if (confirm('Etes-vous certain de vouloir supprimer ce contenu ?'))
+			{
+				getDatas('dbDeleteContenuPageSite', '', 'id=' + contenuPageSiteData.id);
+				refreshContenuPageSite();
+			}
+		}
+		td5.appendChild(boutonSupprimer);
+	}
+
+	var td3 = document.createElement('td');	
+	
+	var boutonDeplacerOk = document.createElement('input');
+	boutonDeplacerOk.value = "Valider";
+	boutonDeplacerOk.type = "button";
+	boutonDeplacerOk.className = "button";
+	if (!creation)
+		boutonDeplacerOk.style.display = "none";
+		
+	boutonDeplacerOk.onclick = function () {
+		if (ddlListePagesSite.value == '')
+		{
+			alert('Vous devez choisir une page !!');
+			return false;
+		}
+		
+		if (txtZonePage.value == '')
+		{
+			alert('Vous devez saisir une référence !!');
+			return false;
+		}
+		
+		getDatas('dbGetContenuPageSite', 'testContenuPageSite', 'id_site=' + id_site + '&page=' + encode(ddlListePagesSite.value) + '&zone=' + encode(txtZonePage.value));
+		
+		if (testContenuPageSite != 0)
+		{
+			alert('Désolé, il existe déjà un contenu avec la même référence pour la même page.\nMerci de corriger votre saisie.');
+			return false;
+		}
+		else
+		{
+			if (creation)
+				getDatas('dbInsertContenuPageSite', '', 'id_site=' + id_site + '&page=' + encode(ddlListePagesSite.value) + '&zone=' + encode(txtZonePage.value));
+			else
+				getDatas('dbUpdateContenuPageSite', '', 'id=' + contenuPageSiteData.id + '&page=' + encode(ddlListePagesSite.value) + '&zone=' + encode(txtZonePage.value));
+		}
+		
+		refreshContenuPageSite();	
+	}
+	td3.appendChild(boutonDeplacerOk);
+
+	var boutonDeplacerAnnuler = document.createElement('input');
+	boutonDeplacerAnnuler.value = "Annuler";
+	boutonDeplacerAnnuler.type = "button";
+	boutonDeplacerAnnuler.className = "button";
+	if (!creation)
+		boutonDeplacerAnnuler.style.display = "none";
+	boutonDeplacerAnnuler.onclick = function () {
+	
+		if (creation)
+			refreshContenuPageSite();
+		else
+		{
+			while (ddlListePagesSite.hasChildNodes())
+				ddlListePagesSite.removeChild(ddlListePagesSite.firstChild);
+			getDatas('getListePagesSite', 'listePagesSite', '');
+			for(var i=0; i<listePagesSite.length; i++)
+			{
+				var optionListePagesSite = document.createElement("option");
+				optionListePagesSite.value = listePagesSite[i];
+				optionListePagesSite.text = listePagesSite[i];
+				ddlListePagesSite.appendChild(optionListePagesSite);
+			}
+		
+			//On initialise les zones de saisies :
+			ddlListePagesSite.value = contenuPageSiteData.page;
+			txtZonePage.value = contenuPageSiteData.zone;
+			
+			//On remplace l'affichage de la ligne par celle d'édition :
+			ddlListePagesSite.style.display = "none";
+			txtZonePage.style.display = "none";
+			spanType.style.display = "block";
+			spanZone.style.display = "block";
+			
+			//On remplace ce bouton par celui de validation et d'annulation :
+			boutonDeplacerOk.style.display = "none";
+			this.style.display = "none";
+			boutonDeplacer.style.display = "block";
+			
+			//On désactive les boutons de modification et de suppression :
+			boutonModifier.disabled = false;
+			boutonSupprimer.disabled = false;
+			}
+		}
+	td3.appendChild(boutonDeplacerAnnuler);
+
+	if (!creation)
+	{
+		var boutonDeplacer = document.createElement('input');
+		boutonDeplacer.value = "<< Déplacer";
+		boutonDeplacer.type = "button";
+		boutonDeplacer.className = "button";
+		boutonDeplacer.onclick = function () {
+		
+			while (ddlListePagesSite.hasChildNodes())
+				ddlListePagesSite.removeChild(ddlListePagesSite.firstChild);
+			getDatas('getListePagesSite', 'listePagesSite', '');
+			for(var i=0; i<listePagesSite.length; i++)
+			{
+				var optionListePagesSite = document.createElement("option");
+				optionListePagesSite.value = listePagesSite[i];
+				optionListePagesSite.text = listePagesSite[i];
+				ddlListePagesSite.appendChild(optionListePagesSite);
+			}
+		
+			//On initialise les zones de saisies :
+			ddlListePagesSite.value = contenuPageSiteData.page;
+			txtZonePage.value = contenuPageSiteData.zone;
+
+			//On remplace l'affichage de la ligne par celle d'édition :
+			spanType.style.display = "none";
+			spanZone.style.display = "none";
+			ddlListePagesSite.style.display = "block";
+			txtZonePage.style.display = "block";
+			
+			//On remplace ce bouton par celui de validation et d'annulation :
+			this.style.display = "none";
+			boutonDeplacerOk.style.display = "block";
+			boutonDeplacerAnnuler.style.display = "block";
+			
+			//On désactive les boutons de modification et de suppression :
+			boutonModifier.disabled = true;
+			boutonSupprimer.disabled = true;
+		}
+		td3.appendChild(boutonDeplacer);
+	}
+	
+	tr.appendChild(td3);
+	tr.appendChild(td4);
+	tr.appendChild(td5);
+
+	return tr;
 }
 
 
@@ -1015,10 +1574,10 @@ function createLigneEditUser(userData, nomParticipant)
 	return userLine;
 }
 
-function refreshNewsFormZoneAfterUpload(reponse, statut)
+function refreshContenuImageFormZoneAfterUpload(reponse, statut)
 {
 	initialiseWaitMessage();
-	refreshNewsFormZone();
+	refreshContenuImageFormZone();
 	hideWait();
 }
 
@@ -1048,17 +1607,18 @@ function refreshImageGifFormZoneAfterUpload(reponse, statut)
 	updateZipEmission();
 }
 
-function refreshNewsFormZone()
+function refreshContenuImageFormZone()
 {
 	ImageThumb= new Image();
-	ImageThumb.src = '../css/news.gif?' + (new Date()).getTime();
-	document.getElementById('imgNewsThumb').src = ImageThumb.src;
-	document.getElementById('imageNews').className = 'etat32';
+	ImageThumb.src = '../' + document.getElementById('fileContenuImageUrl').value + '?' + (new Date()).getTime();
+	//ImageThumb.src = '../css/news.gif?' + (new Date()).getTime();
+	document.getElementById('imgContenuImageThumb').src = ImageThumb.src;
+	document.getElementById('imgContenuImage').className = 'etat32';
 
-	document.getElementById('imgNews').href = document.getElementById('imgNewsThumb').src;
-	document.getElementById('fileNews').value = '';
-	document.getElementById('fileNewsError').innerHTML = '';
-	document.getElementById('fileNewsButton').disabled = true; 
+	document.getElementById('imgContenuImage').href = document.getElementById('imgContenuImageThumb').src;
+	document.getElementById('fileContenuImage').value = '';
+	document.getElementById('fileContenuImageError').innerHTML = '';
+	document.getElementById('fileContenuImageButton').disabled = true; 
 }
 
 function refreshImageFormZone()
@@ -1412,14 +1972,22 @@ function createLigneEmission(emissionData)
 		
 	var col3 = document.createElement('td');
 	col3.className = 'dateEmission';
-	if (emissionData.etat == 2 && emissionData.date_sortie != '??/??/????')
-		col3.innerHTML = 'Annoncée pour le : ' + emissionData.date_sortie;
-	else
-		col3.innerHTML = emissionData.date_sortie;
+	
+	if (emissionData.etat == 1)
+		col3.innerHTML = emissionData.libelle;
+
+	//if (emissionData.etat == 2 && emissionData.date_sortie != '??/??/????')
+	if (emissionData.etat == 2)
+		col3.innerHTML = emissionData.libelle + ' pour le : ' + emissionData.date_sortie;
+	//else
+	//	col3.innerHTML = 'Annoncée pour le : ' + emissionData.date_sortie;
 		
-	var col4 = document.createElement('td');
-	col4.className = 'etatEmission';
-	col4.innerHTML = emissionData.libelle;
+	if (emissionData.etat == 3)
+		col3.innerHTML = emissionData.libelle + ' le : ' + emissionData.date_sortie;
+		
+	//var col4 = document.createElement('td');
+	//col4.className = 'etatEmission';
+	//col4.innerHTML = emissionData.libelle;
 	var col5 = document.createElement('td');
 	col5.className = 'actionEmission';
 	var linkModifier = document.createElement('a');
@@ -1498,6 +2066,16 @@ function createLigneEmission(emissionData)
 		var saut3 = document.createElement('span');
 		saut3.innerHTML = " / ";	
 		col5.appendChild(saut3);
+
+		var linkPreview = document.createElement('a');
+		linkPreview.innerHTML = 'Preview';
+		linkPreview.href = urlPreview.replace("{id}", emissionData.id);
+		linkPreview.target = 'blank';
+		col5.appendChild(linkPreview);
+	
+		var saut4 = document.createElement('span');
+		saut4.innerHTML = " / ";	
+		col5.appendChild(saut4);
 		var linkPublish = document.createElement('a');
 		linkPublish.innerHTML = 'Publier';
 		linkPublish.href = '#';
@@ -1532,7 +2110,7 @@ function createLigneEmission(emissionData)
 	if (admin == '')
 	{
 		emission.appendChild(col3);
-		emission.appendChild(col4);
+		//emission.appendChild(col4);
 	}
 	emission.appendChild(col5);
 		
@@ -1621,17 +2199,29 @@ function newEmission()
 	document.getElementById('formEnregistrer').disabled = (siteHaveTitre && !Verif_NonVide(document.getElementById('txtTitreEmission')));
 }
 
-function validateExtension(control, extension)
+function validateExtension(control, extension, extension2)
 {
 	document.getElementById(control.id + 'Error').innerHTML = '';
-	if (control.value.substring(control.value.lastIndexOf('.') + 1).toUpperCase() != extension.toUpperCase())
+
+	if (extension2 == undefined)
+		extension2 = extension;
+	
+	var updateExtension = false;
+	if (control.id == 'fileContenuImage')
+		updateExtension = true;
+		
+	if (control.value.substring(control.value.lastIndexOf('.') + 1).toUpperCase() != extension.toUpperCase() && control.value.substring(control.value.lastIndexOf('.') + 1).toUpperCase() != extension2.toUpperCase())
 	{
 		control.value = '';
 		document.getElementById(control.id + 'Button').disabled = true; 
 		document.getElementById(control.id + 'Error').innerHTML = 'Le type de fichier est incorrect, il faut du ' + extension;
 	}	
 	else
+	{
 		document.getElementById(control.id + 'Button').disabled = false; 
+		if (updateExtension)
+			document.getElementById(control.id + 'Extension').value = "." + extension; 
+	}
 }
 
 function validateAdresseYoutube(control)
@@ -1891,6 +2481,16 @@ function Verif_NonVide(control)
 		if (control.id.indexOf('formUserMail') == 0)
 		{
 			erreur.innerHTML = "Le mail doit être renseigné";
+			return false;
+		}
+		if (control.id.indexOf('txtZonePage') == 0)
+		{
+			erreur.innerHTML = "La référence doit être renseignée";
+			return false;
+		}
+		if (control.id.indexOf('ddlListePageSite') == 0)
+		{
+			erreur.innerHTML = "La page doit être renseignée";
 			return false;
 		}
 		

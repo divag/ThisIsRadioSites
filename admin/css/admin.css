@@ -64,6 +64,9 @@
 .etat22 {
 	background-color:#F8FF84;
 }
+.etat23 {
+	background-color:#FAFFA6;
+}
 .etat31 {
 	background-color:#6AFF4D;
 }
@@ -78,7 +81,7 @@
 	border-color: rgb(255, 0, 0);
 }
 
-tr.etat11:hover, tr.etat12:hover, tr.etat21:hover, tr.etat22:hover, tr.etat31:hover, tr.etat32:hover, tr.etat41:hover, tr.etat42:hover {
+tr.etat11:hover, tr.etat12:hover, tr.etat21:hover, tr.etat22:hover, tr.etat23:hover, tr.etat31:hover, tr.etat32:hover, tr.etat41:hover, tr.etat42:hover {
 	background-color:#9FFBFF;
 }
 

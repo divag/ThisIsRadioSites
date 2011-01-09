@@ -103,3 +103,111 @@ INSERT INTO `PARAMETRES_SITE` (`id_site`, `mail_admin`, `have_titre`, `have_text
 (3, 'contact@thebrainradio.com', 	0, 0, 1, 0,  1, 0, 1, 0, 0, 0, 0, 1, 0, 'AMIX #{numero} by {nom_participant}', 'thebrain-amix{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}'),
 (4, 'contact@prototop.be', 			0, 0, 0, 13, 1, 1, 0, 0, 0, 0, 1, 1, 0, 'Prototop #{numero}', 'prototop-{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}');
 
+UPDATE `admin_thisisradioclash_dev`.`ETAT_EMISSION` SET `libelle` = 'Masquée' WHERE `ETAT_EMISSION`.`id` =1 LIMIT 1 ;
+UPDATE `admin_thisisradioclash_dev`.`ETAT_EMISSION` SET `libelle` = 'Annoncée' WHERE `ETAT_EMISSION`.`id` =2 LIMIT 1 ;
+UPDATE `admin_thisisradioclash_dev`.`ETAT_EMISSION` SET `libelle` = 'Publiée' WHERE `ETAT_EMISSION`.`id` =3 LIMIT 1 ;
+UPDATE `admin_thisisradioclash_dev`.`ETAT_EMISSION` SET `libelle` = 'Supprimée' WHERE `ETAT_EMISSION`.`id` =4 LIMIT 1 ;
+
+
+
+
+
+
+
+DROP TABLE IF EXISTS `TYPE_CONTENU`;
+CREATE TABLE IF NOT EXISTS `TYPE_CONTENU` (
+  `id` tinyint(1) unsigned NOT NULL,
+  `libelle` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Table des types de contenu';
+  
+INSERT INTO `TYPE_CONTENU` (`id`, `libelle`) VALUES 
+(0, ''),
+(1, 'Texte enrichi'),
+(2, 'Lien'),
+(3, 'Image'),
+(4, 'Mp3'),
+(5, 'Flash'),
+(6, 'Lien YouTube');
+
+
+
+-- Création de la table des contenus :
+DROP TABLE IF EXISTS `CONTENU`;
+CREATE TABLE IF NOT EXISTS `CONTENU` (
+  `id` bigint(20) unsigned NOT NULL auto_increment,
+  `id_type_contenu` tinyint(1) unsigned NOT NULL DEFAULT 0,
+  `url` varchar(255) NOT NULL DEFAULT '',
+  `contenu_fr` MEDIUMTEXT NOT NULL DEFAULT '',
+  `contenu_en` MEDIUMTEXT NOT NULL DEFAULT '',
+  `contenu_txt_fr` MEDIUMTEXT NOT NULL DEFAULT '',
+  `contenu_txt_en` MEDIUMTEXT NOT NULL DEFAULT '',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Table des contenus' AUTO_INCREMENT=1 ;
+
+-- Création de la table des goodies des emissions :
+DROP TABLE IF EXISTS `GOODIES_EMISSION`;
+CREATE TABLE IF NOT EXISTS `GOODIES_EMISSION` (
+  `id_emission` bigint(20) unsigned NOT NULL,
+  `id_contenu` bigint(20) unsigned NOT NULL,
+  `ordre` int(10) unsigned NOT NULL NOT NULL,
+  PRIMARY KEY  (`id_emission`, `id_contenu`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Table des goodies des emissions' ;
+
+-- Création de la table des contenus des pages d un site :
+DROP TABLE IF EXISTS `CONTENU_PAGE_SITE`;
+CREATE TABLE IF NOT EXISTS `CONTENU_PAGE_SITE` (
+  `id` bigint(20) unsigned NOT NULL auto_increment,
+  `id_site` bigint(20) unsigned NOT NULL,
+  `id_contenu` bigint(20) unsigned NOT NULL,
+  `page` varchar(255) NOT NULL,
+  `zone` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Table des contenus des pages d un site' AUTO_INCREMENT=1 ;
+
+-- Création de la table des mails inscrits a la mailing list :
+DROP TABLE IF EXISTS `MAILING_LIST`;
+CREATE TABLE IF NOT EXISTS `MAILING_LIST` (
+  `mail` varchar(255) NOT NULL,
+  `id_site` bigint(20) unsigned NOT NULL,
+  `est_annule` tinyint (1) unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY  (`mail`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Table des inscriptions a la mailing list' ;
+
+-- Création de la table des newsletters :
+DROP TABLE IF EXISTS `NEWSLETTER`;
+CREATE TABLE IF NOT EXISTS `NEWSLETTER` (
+  `id` bigint(20) unsigned NOT NULL auto_increment,
+  `id_site` bigint(20) unsigned NOT NULL,
+  `destinataires` MEDIUMTEXT NOT NULL DEFAULT '',
+  `titre` varchar(255) NOT NULL DEFAULT '',
+  `id_contenu` bigint(20) unsigned NOT NULL,
+  `date_envoi` timestamp NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Table des newsletters' AUTO_INCREMENT=1 ;
+
+-- Création de la table des news :
+DROP TABLE IF EXISTS `NEWS`;
+CREATE TABLE IF NOT EXISTS `NEWS` (
+  `id` bigint(20) unsigned NOT NULL auto_increment,
+  `id_site` bigint(20) unsigned NOT NULL,
+  `titre` varchar(255) NOT NULL DEFAULT '',
+  `id_contenu` bigint(20) unsigned NOT NULL,
+  `id_utilisateur` int (10) NOT NULL,
+  `date` timestamp NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Table des news' AUTO_INCREMENT=1 ;
+
+-- Création de la table des bonus :
+DROP TABLE IF EXISTS `BONUS`;
+CREATE TABLE IF NOT EXISTS `BONUS` (
+  `id` bigint(20) unsigned NOT NULL auto_increment,
+  `id_site` bigint(20) unsigned NOT NULL,
+  `titre` bigint(20) unsigned NOT NULL,
+  `id_contenu` bigint(20) unsigned NOT NULL,
+  `id_utilisateur` int (10) NOT NULL,
+  `date` timestamp NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Table des bonus' AUTO_INCREMENT=1 ;
+
+

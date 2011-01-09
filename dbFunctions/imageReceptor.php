@@ -6,8 +6,12 @@ $folder = $_POST['folder'];
 if ($numero == '0')
 	$fpath= '../css/news.gif';
 else
-	$fpath= '../'.$folder.'thisisradioclash-episode'.$numero.$extension;
-
+{
+	if ($folder == 'contenu/')
+		$fpath= '../'.$folder.$numero.$extension;
+	else
+		$fpath= '../'.$folder.'thisisradioclash-episode'.$numero.$extension;
+}
 print_r($_FILES);
 
 if ($_FILES['fileEmission']['error']) {
