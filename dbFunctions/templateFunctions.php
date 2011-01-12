@@ -18,8 +18,8 @@ function wd_remove_accents($str, $charset='utf-8')
 
 function clean($badstring)
 {
-    $pattern = Array("?", "?", "?", "?", "?", "?", "?", "?", "?", "?");
-    $rep_pat = Array("e", "e", "e", "c", "a", "a", "i", "i", "u", "o");
+    $pattern = Array("?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "'");
+    $rep_pat = Array("e", "e", "e", "c", "a", "a", "i", "i", "u", "o", "_");
     $cleaned= str_replace($pattern, $rep_pat, $badstring);
     $cleaned= wd_remove_accents($cleaned);
 	
