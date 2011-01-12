@@ -31,24 +31,24 @@ function clean($badstring)
     return $cleaned;
 }
 
-function getReferenceEmission($numero, $titre, $nomParticipant)
+function getReferenceEmission($numero, $titre, $nomParticipants)
 {
 	$replaceArray = array(
 	  '{numero}' => str_pad($numero, 3, "0", STR_PAD_LEFT), 
 	  '{titre}' => $titre, 
-	  '{nom_participant}' => $nomParticipant
+	  '{nom_participant}' => str_replace(", ", " & ", $nomParticipants)
 	);
 	
 	$reference = str_replace(array_keys($replaceArray), array_values($replaceArray), TEMPLATE_REF_EMISSION);
 	return $reference;
 }
 
-function getNomFichierEmission($numero, $titre, $nomParticipant)
+function getNomFichierEmission($numero, $titre, $nomParticipants)
 {
 	$replaceArray = array(
 	  '{numero}' => str_pad($numero, 3, "0", STR_PAD_LEFT), 
 	  '{titre}' => $titre, 
-	  '{nom_participant}' => $nomParticipant
+	  '{nom_participant}' => str_replace(", ", " & ", $nomParticipants)
 	);
 	
 	$nomFichier = str_replace(array_keys($replaceArray), array_values($replaceArray), TEMPLATE_NOM_FICHIER_EMISSION);

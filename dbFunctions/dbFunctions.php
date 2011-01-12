@@ -856,6 +856,21 @@ function dbGetNomsParticipantsActifs($id_site){
     return $res;
 }
 
+/*
+//Récupération de la liste de tous participants d'une émission :
+function dbGetNomsParticipantsEmission($id){
+
+    include('var.php');
+
+	$query = "SELECT DISTINCT nom FROM UTILISATEUR, PARTICIPANT, EMISSION WHERE UTILISATEUR.nom = PARTICIPANT.nom_utilisateur AND PARTICIPANT.id_emission = EMISSION.id AND EMISSION.id = ".$id.";";
+    $link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+*/
+
 //R�cup�ration de la liste de tous participants des �missions actives, en texte (avec leur nom sur le forum si possible) s�par�s par des virgules :
 function listeParticipants($id_site)
 {
@@ -870,6 +885,23 @@ function listeParticipants($id_site)
 	
 	return $liste;
 }
+
+/*
+//Récupération de la liste de tous participants d'une émissions actives, en texte (avec leur nom sur le forum si possible) séparés par des " & " :
+function listeParticipantsEmission($id)
+{
+    $listeParticipants = dbGetNomsParticipantsEmission($id);
+	$separateur = "";
+	$liste = "";
+    while($array=mysql_fetch_array($listeParticipants))
+	{
+		$liste = $liste.$separateur.$array['nom'];
+		$separateur = " & ";
+	}
+	
+	return $liste;
+}
+*/
 
 /*
 NEWS :
