@@ -272,6 +272,17 @@ function display(page)
 			document.getElementById('lblDateEmissionPublie').style.display = 'block';
 		else
 			document.getElementById('lblDateEmission').style.display = 'block';
+
+		if (!siteHaveTitre && !siteHaveStatutAnnounced)
+		{
+			document.getElementById('formEnregistrerAnnuler').style.display = 'none';
+			document.getElementById('formEnregistrer').style.display = 'none';
+		}
+		else
+		{
+			document.getElementById('formEnregistrerAnnuler').style.display = 'block';
+			document.getElementById('formEnregistrer').style.display = 'block';
+		}
 		
 		if (siteHaveZip && currentItem.etat == 3)
 			document.getElementById('boutonUpdateZipEmission').style.display = 'block';
@@ -2189,6 +2200,8 @@ function newEmission()
 	currentItem['time_min'] = 0;
 	currentItem['time_sec'] = 0;
 	display('playlist');
+	document.getElementById('formEnregistrer').style.display = 'block';
+	document.getElementById('formEnregistrerAnnuler').style.display = 'block';
 	document.getElementById('formEnregistrer').disabled = (siteHaveTitre && !Verif_NonVide(document.getElementById('txtTitreEmission')));
 }
 
