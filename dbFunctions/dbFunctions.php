@@ -1048,6 +1048,23 @@ function dbGetPrevEmission($id_site, $p_numero){
 	    return 0;
 }
 
+//Récupération du nom d'une émission :
+function dbGetTitreEmission($id_site, $p_numero){
+
+    include('var.php');
+
+	$query = "SELECT titre FROM EMISSION WHERE id_site = ".$id_site." AND numero = ".$p_numero." LIMIT 0,1;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+	mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+	    return $row['titre'];
+    else
+	    return '';
+}
+
 //R�cup�ration d'un utilisateur :
 function dbGetUtilisateur($p_nom_utilisateur){
 

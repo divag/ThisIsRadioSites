@@ -212,8 +212,8 @@ function display(page)
 		document.getElementById('txtEnvoiMail').value = '';
 		document.getElementById('boutonEnvoiMail').disabled = true;
 	}
-	
-	if (page != 'playlist')
+
+	if (page != 'playlist' && page != 'editeurContenu')
 	{
 		document.getElementById('buttonMenu' + page).style.color = 'red';
 	}
@@ -222,7 +222,7 @@ function display(page)
 	{
 		document.getElementById('home').style.display = 'block';
 	}
-	
+
 	if (page == 'playlists')
 	{
 		if (admin == '')
@@ -247,7 +247,7 @@ function display(page)
 		for(var i=0; i<listeEmissions.length; i++)
 			document.getElementById('listeEmissions').appendChild(createLigneEmission(listeEmissions[i]));			
 	}
-	
+
 	if (page == 'playlist')
 	{
 		document.getElementById('txtNumeroEmission').value = currentItem.numero;
@@ -283,7 +283,7 @@ function display(page)
 			document.getElementById('trDateEmission').style.display = 'none';
 			document.getElementById('trBoutonsEmission').style.display = 'none';
 		}
-		
+
 		if (!siteHaveStatutAnnounced)
 			document.getElementById('trDateEmission').style.display = 'none';
 
@@ -319,7 +319,7 @@ function display(page)
 		//Vidage + Affichage de la liste des utilisateurs.
 		refreshUtilisateurs();		
 	}
-	
+
 	hideWait();
 	window.location.href = "#top";
 }
@@ -428,26 +428,27 @@ function createLignePageSite(pageSite, haveContenu)
 	td1.className = 'padded';
 	td1.innerHTML = "<b><u>Page \"" + pageSite + "\" :</u></b>";
 	
-	//var btnAjouter = document.createElement('input');
-	var spanAjouter1 = document.createElement('span');
-	spanAjouter1.innerHTML = "&nbsp;(";
-	var spanAjouter2 = document.createElement('span');
-	spanAjouter2.innerHTML = ")&nbsp;";
-	var btnAjouter = document.createElement('a');
-	btnAjouter.type = "button";
-	//btnAjouter.value = "Ajouter un contenu à cette page";
-	btnAjouter.innerHTML = "Ajouter un contenu";
-	btnAjouter.href = "#";
-	btnAjouter.className = "button";
-	btnAjouter.onclick = function () {
-		document.getElementById("trLignePageSiteVide_" + pageSite).parentNode.insertBefore(createLigneContenuPageSite('', pageSite), document.getElementById("trLignePageSiteVide_" + pageSite).nextSibling);
-		this.onclick = function () { return false };
-		//this.disabled = true;
+	if (superAdmin)
+	{
+		var spanAjouter1 = document.createElement('span');
+		spanAjouter1.innerHTML = "&nbsp;(";
+		var spanAjouter2 = document.createElement('span');
+		spanAjouter2.innerHTML = ")&nbsp;";
+		var btnAjouter = document.createElement('a');
+		btnAjouter.type = "button";
+		btnAjouter.innerHTML = "Ajouter un contenu";
+		btnAjouter.href = "#";
+		btnAjouter.className = "button";
+		btnAjouter.onclick = function () {
+			document.getElementById("trLignePageSiteVide_" + pageSite).parentNode.insertBefore(createLigneContenuPageSite('', pageSite), document.getElementById("trLignePageSiteVide_" + pageSite).nextSibling);
+			this.onclick = function () { return false };
+			//this.disabled = true;
+		}
+		td1.appendChild(spanAjouter1);
+		td1.appendChild(btnAjouter);
+		td1.appendChild(spanAjouter2);
 	}
-	td1.appendChild(spanAjouter1);
-	td1.appendChild(btnAjouter);
-	td1.appendChild(spanAjouter2);
-			
+	
 	var td2 = document.createElement('td');
 	td2.colSpan = "4";
 	td2.className = 'padded';
@@ -478,35 +479,54 @@ function initialiseFormEditFormEditContenu(id_contenu, id_type_contenu, url, con
 	document.getElementById('formContenuContenuTxtEn').value = contenu_txt_en;
 }
 
-function refreshTypeContenu(id_contenu, id_type_contenu, bouton_valider)
+function refreshTypeContenu(id_contenu, id_type_contenu, bouton_valider, forced_type)
 {
-	//var typeContenu = document.getElementById('formContenuType' + id_contenu).value;
 	var typeContenu;
+	var forcedType;
 	
 	if (id_type_contenu == undefined)
-		typeContenu = document.getElementById('formContenuType').value;
+		typeContenu = ddlTypeContenu.value;
 	else
 		typeContenu = id_type_contenu;
 	
 	if (bouton_valider == undefined)
-		var bouton_valider = document.getElementById('boutonValiderContenu');
+		var bouton_valider = boutonValiderContenu;
+	
+	if (forced_type == undefined)
+		forcedType = false;
+	else
+		forcedType = forced_type;
+	
+	
+	if (forcedType)
+	{
+		ddlTypeContenu.style.display = 'none';
+		document.getElementById('spanContenuType').style.display = 'none';
+	}
+	else
+	{
+		ddlTypeContenu.style.display = 'block';
+		document.getElementById('spanContenuType').style.display = 'block';
+	}
 	
 	//Affichage du formulaire correspondant au type de contenu :
 	//==========================================================
 	
 	bouton_valider.style.display = 'none';
 	document.getElementById('fileContenuImageButton').style.display = 'none';
-	//document.getElementById('fileContenuImageButton').style.display = 'none';
 	
 	document.getElementById('formContenuType_0').style.display = 'none';
 	document.getElementById('formContenuType_1').style.display = 'none';
 	document.getElementById('formContenuType_2').style.display = 'none';
 	document.getElementById('formContenuType_3').style.display = 'none';
+	document.getElementById('formContenuType_3_Preview').style.display = 'none';
 	document.getElementById('formContenuType_4').style.display = 'none';
 	document.getElementById('formContenuType_5').style.display = 'none';
 	document.getElementById('formContenuType_6').style.display = 'none';
 	
 	document.getElementById('formContenuType_' + typeContenu).style.display = 'block';
+	if (document.getElementById('formContenuType_' + typeContenu + '_Preview') != null)
+		document.getElementById('formContenuType_' + typeContenu + '_Preview').style.display = 'block';
 	
 	//Actions d'initialisation spécifique au type de contenu
 	//Et on renvoie la fonction à exécuter avant la mise à jour du contenu 
@@ -585,14 +605,11 @@ function refreshTypeContenu(id_contenu, id_type_contenu, bouton_valider)
 	}
 }
 
-function displayFormEditContenu(contenuData, postAction, postActionCancel)
+function displayFormEditContenu(contenuData, postAction, postActionCancel, forcedType)
 {
 	window.location.href = "#top";
 	showWait();
 	
-	while (document.getElementById('formContenuTypeTable').hasChildNodes())
-		document.getElementById('formContenuTypeTable').removeChild(document.getElementById('formContenuTypeTable').firstChild);
-
 	var fieldsetContenu = document.getElementById('formContenuFieldset');
 	fieldsetContenu.className = 'etat42';
 
@@ -603,48 +620,13 @@ function displayFormEditContenu(contenuData, postAction, postActionCancel)
 	else
 		legend.innerHTML = "Modification d'un contenu :";
 	
-	var trType = document.createElement('tr');
-	var tdType1 = document.createElement('td');
-	tdType1.style.width = "200px";
-	tdType1.innerHTML = "<b><u>Type de contenu :</u></b>";
-	tdType1.className = 'padded';
-	var tdType2 = document.createElement('td');
-	tdType2.style.textAlign = "left";
-	tdType2.className = 'padded';
-	var tdType3 = document.createElement('td');
-	tdType3.style.textAlign = "right";
-	tdType3.style.width = "50px";
-	tdType3.className = 'padded';
-	var tdType4 = document.createElement('td');
-	tdType4.style.textAlign = "left";
-	tdType4.style.width = "50px";
-	tdType2.className = 'padded';
-	
-	var ddlTypeContenu = document.createElement('select');
-	//ddlTypeContenu.id = 'formContenuType' + contenuData.id_contenu;
-	ddlTypeContenu.id = 'formContenuType';
-
-	while (ddlTypeContenu.hasChildNodes())
-		ddlTypeContenu.removeChild(ddlTypeContenu.firstChild);
-		
-	getDatas('dbListeAllTypeContenu', 'listeAllTypeContenu', '');
-	
-	for(var i=0; i<listeAllTypeContenu.length; i++)
-	{
-		var optionTypeContenu = document.createElement("option");
-		optionTypeContenu.value = listeAllTypeContenu[i].id;
-		optionTypeContenu.text = listeAllTypeContenu[i].libelle;
-		ddlTypeContenu.appendChild(optionTypeContenu);
-	}
-	
 	ddlTypeContenu.value = contenuData.id_type_contenu;		
-
-	var boutonValider = document.createElement('input');
-
-	//Initialisation de la zone de contenu :
+	ddlTypeContenu.disabled = forcedType;
+	
 	initialiseFormEditFormEditContenu(contenuData.id_contenu, contenuData.id_type_contenu, contenuData.url, contenuData.contenu_fr, contenuData.contenu_en, contenuData.contenu_txt_fr, contenuData.contenu_txt_en);
 	
-	var actionsBeforeValidate = refreshTypeContenu(contenuData.id_contenu, contenuData.id_type_contenu, boutonValider);	
+	var actionsBeforeValidate = refreshTypeContenu(contenuData.id_contenu, contenuData.id_type_contenu, boutonValiderContenu, forcedType);	
+	
 	var validateFunction = function () {
 		actionsBeforeValidate();
 		getDatas('dbUpdateContenu', '', 'id=' + contenuData.id_contenu + '&id_type_contenu=' + ddlTypeContenu.value + '&url=' + encode(document.getElementById('formContenuUrl').value) + '&contenu_fr=' + encode(document.getElementById('formContenuContenuFr').value) + '&contenu_en=' + encode(document.getElementById('formContenuContenuEn').value) + '&contenu_txt_fr=' + encode(document.getElementById('formContenuContenuTxtFr').value) + '&contenu_txt_en=' + encode(document.getElementById('formContenuContenuTxtEn').value));
@@ -659,41 +641,14 @@ function displayFormEditContenu(contenuData, postAction, postActionCancel)
 			postAction();
 		}
 	}
-	
-	tdType2.appendChild(ddlTypeContenu);
-	
-	//création du bouton valider :
-	boutonValider.id = 'boutonValiderContenu';
-	boutonValider.type = "button";
-	boutonValider.className = "button";
-	boutonValider.value = "Valider";
-	boutonValider.onclick = validateFunction;
-	tdType3.appendChild(boutonValider);
+	boutonValiderContenu.onclick = validateFunction;
 	
 	//On initialise l'action des boutons des formulaires extérieurs :
 	document.getElementById('fileContenuImageButton').onclick = function () {
 		validateFunction();
 	}
-	/*
-	document.getElementById('fileContenuMp3Button').onclick = function () {
-		validateFunction();
-	}
-	*/
+	boutonAnnulerContenu.onclick = postActionCancel;
 	
-	var boutonAnnuler = document.createElement('input');
-	boutonAnnuler.type = "button";
-	boutonAnnuler.className = "button";
-	boutonAnnuler.value = "Retour";
-	boutonAnnuler.onclick = postActionCancel;
-	tdType4.appendChild(boutonAnnuler);	
-	
-	trType.appendChild(tdType1);
-	trType.appendChild(tdType2);
-	trType.appendChild(tdType3);
-	trType.appendChild(tdType4);
-			
-	document.getElementById('formContenuTypeTable').appendChild(trType);
-		
 	display('editeurContenu');
 	hideWait();
 }
@@ -777,6 +732,7 @@ function createLigneContenuPageSite(contenuPageSiteData, nomPage)
 
 	var td4 = document.createElement('td');
 	td4.className = 'actionEmission';
+	
 	var td5 = document.createElement('td');	
 	td5.className = 'actionEmission';
 	if (!creation)
@@ -801,7 +757,7 @@ function createLigneContenuPageSite(contenuPageSiteData, nomPage)
 				display('contenuPageSite');
 				window.location.href = "#top";
 			}
-			displayFormEditContenu(contenuPageSiteData, postAction, postActionCancel);
+			displayFormEditContenu(contenuPageSiteData, postAction, postActionCancel, false);
 		}
 		
 		td4.appendChild(boutonModifier);
@@ -821,56 +777,58 @@ function createLigneContenuPageSite(contenuPageSiteData, nomPage)
 		td5.appendChild(boutonSupprimer);
 	}
 
-	var td3 = document.createElement('td');	
-	td3.className = 'actionEmission';
-	
-	var boutonDeplacerOk = document.createElement('input');
-	boutonDeplacerOk.value = "Valider";
-	boutonDeplacerOk.type = "button";
-	boutonDeplacerOk.className = "button";
-	if (!creation)
-		boutonDeplacerOk.style.display = "none";
+	if (superAdmin)
+	{
+		var td3 = document.createElement('td');	
+		td3.className = 'actionEmission';
 		
-	boutonDeplacerOk.onclick = function () {
-		if (ddlListePagesSite.value == '')
-		{
-			alert('Vous devez choisir une page !!');
-			return false;
-		}
-		
-		if (txtZonePage.value == '')
-		{
-			alert('Vous devez saisir une référence !!');
-			return false;
-		}
-		
-		getDatas('dbGetContenuPageSite', 'testContenuPageSite', 'id_site=' + id_site + '&page=' + encode(ddlListePagesSite.value) + '&zone=' + encode(txtZonePage.value));
-		
-		if (testContenuPageSite != 0)
-		{
-			alert('Désolé, il existe déjà un contenu avec la même référence pour la même page.\nMerci de corriger votre saisie.');
-			return false;
-		}
-		else
-		{
-			if (creation)
-				getDatas('dbInsertContenuPageSite', '', 'id_site=' + id_site + '&page=' + encode(ddlListePagesSite.value) + '&zone=' + encode(txtZonePage.value));
+		var boutonDeplacerOk = document.createElement('input');
+		boutonDeplacerOk.value = "Valider";
+		boutonDeplacerOk.type = "button";
+		boutonDeplacerOk.className = "button";
+		if (!creation)
+			boutonDeplacerOk.style.display = "none";
+			
+		boutonDeplacerOk.onclick = function () {
+			if (ddlListePagesSite.value == '')
+			{
+				alert('Vous devez choisir une page !!');
+				return false;
+			}
+			
+			if (txtZonePage.value == '')
+			{
+				alert('Vous devez saisir une référence !!');
+				return false;
+			}
+			
+			getDatas('dbGetContenuPageSite', 'testContenuPageSite', 'id_site=' + id_site + '&page=' + encode(ddlListePagesSite.value) + '&zone=' + encode(txtZonePage.value));
+			
+			if (testContenuPageSite != 0)
+			{
+				alert('Désolé, il existe déjà un contenu avec la même référence pour la même page.\nMerci de corriger votre saisie.');
+				return false;
+			}
 			else
-				getDatas('dbUpdateContenuPageSite', '', 'id=' + contenuPageSiteData.id + '&page=' + encode(ddlListePagesSite.value) + '&zone=' + encode(txtZonePage.value));
+			{
+				if (creation)
+					getDatas('dbInsertContenuPageSite', '', 'id_site=' + id_site + '&page=' + encode(ddlListePagesSite.value) + '&zone=' + encode(txtZonePage.value));
+				else
+					getDatas('dbUpdateContenuPageSite', '', 'id=' + contenuPageSiteData.id + '&page=' + encode(ddlListePagesSite.value) + '&zone=' + encode(txtZonePage.value));
+			}
+			
+			refreshContenuPageSite();	
 		}
-		
-		refreshContenuPageSite();	
-	}
-	td3.appendChild(boutonDeplacerOk);
+		td3.appendChild(boutonDeplacerOk);
 
-	var boutonDeplacerAnnuler = document.createElement('input');
-	boutonDeplacerAnnuler.value = "Annuler";
-	boutonDeplacerAnnuler.type = "button";
-	boutonDeplacerAnnuler.className = "button";
-	if (!creation)
-		boutonDeplacerAnnuler.style.display = "none";
-	boutonDeplacerAnnuler.onclick = function () {
-	
+		var boutonDeplacerAnnuler = document.createElement('input');
+		boutonDeplacerAnnuler.value = "Annuler";
+		boutonDeplacerAnnuler.type = "button";
+		boutonDeplacerAnnuler.className = "button";
+		if (!creation)
+			boutonDeplacerAnnuler.style.display = "none";
+		boutonDeplacerAnnuler.onclick = function () {
+		
 		if (creation)
 			refreshContenuPageSite();
 		else
@@ -906,52 +864,55 @@ function createLigneContenuPageSite(contenuPageSiteData, nomPage)
 			boutonSupprimer.disabled = false;
 			}
 		}
-	td3.appendChild(boutonDeplacerAnnuler);
+		td3.appendChild(boutonDeplacerAnnuler);
 
-	if (!creation)
-	{
-		var boutonDeplacer = document.createElement('input');
-		boutonDeplacer.value = "<< Déplacer";
-		boutonDeplacer.type = "button";
-		boutonDeplacer.className = "button";
-		boutonDeplacer.onclick = function () {
-		
-			while (ddlListePagesSite.hasChildNodes())
-				ddlListePagesSite.removeChild(ddlListePagesSite.firstChild);
-			getDatas('getListePagesSite', 'listePagesSite', '');
-			for(var i=0; i<listePagesSite.length; i++)
-			{
-				var optionListePagesSite = document.createElement("option");
-				optionListePagesSite.value = listePagesSite[i];
-				optionListePagesSite.text = listePagesSite[i];
-				ddlListePagesSite.appendChild(optionListePagesSite);
+		if (!creation)
+		{
+			var boutonDeplacer = document.createElement('input');
+			boutonDeplacer.value = "<< Déplacer";
+			boutonDeplacer.type = "button";
+			boutonDeplacer.className = "button";
+			boutonDeplacer.onclick = function () {
+			
+				while (ddlListePagesSite.hasChildNodes())
+					ddlListePagesSite.removeChild(ddlListePagesSite.firstChild);
+				getDatas('getListePagesSite', 'listePagesSite', '');
+				for(var i=0; i<listePagesSite.length; i++)
+				{
+					var optionListePagesSite = document.createElement("option");
+					optionListePagesSite.value = listePagesSite[i];
+					optionListePagesSite.text = listePagesSite[i];
+					ddlListePagesSite.appendChild(optionListePagesSite);
+				}
+			
+				//On initialise les zones de saisies :
+				ddlListePagesSite.value = contenuPageSiteData.page;
+				txtZonePage.value = contenuPageSiteData.zone;
+
+				//On remplace l'affichage de la ligne par celle d'édition :
+				spanType.style.display = "none";
+				spanZone.style.display = "none";
+				ddlListePagesSite.style.display = "block";
+				txtZonePage.style.display = "block";
+				
+				//On remplace ce bouton par celui de validation et d'annulation :
+				this.style.display = "none";
+				boutonDeplacerOk.style.display = "block";
+				boutonDeplacerAnnuler.style.display = "block";
+				
+				//On désactive les boutons de modification et de suppression :
+				boutonModifier.disabled = true;
+				boutonSupprimer.disabled = true;
 			}
-		
-			//On initialise les zones de saisies :
-			ddlListePagesSite.value = contenuPageSiteData.page;
-			txtZonePage.value = contenuPageSiteData.zone;
-
-			//On remplace l'affichage de la ligne par celle d'édition :
-			spanType.style.display = "none";
-			spanZone.style.display = "none";
-			ddlListePagesSite.style.display = "block";
-			txtZonePage.style.display = "block";
-			
-			//On remplace ce bouton par celui de validation et d'annulation :
-			this.style.display = "none";
-			boutonDeplacerOk.style.display = "block";
-			boutonDeplacerAnnuler.style.display = "block";
-			
-			//On désactive les boutons de modification et de suppression :
-			boutonModifier.disabled = true;
-			boutonSupprimer.disabled = true;
+			td3.appendChild(boutonDeplacer);
 		}
-		td3.appendChild(boutonDeplacer);
+		
+		tr.appendChild(td3);
 	}
 	
-	tr.appendChild(td3);
-	tr.appendChild(td4);
-	tr.appendChild(td5);
+	tr.appendChild(td4);		
+	if (superAdmin)
+		tr.appendChild(td5);
 
 	return tr;
 }

@@ -15,7 +15,7 @@ if(isset($_POST['nomCompte']))
 			if (!$result)
 				echo '<script type="text/javascript">alert("Une erreur est survenue lors de l\'envoi de mail");</script>';
 				
-			echo '<script type="text/javascript">alert("result :  '.$result.'");</script>';			
+			echo '<script type="text/javascript">alert("'.$result.'");</script>';			
 		}
 		else
 			echo '<script type="text/javascript">alert("Une erreur est survenue lors de la création du mail");</script>';
