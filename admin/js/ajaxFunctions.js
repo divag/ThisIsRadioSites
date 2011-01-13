@@ -112,7 +112,7 @@ function fonctionAvantUploadMp3(formData, jqForm, options) {
 } 
 
 function fonctionAvantUploadMp3Teaser(formData, jqForm, options) { 
-	changeWaitMessage("<b>Upload d uteaser MP3 de l'émission ...</b><br /><br />Cela peut être long si le fichier est volumineux.<br /> Ne pas s'inquiéter.");
+	changeWaitMessage("<b>Upload du teaser MP3 de l'émission ...</b><br /><br />Cela peut être long si le fichier est volumineux.<br /> Ne pas s'inquiéter.");
 	showWait();
     var queryString = $.param(formData); 
     return true; 
@@ -262,7 +262,7 @@ function display(page)
 		document.getElementById('lblDateEmissionPublie').style.display = 'none';
 		document.getElementById('txtDateEmissionError').innerHTML = '';
 		document.getElementById('boutonUpdateZipEmission').style.display = 'none';
-		
+				
 		if (currentItem.titre != '' || !siteHaveTitre)
 			document.getElementById('emission').className = 'etat32';
 		else
@@ -1620,7 +1620,7 @@ function refreshImageFormZone()
 		if (emissionHaveImage)
 		{
 			ImageThumb= new Image();
-			ImageThumb.src = '../pochettes/thisisradioclash-episode' + currentItem.numero + '.jpg?' + (new Date()).getTime();
+			ImageThumb.src = '../pochettes/' + currentItem.nom_fichier + '.jpg?' + (new Date()).getTime();
 			document.getElementById('imgPochetteEmissionThumb').src = ImageThumb.src;
 			document.getElementById('pochetteEmission').className = 'etat32';
 			
@@ -1653,11 +1653,12 @@ function refreshImageToPrintFormZone()
 	{
 		document.getElementById('pochetteEmissionToPrint').style.display = 'block';
 
-		getDatas('getImageEmissionFlag', 'emissionHaveImageToPrint', 'numero=' + currentItem.numero + '-toPrint');
+		getDatas('getImageEmissionToPrintFlag', 'emissionHaveImageToPrint', 'numero=' + currentItem.numero);
+		
 		if (emissionHaveImageToPrint)
 		{
 			ImageThumb= new Image();
-			ImageThumb.src = '../pochettes/thisisradioclash-episode' + currentItem.numero + '-toPrint.jpg?' + (new Date()).getTime();
+			ImageThumb.src = '../pochettes/' + currentItem.nom_fichier + '-toPrint.jpg?' + (new Date()).getTime();
 			document.getElementById('imgPochetteEmissionThumbToPrint').src = ImageThumb.src;
 			document.getElementById('pochetteEmissionToPrint').className = 'etat32';
 			document.getElementById('imgPochetteEmissionToPrint').href = document.getElementById('imgPochetteEmissionThumbToPrint').src;
@@ -1684,35 +1685,35 @@ function deleteFile(typeFichier)
 
 	if (typeFichier == 'pochette')
 	{
-		getDatas('deleteFile', '', 'file=' + '../pochettes/thisisradioclash-episode' + currentItem.numero + '.jpg');
+		getDatas('deleteFile', '', 'file=' + '../pochettes/' + currentItem.nom_fichier + '.jpg');
 		objet = 'Pochette JPG';
 		refreshImageFormZone();
 	}		
 
 	if (typeFichier == 'pochetteToPrint')
 	{
-		getDatas('deleteFile', '', 'file=' + '../pochettes/thisisradioclash-episode' + currentItem.numero + '-toPrint.jpg');
+		getDatas('deleteFile', '', 'file=' + '../pochettes/' + currentItem.nom_fichier + '-toPrint.jpg');
 		objet = 'Pochette à imprimer';
 		refreshImageToPrintFormZone();
 	}		
 
 	if (typeFichier == 'pochetteGif')
 	{
-		getDatas('deleteFile', '', 'file=' + '../pochettes/thisisradioclash-episode' + currentItem.numero + '.gif');
+		getDatas('deleteFile', '', 'file=' + '../pochettes/' + currentItem.nom_fichier + '.gif');
 		objet = 'Pochette GIF';
 		refreshImageGifFormZone();
 	}	
 	
 	if (typeFichier == 'mp3')
 	{
-		getDatas('deleteFile', '', 'file=' + '../mp3/thisisradioclash-episode' + currentItem.numero + '.mp3');
+		getDatas('deleteFile', '', 'file=' + '../mp3/' + currentItem.nom_fichier + '.mp3');
 		objet = 'Fichier MP3';
 		refreshMp3FormZone();
 	}		
 	
 	if (typeFichier == 'teaserMp3')
 	{
-		getDatas('deleteFile', '', 'file=' + '../mp3/thisisradioclash-episode' + currentItem.numero + '-teaser.mp3');
+		getDatas('deleteFile', '', 'file=' + '../mp3/' + currentItem.nom_fichier + '-teaser.mp3');
 		objet = 'Teaser MP3';
 		refreshMp3TeaserFormZone();
 	}		
@@ -1738,7 +1739,7 @@ function refreshImageGifFormZone()
 		if (emissionHaveImageGif)
 		{
 			ImageThumbGif= new Image();
-			ImageThumbGif.src = '../pochettes/thisisradioclash-episode' + currentItem.numero + '.gif?' + (new Date()).getTime();
+			ImageThumbGif.src = '../pochettes/' + currentItem.nom_fichier + '.gif?' + (new Date()).getTime();
 			document.getElementById('imgPochetteEmissionThumbGif').src = ImageThumbGif.src;
 			document.getElementById('pochetteEmissionGif').className = 'etat32';
 			document.getElementById('imgPochetteEmissionGif').href = document.getElementById('imgPochetteEmissionThumbGif').src;
@@ -1792,7 +1793,7 @@ function refreshMp3FormZone()
 		{
 			document.getElementById('mp3Emission').className = 'etat32';
 			document.getElementById('yesMp3').style.display = 'block';
-			document.getElementById('linkMp3Emission').href = '../mp3/thisisradioclash-episode' + currentItem.numero + '.mp3';
+			document.getElementById('linkMp3Emission').href = '../mp3/' + currentItem.nom_fichier + '.mp3';
 			document.getElementById('linkMp3Emission').innerHTML = 'This is radioclash n°' + currentItem.numero;
 			document.getElementById('timeMp3Emission').innerHTML = emissionHaveMp3;
 			var times = emissionHaveMp3.split(':');
@@ -1838,7 +1839,7 @@ function refreshMp3TeaserFormZone()
 		{
 			document.getElementById('mp3Teaser').className = 'etat32';
 			document.getElementById('yesMp3Teaser').style.display = 'block';
-			document.getElementById('linkMp3Teaser').href = '../mp3/thisisradioclash-episode' + currentItem.numero + '-teaser.mp3';
+			document.getElementById('linkMp3Teaser').href = '../mp3/' + currentItem.nom_fichier + '-teaser.mp3';
 			document.getElementById('linkMp3Teaser').innerHTML = 'Teaser de this is radioclash n°' + currentItem.numero;
 			document.getElementById('fileMp3TeaserDeleteButton').disabled = false; 
 		}
@@ -1945,7 +1946,7 @@ function createLigneEmission(emissionData)
 	var col1 = document.createElement('td');
 	col1.className = 'thumbEmission';
 	var thumb = document.createElement('img');
-	thumb.src = '../pochettes/thisisradioclash-episode' + emissionData.numero + '.jpg?' + (new Date()).getTime();
+	thumb.src = '../pochettes/' + emissionData.nom_fichier + '.jpg?' + (new Date()).getTime();
 	thumb.className = 'thumbEmission';
 	col1.appendChild(thumb);
 	var col2 = document.createElement('td');
@@ -2194,6 +2195,7 @@ function newEmission()
 	currentItem = new Array();
 	currentItem['id_site'] = id_site;
 	currentItem['numero'] = newNumber;
+	currentItem['nom_fichier'] = 'no_file';
 	currentItem['titre'] = '';
 	currentItem['date_sortie'] = '??/??/????';
 	currentItem['etat'] = 1;

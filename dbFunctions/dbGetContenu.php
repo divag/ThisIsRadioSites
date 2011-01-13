@@ -1,6 +1,7 @@
 <?php
 
-include('dbFunctions.php');
+include('../dbFunctions/dbFunctions.php');
+include('../sitevars.php');
 
 $contenu = dbGetContenu($_POST["id"]);
 

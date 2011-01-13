@@ -1,6 +1,7 @@
 <?php
 
-include('dbFunctions.php');
+include('../dbFunctions/dbFunctions.php');
+include('../sitevars.php');
 
 if (getTeaserEmissionFlag($_POST["numero"]))
 	echo $_POST["variable"]." = true;";

@@ -3,9 +3,7 @@
 include('../dbFunctions/dbFunctions.php');
 include('../sitevars.php');
 
-$emissionComplete = dbGetEmissionCompleteFlag($_POST["id"]);
-
-if ($emissionComplete)
+if (getImageEmissionToPrintFlag($_POST["numero"]))
 	echo $_POST["variable"]." = true;";
 else
 	echo $_POST["variable"]." = false;";

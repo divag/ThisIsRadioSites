@@ -1,4 +1,7 @@
 <?php
+
+include('../dbFunctions/templateFunctions.php');
+
 /*
 CONTENU :
 =========
@@ -1340,6 +1343,11 @@ function dbDeleteCascadeEmission($id){
 
     include('var.php');
 
+	$emission = dbGetEmission($id);
+	$numero = $emission["numero"];
+	$titre = $emission["titre"];
+	$nomParticipants = listeParticipantsEmission($id);
+
     $query = "DELETE FROM MORCEAU WHERE id_emission = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
@@ -1357,15 +1365,20 @@ function dbDeleteCascadeEmission($id){
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	
     mysql_close($link);
-	
-	$emission = dbGetEmission($id);
-	$numero = $emission["numero"];
-	
-	include('../sitevars.php');
-	if (file_exists("../".$pics."thisisradioclash-episode".$numero.".jpg"))
-		unlink("../".$pics."thisisradioclash-episode".$numero.".jpg");
-	if (file_exists("../".$mp3s."thisisradioclash-episode".$numero.".mp3"))
-		unlink("../".$mp3s."thisisradioclash-episode".$numero.".mp3");
+		
+	$referenceEmission = getReferenceEmission($numero, $titre, $nomParticipants);
+	$nomFichierEmission = getNomFichierEmission($numero, $titre, $nomParticipants);
+
+	if (file_exists("../".PICS.$nomFichierEmission.".jpg"))
+		unlink("../".PICS.$nomFichierEmission.".jpg");
+	if (file_exists("../".PICS.$nomFichierEmission.".gif"))
+		unlink("../".PICS.$nomFichierEmission.".gif");
+	if (file_exists("../".PICS.$nomFichierEmission."-toPrint.jpg"))
+		unlink("../".PICS.$nomFichierEmission."-toPrint.jpg");
+	if (file_exists("../".MP3S.$nomFichierEmission."-teaser.mp3"))
+		unlink("../".MP3S.$nomFichierEmission.$numero."-teaser.mp3");
+	if (file_exists("../".MP3S.$nomFichierEmission.".mp3"))
+		unlink("../".MP3S.$nomFichierEmission.$numero.".mp3");
 }
 
 function dbInsertEmission($id_site, $numero, $titre, $date_sortie, $etat, $time_min, $time_sec){
@@ -1431,37 +1444,63 @@ function dbUpdateEtatEmission($id_emission, $id_etat){
 
 function getImageEmissionFlag($numero)
 {
-	include('../sitevars.php');
-	//$fichier = str_replace("{numero}", $numero, $templateNommageFichiersEmission);	
-	//return file_exists("../".$pics.$fichier.".jpg");
-	return file_exists("../".$pics."thisisradioclash-episode".$numero.".jpg");
+	$emission = dbGetEmissionByNumero(ID_SITE, $numero);
+	$idEmission = $emission['id'];
+	$titre = $emission['titre'];
+	$nomParticipants = listeParticipantsEmission($idEmission);
+
+	return file_exists("../".PICS.getNomFichierEmission($numero, $titre, $nomParticipants).".jpg");
+}
+
+function getImageEmissionToPrintFlag($numero)
+{
+	$emission = dbGetEmissionByNumero(ID_SITE, $numero);
+	$idEmission = $emission['id'];
+	$titre = $emission['titre'];
+	$nomParticipants = listeParticipantsEmission($idEmission);
+
+	return file_exists("../".PICS.getNomFichierEmission($numero, $titre, $nomParticipants)."-toPrint.jpg");
 }
 
 function getImageEmissionGifFlag($numero)
 {
-	include('../sitevars.php');
-	return file_exists("../".$pics."thisisradioclash-episode".$numero.".gif");
+	$emission = dbGetEmissionByNumero(ID_SITE, $numero);
+	$idEmission = $emission['id'];
+	$titre = $emission['titre'];
+	$nomParticipants = listeParticipantsEmission($idEmission);
+
+	return file_exists("../".PICS.getNomFichierEmission($numero, $titre, $nomParticipants).".gif");
 }
 
 function getTeaserEmissionFlag($numero)
 {
-	include('../sitevars.php');
-	return file_exists("../".$mp3s."thisisradioclash-episode".$numero."-teaser.mp3");
+	$emission = dbGetEmissionByNumero(ID_SITE, $numero);
+	$idEmission = $emission['id'];
+	$titre = $emission['titre'];
+	$nomParticipants = listeParticipantsEmission($idEmission);
+
+	return file_exists("../".MP3S.getNomFichierEmission($numero, $titre, $nomParticipants)."-teaser.mp3");
 }
 
 function emissionHaveTeaser($numero)
 {
-	include('sitevars.php');
-	return file_exists($mp3s."thisisradioclash-episode".$numero."-teaser.mp3");
+	$emission = dbGetEmissionByNumero(ID_SITE, $numero);
+	$idEmission = $emission['id'];
+	$titre = $emission['titre'];
+	$nomParticipants = listeParticipantsEmission($idEmission);
+
+	return file_exists(MP3S.getNomFichierEmission($numero, $titre, $nomParticipants)."-teaser.mp3");
 }
 
 require('classAudioFile.php');
 function getTimeEmission($numero)
 {
-
-include('../sitevars.php');
+	$emission = dbGetEmissionByNumero(ID_SITE, $numero);
+	$idEmission = $emission['id'];
+	$titre = $emission['titre'];
+	$nomParticipants = listeParticipantsEmission($idEmission);
 	
-	$filePath = "../".$mp3s."thisisradioclash-episode".$numero.".mp3";
+	$filePath = "../".MP3S.getNomFichierEmission($numero, $titre, $nomParticipants).".mp3";
 	if (file_exists($filePath))
 	{
 		$AF = new AudioFile;
@@ -1482,9 +1521,12 @@ include('../sitevars.php');
 
 function getBytesLengthEmission($numero)
 {
-	include('../sitevars.php');
+	$emission = dbGetEmissionByNumero(ID_SITE, $numero);
+	$idEmission = $emission['id'];
+	$titre = $emission['titre'];
+	$nomParticipants = listeParticipantsEmission($idEmission);
 	
-	$filePath = "../".$mp3s."thisisradioclash-episode".$numero.".mp3";
+	$filePath = "../".MP3S.getNomFichierEmission($numero, $titre, $nomParticipants).".mp3";
 	if (file_exists($filePath))
 	{
 		return filesize($filePath);
@@ -1495,16 +1537,18 @@ function getBytesLengthEmission($numero)
 
 function dbGetEmissionCompleteFlag($id)
 {
-	include('../sitevars.php');
-	
 	$emission = dbGetEmission($id);
 	$numero = $emission["numero"];
+	$titre = $emission['titre'];
+	$nomParticipants = listeParticipantsEmission($id);
 	
-	$filePath = "../".$mp3s."thisisradioclash-episode".$numero.".mp3";
+	$nomFichierEmission = getNomFichierEmission($numero, $titre, $nomParticipants);
+	
+	$filePath = "../".MP3S.$nomFichierEmission.".mp3";
 	if (!file_exists($filePath))
 		return false;
 	
-	$filePath = "../".$pics."thisisradioclash-episode".$numero.".jpg";
+	$filePath = "../".PICS.$nomFichierEmission.".jpg";
 	if (!file_exists($filePath))
 		return false;
 	

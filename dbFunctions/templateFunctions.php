@@ -1,5 +1,4 @@
 <?php
-include ("../sitevars.php");
 
 //=========================
 // Fonctions de Templates :

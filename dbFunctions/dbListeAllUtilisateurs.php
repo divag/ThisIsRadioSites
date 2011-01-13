@@ -1,6 +1,7 @@
 <?php
 
-include('dbFunctions.php');
+include('../dbFunctions/dbFunctions.php');
+include('../sitevars.php');
 
 $id_site = $_POST["id_site"];
 $liste_utilisateurs = dbGetListeAllUtilisateurs();

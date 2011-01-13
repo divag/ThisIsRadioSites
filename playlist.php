@@ -1,6 +1,6 @@
 <?php include('dbFunctions/dbFunctions.php');
-include('siteparts.php');
 include('sitevars.php');
+include('siteparts.php');
 
 if ($_GET["episode"] == null)
 	echo "<script>window.location.href = '".$radioclashHome."';</script>";
@@ -19,22 +19,22 @@ else
 		else
 		{
 			$idEmission = $emission['id'];
-			$texteEmission = "This is radioclash n°".$numero." : ".$emission['titre'];
-			$titreEmission = "This is radioclash n°".$numero." : ";
-			$nomEmission = "# ".$numero." : ".$emission['titre'];
-						
-			if (file_exists($pics."thisisradioclash-episode".$numero.".gif"))
-				$imageEmission = $pics."thisisradioclash-episode".$numero.".gif";
-			else
-				$imageEmission = $pics."thisisradioclash-episode".$numero.".jpg";
+			$nomParticipants = listeParticipantsEmission($emission['id']);
+			$nomEmission = getReferenceEmission($numero, $emission['titre'], $nomParticipants);
+			$nomFichierEmission = getNomFichierEmission($numero, $emission['titre'], $nomParticipants);
 			
-			if (file_exists($pics."thisisradioclash-episode".$numero."-toPrint.jpg"))
-				$imageEmissionPrint = $pics."thisisradioclash-episode".$numero."-toPrint.jpg";
+			if (file_exists($pics.$nomFichierEmission.".gif"))
+				$imageEmission = $pics.$nomFichierEmission.".gif";
 			else
-				$imageEmissionPrint = $pics."thisisradioclash-episode".$numero.".jpg";
+				$imageEmission = $pics.$nomFichierEmission.".jpg";
+			
+			if (file_exists($pics.$nomFichierEmission."-toPrint.jpg"))
+				$imageEmissionPrint = $pics.$nomFichierEmission."-toPrint.jpg";
+			else
+				$imageEmissionPrint = $pics.$nomFichierEmission.".jpg";
 
-			$audioEmission = $mp3s."thisisradioclash-episode".$numero.".mp3";
-			$zipEmission = $zips."thisisradioclash-episode".$numero.".zip";
+			$audioEmission = $mp3s.$nomFichierEmission.".mp3";
+			$zipEmission = $zips.$nomFichierEmission.".zip";
 			$linkEmission = "playlist.php?episode=".$numero;
 			$playlist = dbGetPlaylist($idEmission);
 			$nextEmission = dbGetNextEmission($id_site, $numero);
@@ -138,7 +138,7 @@ writeEntete('playlist');
 			<?php 
 				if (emissionHaveTeaser($numero))
 				{
-					$linkTeaser = $mp3s."thisisradioclash-episode".$numero."-teaser.mp3";
+					$linkTeaser = $mp3s.$nomFichierEmission."-teaser.mp3";
 
 					echo "<div class=\"sm2-inline-list\">";
 					echo "    <div class=\"ui360\"><a id=\"teaser\" href=\"".$linkTeaser."\"><span style=\"color:red;text-decoration:underline;font-weight:bolder;margin-top:50px;\">>> TEASER <<</span></a></div>";
@@ -198,7 +198,7 @@ writeEntete('playlist');
 		
 		if (emissionHaveTeaser($numero) || $emission['teaser_video'] != '')
 		{
-			$linkTeaser = $mp3s."thisisradioclash-episode".$numero."-teaser.mp3";
+			$linkTeaser = $mp3s.$nomFichierEmission."-teaser.mp3";
 			echo "<h2>R.I.P. teasers :</h2>";
 			
 			if (emissionHaveTeaser($numero))

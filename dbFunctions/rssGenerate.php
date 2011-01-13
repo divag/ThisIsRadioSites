@@ -21,9 +21,11 @@ while($emission=mysql_fetch_array($listeEmissions))
 {
 	$idEmission = $emission['id'];
 	$numeroEmission = $emission['numero'];
-	$titreEmission = "This is Radioclash ".$numeroEmission." : ".$emission['titre'];
-	$imageEmission = $radioclashHome.$pics."thisisradioclash-episode".$numeroEmission.".jpg";
-	$mp3Emission = $radioclashHome.$mp3s."thisisradioclash-episode".$numeroEmission.".mp3";
+	$nomParticipants = listeParticipantsEmission($idEmission);
+	$nomFichier = getNomFichierEmission($numeroEmission, $emission['titre'], $nomParticipants);
+	$titreEmission = getReferenceEmission($numeroEmission, $emission['titre'], $nomParticipants);
+	$imageEmission = $radioclashHome.$pics.$nomFichier.".jpg";
+	$mp3Emission = $radioclashHome.$mp3s.$nomFichier.".mp3";
 	$linkEmission = $radioclashHome."playlist.php?episode=".$numeroEmission;
 	$lengthEmission = getBytesLengthEmission($numeroEmission);
 	$dateEmission = date('D, d M Y H:i:s O', strtotime($emission['date_sortie']));
@@ -52,7 +54,13 @@ while($emission=mysql_fetch_array($listeEmissions))
 				else
 					echo "<b><u>".$nomUtilisateurEnCours."</u></b><br />";
 			}
-			echo "<span>".toTime($array['time_min']).":".toTime($array['time_sec'])." ".$array['nom_artiste']." - ".$array['nom_morceau']."<br />";
+			
+			//
+			// TODO : Ajouter le label et l'année à l'appel de getNomMorceauEmission... :
+			//
+			
+			//echo "<span>".toTime($array['time_min']).":".toTime($array['time_sec'])." ".$array['nom_artiste']." - ".$array['nom_morceau']."<br />";
+			echo "<span>".getNomMorceauEmission (toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], null, null)."</span><br />";
 			$i++;
 		}
 

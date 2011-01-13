@@ -1,5 +1,6 @@
 <?php
 include('../dbFunctions/sendMail.php');
+include('../sitevars.php');
 
 $utilisateur = dbGetUtilisateur($_POST["nom"]);
 if ($utilisateur != 0 && $utilisateur['mail'] != "")

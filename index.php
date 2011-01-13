@@ -1,15 +1,18 @@
 <?php include('dbFunctions/dbFunctions.php');
-include('siteparts.php');
 include('sitevars.php');
+include('siteparts.php');
 
 //R�cup�ration de la derni�re �mission :
 $lastEmission = dbGetLastEmission($id_site);
-$texteLastEmission = $lastEmission['numero']." : ".$lastEmission['titre'];
 
-if (file_exists($pics."thisisradioclash-episode".$lastEmission['numero'].".gif"))
-	$imageLastEmission = $pics."thisisradioclash-episode".$lastEmission['numero'].".gif";
+$nomLastParticipants = listeParticipantsEmission($lastEmission['id']);
+$texteLastEmission = getReferenceEmission($lastEmission['numero'], $lastEmission['titre'], $nomParticipants);
+$nomFichierEmission = getNomFichierEmission($lastEmission['numero'], $lastEmission['titre'], $nomParticipants);
+
+if (file_exists($pics.$nomFichierEmission.".gif"))
+	$imageLastEmission = $pics.$nomFichierEmission.".gif";
 else
-	$imageLastEmission = $pics."thisisradioclash-episode".$lastEmission['numero'].".jpg";
+	$imageLastEmission = $pics.$nomFichierEmission.".jpg";
 
 $linkLastEmission = "playlist.php?episode=".$lastEmission['numero'];
 
@@ -136,7 +139,12 @@ writeEntete('');
 				
 				if (emissionHaveTeaser($emission['numero']))
 				{
-					$linkTeaser = $mp3s."thisisradioclash-episode".$emission['numero']."-teaser.mp3";
+					$nomParticipants = '';
+					$nomFichierEmission = 'frdfd';
+					//$nomParticipants = listeParticipantsEmission($emission['id']);
+					//$nomFichierEmission = getNomFichierEmission($emission['numero'], $emission['titre'], $nomParticipants);
+
+					$linkTeaser = $mp3s.$nomFichierEmission."-teaser.mp3";
 					$teaserLinkStart = "<a href=\"".$linkTeaser."\" class=\"myShortcut\" cible=\"teaser-".$emission['numero']."\" target=\"blank\"><span class=\"linkTeaser\"><font class=\"red\">)) </font><font class=\"underline\">TEASER</font><font class=\"red\"> ((</font>>>>>> ";
 					$teaserLinkEnd = "</span></a>";
 					

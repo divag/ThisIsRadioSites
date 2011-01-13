@@ -3,15 +3,36 @@ $numero = $_POST['numero'];
 $extension = $_POST['extension'];
 $folder = $_POST['folder'];
 
-if ($numero == '0')
-	$fpath= '../css/news.gif';
+include('../dbFunctions/dbFunctions.php');
+include('../sitevars.php');
+
+$toPrint = (strpos($numero, '-toPrint'));
+if ($toPrint == true)
+	$numero = str_replace("-toPrint", "", $numero);
+
+$teaser = (strpos($numero, '-teaser'));
+if ($teaser == true)
+	$numero = str_replace("-teaser", "", $numero);
+
+$emission = dbGetEmissionByNumero($id_site, $numero);
+$idEmission = $emission['id'];
+$titre = $emission['titre'];
+$nomParticipants = listeParticipantsEmission($idEmission);
+
+if ($folder == 'contenu/')
+	$fpath= '../'.$folder.$numero.$extension;
 else
 {
-	if ($folder == 'contenu/')
-		$fpath= '../'.$folder.$numero.$extension;
-	else
-		$fpath= '../'.$folder.'thisisradioclash-episode'.$numero.$extension;
+	$fpath = '../'.$folder.getNomFichierEmission($numero, $titre, $nomParticipants);
+	if ($toPrint)
+		$fpath .= '-toPrint';
+		
+	if ($teaser)
+		$fpath .= '-teaser';
+		
+	$fpath .= $extension;
 }
+	
 print_r($_FILES);
 
 if ($_FILES['fileEmission']['error']) {

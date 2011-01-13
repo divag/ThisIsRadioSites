@@ -1,6 +1,7 @@
 <?php
 
-include('dbFunctions.php');
+include('../dbFunctions/dbFunctions.php');
+include('../sitevars.php');
 
 $contenu = dbGetContenuPageSite($_POST["id_site"], $_POST["page"], $_POST["zone"]);
 

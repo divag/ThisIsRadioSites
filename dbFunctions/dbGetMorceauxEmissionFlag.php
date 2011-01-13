@@ -1,6 +1,7 @@
 <?php
 
-include('dbFunctions.php');
+include('../dbFunctions/dbFunctions.php');
+include('../sitevars.php');
 
 if (dbGetMorceauxEmissionFlag($_POST["id"]))
 	echo $_POST["variable"]." = true;";

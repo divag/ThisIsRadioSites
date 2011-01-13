@@ -1,6 +1,7 @@
 <?php
 
-include('dbFunctions.php');
+include('../dbFunctions/dbFunctions.php');
+include('../sitevars.php');
 
 $emission = dbGetEmissionByNumero($_POST["id_site"], $_POST["numero"]);
 

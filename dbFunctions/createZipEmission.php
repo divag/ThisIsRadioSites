@@ -1,5 +1,5 @@
 <?php      
-	include('dbFunctions.php');
+	include('../dbFunctions/dbFunctions.php');
 	include('../sitevars.php');
 	include('../'.$zipModule);
 
@@ -7,10 +7,13 @@
 	//$id = $_GET['id'];
 	
 	$emission = dbGetEmission($id);
+	$nomParticipants = listeParticipantsEmission($id);
 	$numero = $emission['numero'];
+	$titre = $emission['titre'];
 	$id_site = $emission['id_site'];
 	
-	$nom_emission = 'thisisradioclash-episode'.$numero;
+	$ref_emission = getReferenceEmission($numero, $titre, $nomParticipants);
+	$nom_emission = getNomFichierEmission($numero, $titre, $nomParticipants);
     $chemin_destination = '../'.$zips;
 	
     if (!file_exists($chemin_destination))
@@ -33,9 +36,9 @@
 	$radioclashZip = new createZip;  
 
 	// On genere le fichier de la playlist :	
-	$fichier_playlist ="THIS IS RADIOCLASH N°".$numero." : ".$emission['titre']."\r\n";
-	$fichier_playlist.="\r\n";
-	$fichier_playlist.="\r\n";
+	$fichier_playlist = $ref_emission."\r\n";
+	$fichier_playlist.= "\r\n";
+	$fichier_playlist.= "\r\n";
 	
 	
 	$fichier_playlist.=" 00:00 This is radioclash - Introduction Jingle\r\n";
@@ -59,7 +62,13 @@
 
 			$fichier_playlist.="\r\n";
 		}
-		$fichier_playlist.=" ".toTime($array['time_min']).":".toTime($array['time_sec'])." ".$array['nom_artiste']." - ".$array['nom_morceau'].")\r\n";
+		
+		//
+		// TODO : Ajouter les labels et année à la template de noms de morceaux :
+		//
+		
+		$fichier_playlist.=" ".getNomMorceauEmission(toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], null, null)."\r\n";
+		//$fichier_playlist.=" ".toTime($array['time_min']).":".toTime($array['time_sec'])." ".$array['nom_artiste']." - ".$array['nom_morceau'].")\r\n";
 		$i++;
 	}
 	
@@ -80,8 +89,8 @@
     
 	$fichier_playlist.="\r\n";
 	$fichier_playlist.="---------------------------------\r\n";
-	$fichier_playlist.=">> http://www.thisisradioclash.org/ <<\r\n";
-	$fichier_playlist.=">> http://www.musiques-incongrues.net/ <<\r\n";
+	$fichier_playlist.=">> ".$radioclashHome." <<\r\n";
+	$fichier_playlist.=">> ".$lienForum." <<\r\n";
 	$fichier_playlist.="\r\n";
 
 	$radioclashZip -> addFile($fichier_playlist, $nom_emission.'.txt'); 
@@ -112,6 +121,10 @@
 		$radioclashZip -> addFile($fileContents, $nom_emission.'.gif'); 
 	}
 
+	//
+	// TODO : Ajouter les bonus des émissions, et le texte de présentation
+	//
+	
 	$fd = fopen ($nomFichierZip, "wb");
 	$out = fwrite ($fd, $radioclashZip -> getZippedfile());
 	fclose ($fd);

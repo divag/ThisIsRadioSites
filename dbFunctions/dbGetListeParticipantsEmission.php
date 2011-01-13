@@ -1,6 +1,7 @@
 <?php
 
-include('dbFunctions.php');
+include('../dbFunctions/dbFunctions.php');
+include('../sitevars.php');
 
 $liste_participants = dbGetListeParticipantsEmission($_POST["id"]);
 

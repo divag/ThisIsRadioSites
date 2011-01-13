@@ -1,6 +1,7 @@
 <?php
 
-include('dbFunctions.php');
+include('../dbFunctions/dbFunctions.php');
+include('../sitevars.php');
 
 $liste_morceaux = dbGetPlaylistParticipant($_POST["id"], $_POST["nom"]);
 

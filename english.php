@@ -1,15 +1,18 @@
 <?php include('dbFunctions/dbFunctions.php');
-include('siteparts.php');
 include('sitevars.php');
+include('siteparts.php');
 
 //Récupération de la derni&egrave;re émission :
 $lastEmission = dbGetLastEmission($id_site);
-$texteLastEmission = $lastEmission['numero']." : ".$lastEmission['titre'];
 
-if (file_exists($pics."thisisradioclash-episode".$lastEmission['numero'].".gif"))
-	$imageLastEmission = $pics."thisisradioclash-episode".$lastEmission['numero'].".gif";
+$nomLastParticipants = listeParticipantsEmission($lastEmission['id']);
+$texteLastEmission = getReferenceEmission($lastEmission['numero'], $lastEmission['titre'], $nomParticipants);
+$nomFichierEmission = getNomFichierEmission($lastEmission['numero'], $lastEmission['titre'], $nomParticipants);
+
+if (file_exists($pics.$nomFichierEmission.".gif"))
+	$imageLastEmission = $pics.$nomFichierEmission.".gif";
 else
-	$imageLastEmission = $pics."thisisradioclash-episode".$lastEmission['numero'].".jpg";
+	$imageLastEmission = $pics.$nomFichierEmission.".jpg";
 
 $linkLastEmission = "playlist.php?episode=".$lastEmission['numero'];
 

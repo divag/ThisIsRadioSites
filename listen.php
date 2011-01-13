@@ -1,9 +1,10 @@
 <?php include('dbFunctions/dbFunctions.php');
-include('siteparts.php');
 include('sitevars.php');
+include('siteparts.php');
 
 //Récupération de la liste des émissions :
 $listeEmissions = dbGetListeEmissions($id_site);
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -25,8 +26,8 @@ writeEntete('listen');
 <?php 
 while($emission=mysql_fetch_array($listeEmissions))
 {
-	$texteEmission = $emission['numero']." : ".$emission['titre'];
-	$imageEmission = $pics."thisisradioclash-episode".$emission['numero'].".jpg";
+	$texteEmission = getReferenceEmission($emission['numero'], $emission['titre'], null);
+	$imageEmission = $pics.getNomFichierEmission($emission['numero'], $emission['titre'], null).".jpg";
 	$linkEmission = "playlist.php?episode=".$emission['numero'];
 
 	echo "<li>";

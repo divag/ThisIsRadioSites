@@ -1,6 +1,7 @@
 <?php
 
-include('dbFunctions.php');
+include('../dbFunctions/dbFunctions.php');
+include('../sitevars.php');
 
 $liste_emissions = dbListeAllEmissionForChef($_POST["id_site"], $_POST["admin"]);
 
