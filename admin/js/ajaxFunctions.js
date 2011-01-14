@@ -2068,8 +2068,8 @@ function createLigneEmission(emissionData)
 		linkPreview.type = 'button';
 		//linkPreview.innerHTML = 'Preview';
 		linkPreview.value = 'Preview';
-		//linkPreview.href = urlPreview.replace("{id}", emissionData.id);
-		linkPreview.onclick = function () { window.open(urlPreview.replace("{id}", emissionData.id)); };
+		//linkPreview.href = urlPreview.replace("{numero}", emissionData.id);
+		linkPreview.onclick = function () { window.open(urlPreview.replace("{numero}", emissionData.numero)); };
 		//linkPreview.target = 'blank';
 		col6.appendChild(linkPreview);
 	

@@ -15,7 +15,9 @@ else
 		$emission = dbGetEmissionByNumero($id_site, $numero);
 		
 		if ($emission == 0 || ($emission['etat'] != 3 && $_GET["preview"] == null))
+		{
 			echo "<script>window.location.href = '".$radioclashHome."';</script>";
+		}
 		else
 		{
 			$idEmission = $emission['id'];

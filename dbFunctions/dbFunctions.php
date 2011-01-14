@@ -1,6 +1,6 @@
 <?php
 
-include('../dbFunctions/templateFunctions.php');
+include('templateFunctions.php');
 
 /*
 CONTENU :
