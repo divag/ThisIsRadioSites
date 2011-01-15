@@ -63,12 +63,7 @@
 			$fichier_playlist.="\r\n";
 		}
 		
-		//
-		// TODO : Ajouter les labels et année à la template de noms de morceaux :
-		//
-		
-		$fichier_playlist.=" ".getNomMorceauEmission(toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], null, null)."\r\n";
-		//$fichier_playlist.=" ".toTime($array['time_min']).":".toTime($array['time_sec'])." ".$array['nom_artiste']." - ".$array['nom_morceau'].")\r\n";
+		$fichier_playlist.=" ".getNomMorceauEmission(toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], $array['nom_label'], $array['annee'])."\r\n";
 		$i++;
 	}
 	

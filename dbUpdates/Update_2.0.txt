@@ -203,11 +203,12 @@ DROP TABLE IF EXISTS `BONUS`;
 CREATE TABLE IF NOT EXISTS `BONUS` (
   `id` bigint(20) unsigned NOT NULL auto_increment,
   `id_site` bigint(20) unsigned NOT NULL,
-  `titre` bigint(20) unsigned NOT NULL,
+  `titre` varchar(255) NOT NULL DEFAULT '',
   `id_contenu` bigint(20) unsigned NOT NULL,
   `id_utilisateur` int (10) NOT NULL,
   `date` timestamp NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='Table des bonus' AUTO_INCREMENT=1 ;
 
-
+ALTER TABLE `MORCEAU` ADD `nom_label` VARCHAR( 255 ) NOT NULL DEFAULT '',
+ADD `annee` VARCHAR( 255 ) NOT NULL DEFAULT '';

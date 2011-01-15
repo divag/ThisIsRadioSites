@@ -2326,6 +2326,8 @@ function createLigneParticipantPlaylist(participantData)
 			newMorceau['time_sec'] = '';
 			newMorceau['nom_artiste'] = '';
 			newMorceau['nom_morceau'] = '';
+			newMorceau['nom_label'] = '';
+			newMorceau['annee'] = '';
 			
 			if (morceau != '')
 			{
@@ -2406,7 +2408,7 @@ function createLigneParticipantPlaylist(participantData)
 		getDatas('dbDeletePlaylistParticipant', '', 'id=' + currentItem.id + '&nom=' + encode(participantData.nom_utilisateur));
 		//on les recrée à partir de this.datas[i].time_min, ...
 		for (var i=0; i<this.datas.length; i++)
-			getDatas('dbInsertMorceau', '', 'id=' + currentItem.id + '&nom=' + encode(participantData.nom_utilisateur) + '&time_min=' + this.datas[i].time_min + '&time_sec=' + this.datas[i].time_sec + '&nom_artiste=' + encode(this.datas[i].nom_artiste) + '&nom_morceau=' + encode(this.datas[i].nom_morceau));
+			getDatas('dbInsertMorceau', '', 'id=' + currentItem.id + '&nom=' + encode(participantData.nom_utilisateur) + '&time_min=' + this.datas[i].time_min + '&time_sec=' + this.datas[i].time_sec + '&nom_artiste=' + encode(this.datas[i].nom_artiste) + '&nom_morceau=' + encode(this.datas[i].nom_morceau) + '&nom_label=' + encode(this.datas[i].nom_label) + '&annee=' + encode(this.datas[i].annee));
 		
 		refreshParticipants();
 		

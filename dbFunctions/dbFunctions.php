@@ -1188,7 +1188,7 @@ function dbGetPlaylist($p_id_emission){
 
     include('var.php');
 
-	$query = "SELECT id, id_emission, nom_utilisateur, time_min, time_sec, nom_artiste, nom_morceau FROM MORCEAU WHERE id_emission = ".$p_id_emission." ORDER BY time_min, time_sec ASC;";
+	$query = "SELECT id, id_emission, nom_utilisateur, time_min, time_sec, nom_artiste, nom_morceau, nom_label, annee FROM MORCEAU WHERE id_emission = ".$p_id_emission." ORDER BY time_min, time_sec ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1202,7 +1202,7 @@ function dbGetPlaylistParticipant($p_id_emission, $nom_participant){
 
     include('var.php');
 
-	$query = "SELECT id, id_emission, nom_utilisateur, time_min, time_sec, nom_artiste, nom_morceau FROM MORCEAU WHERE id_emission = ".$p_id_emission." AND nom_utilisateur = '".urldecode($nom_participant)."' ORDER BY time_min, time_sec ASC;";
+	$query = "SELECT id, id_emission, nom_utilisateur, time_min, time_sec, nom_artiste, nom_morceau, nom_label, annee FROM MORCEAU WHERE id_emission = ".$p_id_emission." AND nom_utilisateur = '".urldecode($nom_participant)."' ORDER BY time_min, time_sec ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1329,10 +1329,10 @@ function dbDeletePlaylistParticipant($id, $nom){
     mysql_close($link);
 }
 
-function dbInsertMorceau($id, $nom, $time_min, $time_sec, $nom_artiste, $nom_morceau)
+function dbInsertMorceau($id, $nom, $time_min, $time_sec, $nom_artiste, $nom_morceau, $nom_label, $annee)
 {
     include('var.php');
-    $query = "INSERT INTO MORCEAU (id_emission, nom_utilisateur, time_min, time_sec, nom_morceau, nom_artiste) VALUES (".$id.", '".urldecode($nom)."', ".$time_min.", ".$time_sec.", '".urldecode($nom_morceau)."', '".urldecode($nom_artiste)."');";
+    $query = "INSERT INTO MORCEAU (id_emission, nom_utilisateur, time_min, time_sec, nom_morceau, nom_artiste, nom_label, annee) VALUES (".$id.", '".urldecode($nom)."', ".$time_min.", ".$time_sec.", '".urldecode($nom_morceau)."', '".urldecode($nom_artiste)."', '".urldecode($nom_label)."', '".urldecode($annee)."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	mysql_db_query ($db, $query);	

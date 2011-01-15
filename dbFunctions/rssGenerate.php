@@ -55,12 +55,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 					echo "<b><u>".$nomUtilisateurEnCours."</u></b><br />";
 			}
 			
-			//
-			// TODO : Ajouter le label et l'année à l'appel de getNomMorceauEmission... :
-			//
-			
-			//echo "<span>".toTime($array['time_min']).":".toTime($array['time_sec'])." ".$array['nom_artiste']." - ".$array['nom_morceau']."<br />";
-			echo "<span>".getNomMorceauEmission (toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], null, null)."</span><br />";
+			echo "<span>".getNomMorceauEmission (toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], $array['nom_label'], $array['annee'])."</span><br />";
 			$i++;
 		}
 
