@@ -210,3 +210,19 @@ td.actionEmission {
 	text-align: center;
 }
 
+#haveMorceaux {
+	color:red;
+	background-color: transparent;
+	width:100%;
+}
+#haveMorceauxExample {
+	border: 1px dashed rgb(0, 0, 0);
+	padding: 10px;
+	background-color: #FFFFFF;
+	color: rgb(0, 0, 0);
+	font-family: monospace;
+	font-size: 10pt;
+	font-weight:bold;
+	width:100%;
+}
+

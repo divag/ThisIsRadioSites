@@ -293,6 +293,7 @@ function display(page)
 			document.getElementById('txtTitreEmission').disabled = true;
 			document.getElementById('trDateEmission').style.display = 'none';
 			document.getElementById('trBoutonsEmission').style.display = 'none';
+			document.getElementById('boutonAddParticipant').style.display = 'none';
 		}
 
 		if (!siteHaveStatutAnnounced)
@@ -933,7 +934,8 @@ var listeParticipantsEmissionDatas = new Array();
 function refreshParticipants()
 {
 	hideAddParticipant();
-	if (isNew || !siteHaveParticipants || admin != '')
+	//if (isNew || !siteHaveParticipants || admin != '')
+	if (isNew || !siteHaveParticipants)
 	{
 		document.getElementById('participants').style.display = 'none';
 	}
@@ -1031,18 +1033,26 @@ function hideCompleteParticipant(nomParticipant)
 function createLigneParticipantEmission(participantData)
 {
 	var col1 = document.createElement('td');
-	col1.style.width = '40px';
+	if (admin == '')
+		col1.style.width = '40px';
+	else
+		col1.style.width = '20px';
+	
 	col1.style.textAlign = 'left';
 	
-	var radio = document.createElement('input');
-	radio.type = 'radio';
-	radio.style.color = 'yellow';
-	radio.checked = (participantData.est_chef == 1);
-	radio.onclick = function () {
-		getDatas('dbUpdateChefEmission', '', 'id=' + currentItem.id + '&nom=' + encode(participantData.nom_utilisateur));
-		refreshParticipants();
-	}
-	col1.appendChild(radio);
+	if (admin == '')
+	{
+		
+		var radio = document.createElement('input');
+		radio.type = 'radio';
+		radio.style.color = 'yellow';
+		radio.checked = (participantData.est_chef == 1);
+		radio.onclick = function () {
+			getDatas('dbUpdateChefEmission', '', 'id=' + currentItem.id + '&nom=' + encode(participantData.nom_utilisateur));
+			refreshParticipants();
+		}
+		col1.appendChild(radio);
+	}	
 	
 	var col2 = document.createElement('td');
 	col2.innerHTML = participantData.nom_utilisateur;
@@ -1075,64 +1085,67 @@ function createLigneParticipantEmission(participantData)
 	}
 	col3.appendChild(linkDescendre);
 
-	var col4 = document.createElement('td');
-	col4.style.width = '190px';
-	col4.style.textAlign = 'right';
-	
-	var deleteParticipant = document.createElement('input');
-	deleteParticipant.type = 'button';
-	deleteParticipant.className = 'button';
-	deleteParticipant.value = 'Supprimer';
-	deleteParticipant.onclick = function() {
-		if (confirm('Etes-vous certain de vouloir supprimer ce participant ?'))
-		{
-			getDatas('dbDeleteParticipant', '', 'id=' + currentItem.id + '&nom=' + encode(participantData.nom_utilisateur));
-			refreshParticipants();
-		}
-	}
-	col4.appendChild(deleteParticipant);
-	
-	var completeParticipant = document.createElement('input');
-	completeParticipant.type = 'button';
-	completeParticipant.className = 'button';
-	
-	if (participantData.existe == 0)
+	if (admin == '')
 	{
-		completeParticipant.value = 'Compléter';
-		completeParticipant.style.color = 'green';
-		completeParticipant.style.fontWeight = 'bold';
-		completeParticipant.onclick = function() {
-			showCompleteParticipant(participantData.nom_utilisateur);
-		}
-	}
-	else
-	{
-		if (participantData.est_utilisateur == 1)
-		{
-			completeParticipant.value = 'Modifier';
-			completeParticipant.style.color = 'red';
-			completeParticipant.onclick = function() {
-				showModifieParticipant(participantData.nom_utilisateur);
+		var col4 = document.createElement('td');
+		col4.style.width = '190px';
+		col4.style.textAlign = 'right';
+		
+		var deleteParticipant = document.createElement('input');
+		deleteParticipant.type = 'button';
+		deleteParticipant.className = 'button';
+		deleteParticipant.value = 'Supprimer';
+		deleteParticipant.onclick = function() {
+			if (confirm('Etes-vous certain de vouloir supprimer ce participant ?'))
+			{
+				getDatas('dbDeleteParticipant', '', 'id=' + currentItem.id + '&nom=' + encode(participantData.nom_utilisateur));
+				refreshParticipants();
 			}
 		}
-	}
-
-	col4.appendChild(completeParticipant);
-	
-	if (participantData.est_chef_complet == 1)
-	{
-		var envoyerInfosChef = document.createElement('input');
-		envoyerInfosChef.type = 'button';	
-		envoyerInfosChef.className = 'button';	
-		envoyerInfosChef.value = 'Envoyer les infos CHEF';
-		envoyerInfosChef.onclick = function() {
-			showWait();
-			getDatas('sendMailAjax', '', 'nom=' + encode(participantData.nom_utilisateur));
-			hideWait();
-		}
+		col4.appendChild(deleteParticipant);
 		
-		if (participantData.est_chef == 1)
-			col4.appendChild(envoyerInfosChef);
+		var completeParticipant = document.createElement('input');
+		completeParticipant.type = 'button';
+		completeParticipant.className = 'button';
+		
+		if (participantData.existe == 0)
+		{
+			completeParticipant.value = 'Compléter';
+			completeParticipant.style.color = 'green';
+			completeParticipant.style.fontWeight = 'bold';
+			completeParticipant.onclick = function() {
+				showCompleteParticipant(participantData.nom_utilisateur);
+			}
+		}
+		else
+		{
+			if (participantData.est_utilisateur == 1)
+			{
+				completeParticipant.value = 'Modifier';
+				completeParticipant.style.color = 'red';
+				completeParticipant.onclick = function() {
+					showModifieParticipant(participantData.nom_utilisateur);
+				}
+			}
+		}
+
+		col4.appendChild(completeParticipant);
+		
+		if (participantData.est_chef_complet == 1)
+		{
+			var envoyerInfosChef = document.createElement('input');
+			envoyerInfosChef.type = 'button';	
+			envoyerInfosChef.className = 'button';	
+			envoyerInfosChef.value = 'Envoyer les infos CHEF';
+			envoyerInfosChef.onclick = function() {
+				showWait();
+				getDatas('sendMailAjax', '', 'nom=' + encode(participantData.nom_utilisateur));
+				hideWait();
+			}
+			
+			if (participantData.est_chef == 1)
+				col4.appendChild(envoyerInfosChef);
+		}
 	}
 	
 	var participant = document.createElement('tr');
@@ -1165,7 +1178,8 @@ function createLigneParticipantEmission(participantData)
 	participant.appendChild(col3);
 	participant.appendChild(col1);
 	participant.appendChild(col2);
-	participant.appendChild(col4);
+	if (admin == '')
+		participant.appendChild(col4);
 		
 	if (alternate == 1)
 		alternate = 2;
@@ -2246,13 +2260,15 @@ function validateAdresseYoutube(control)
 
 function refreshMorceaux()
 {
-	if (isNew || admin != '')		
+	//if (isNew || admin != '')		
+	if (isNew)		
 	{
 		document.getElementById('morceaux').style.display = 'none';
 	}
 	else
 	{
 		document.getElementById('morceaux').style.display = 'block';
+		document.getElementById('haveMorceaux').style.display = 'block';
 		document.getElementById('noMorceaux').style.display = 'none';
 		document.getElementById('listeMorceaux').style.display = 'none';
 		
@@ -2260,6 +2276,7 @@ function refreshMorceaux()
 		
 		if (participantsEmission.length == 0)
 		{
+			document.getElementById('haveMorceaux').style.display = 'none';
 			document.getElementById('noMorceaux').style.display = 'block';
 			document.getElementById('morceaux').className = 'etat42';
 		}
