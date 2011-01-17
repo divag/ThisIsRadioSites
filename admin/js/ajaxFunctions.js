@@ -970,6 +970,10 @@ function refreshParticipants()
 				document.getElementById('listeParticipants').appendChild(createLigneParticipantEmission(participantsEmission[i]));			
 				listeParticipantsEmissionDatas[participantsEmission[i].nom_utilisateur] = participantsEmission[i];
 			}
+			
+			if (participantsEmission.length == 1 && admin != '')
+				document.getElementById('participants').style.display = 'none';
+
 		}
 	}
 	
