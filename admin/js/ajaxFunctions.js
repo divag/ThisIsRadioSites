@@ -176,10 +176,14 @@ function display(page)
 		page = 'playlists';
 	
 	currentPage = page;
-	
+		
 	document.getElementById('playlists').style.display = 'none';
 	document.getElementById('playlist').style.display = 'none';
+	document.getElementById('news').style.display = 'none';
+	document.getElementById('newsletter').style.display = 'none';
 	document.getElementById('users').style.display = 'none';
+	document.getElementById('artistesLabels').style.display = 'none';
+	document.getElementById('bonus').style.display = 'none';
 	document.getElementById('contenuPageSite').style.display = 'none';
 	document.getElementById('home').style.display = 'none';
 	document.getElementById('editeurContenu').style.display = 'none';
@@ -190,7 +194,11 @@ function display(page)
 	{
 		document.getElementById('buttonMenuhome').style.color = 'black';
 		document.getElementById('buttonMenuplaylists').style.color = 'black';
+		document.getElementById('buttonMenunews').style.color = 'black';
+		document.getElementById('buttonMenunewsletter').style.color = 'black';
 		document.getElementById('buttonMenuusers').style.color = 'black';
+		document.getElementById('buttonMenuartistesLabels').style.color = 'black';
+		document.getElementById('buttonMenubonus').style.color = 'black';
 		document.getElementById('buttonMenucontenuPageSite').style.color = 'black';
 		
 		document.getElementById('texteChef').style.display = 'none';
@@ -199,8 +207,20 @@ function display(page)
 		if (!siteHaveParticipants)
 			document.getElementById('buttonMenuusers').style.display = 'none';
 			
+		if (!siteHaveBonus)
+			document.getElementById('buttonMenubonus').style.display = 'none';
+			
+		if (!siteHaveNews)
+			document.getElementById('buttonMenunews').style.display = 'none';
+			
+		if (!siteHaveNewsletter)
+			document.getElementById('buttonMenunewsletter').style.display = 'none';
+			
 		if (!siteHaveContenuPages)
 			document.getElementById('buttonMenucontenuPageSite').style.display = 'none';
+			
+		if (!siteHaveLabel)
+			document.getElementById('buttonMenuartistesLabels').value = document.getElementById('buttonMenuartistesLabels').value.replace(' / Labels', '');
 	}
 	else
 	{
@@ -208,6 +228,10 @@ function display(page)
 		document.getElementById('buttonMenuplaylists').style.display = 'none';
 		document.getElementById('buttonMenuusers').style.display = 'none';
 		document.getElementById('buttonMenucontenuPageSite').style.display = 'none';
+		document.getElementById('buttonMenubonus').style.display = 'none';
+		document.getElementById('buttonMenunews').style.display = 'none';
+		document.getElementById('buttonMenunewsletter').style.display = 'none';
+		document.getElementById('buttonMenuartistesLabels').style.display = 'none';
 		
 		document.getElementById('ajoutEmission').style.display = 'none';
 		document.getElementById('txtEnvoiMail').value = '';
@@ -323,10 +347,19 @@ function display(page)
 	}	
 	
 	if (page == "contenuPageSite")
-	{
 		refreshContenuPageSite();		
-		//refreshNewsFormZone();
-	}
+	
+	if (page == "news")
+		refreshNews();		
+	
+	if (page == "newsletter")
+		refreshNewsletter();		
+	
+	if (page == "bonus")
+		refreshBonus();		
+	
+	if (page == "artistesLabels")
+		refreshArtistesLabel();		
 	
 	if (page == 'users')
 	{
@@ -412,6 +445,243 @@ function refreshUtilisateurs()
 	}
 }
 
+function refreshNews()
+{
+	var boutonAddNews = document.getElementById('boutonAddNews');				
+	boutonAddNews.onclick = function () {
+		
+		getDatas('dbInsertAndGetNews', 'newNews', "id_site=" + id_site + "&titre=&id_utilisateur=" + id_utilisateur);
+
+		var postAction = function() {
+			//Retour à la page de l'émission :
+			getDatas('dbUpdateTitreNews', '', 'id=' + newNews.id + '&titre=' + encode(document.getElementById('txtTitreNewsContenu' + newNews.id).value));
+			videAdditionnalContenu();
+			display('news');
+		}
+		var postActionCancel = function() {
+			//Retour à la page de l'émission :
+			getDatas('dbDeleteNews', '', 'id=' + newNews.id);
+			videAdditionnalContenu();
+			display('news');
+			window.location.href = "#top";
+		}
+		
+		var txtTitreNewsContenu = document.createElement('input');
+		txtTitreNewsContenu.id = 'txtTitreNewsContenu' + newNews.id;
+		txtTitreNewsContenu.type = 'text';
+		txtTitreNewsContenu.style.width = '100%';
+		txtTitreNewsContenu.value = newNews.titre;
+		var brTitreNewsContenu = document.createElement('br');
+		var spanTitreNewsContenuError = document.createElement('span');
+		spanTitreNewsContenuError.id = 'txtTitreNewsContenu' + newNews.id + 'Error';
+		spanTitreNewsContenuError.style.color = 'red';
+		
+		txtTitreNewsContenu.onchange = function () {
+			document.getElementById('boutonValiderContenu').disabled = (!Verif_NonVide(this))
+		}
+		document.getElementById('contenuAdditionnal').appendChild(txtTitreNewsContenu);
+		document.getElementById('contenuAdditionnal').appendChild(brTitreNewsContenu);
+		document.getElementById('contenuAdditionnal').appendChild(spanTitreNewsContenuError);
+		displayFormEditContenu(newNews, postAction, postActionCancel, true);
+		document.getElementById('boutonValiderContenu').disabled = (!Verif_NonVide(document.getElementById('txtTitreNewsContenu' + newNews.id)));
+	}
+		
+	while (document.getElementById('listeNews').hasChildNodes())
+		document.getElementById('listeNews').removeChild(document.getElementById('listeNews').firstChild);
+
+	//Récupération et affichage de la liste des contenus existants :
+	getDatas('dbGetListeNews', 'listeNews', "id_site=" + id_site);
+	alternate = 1;
+				
+	for(var i=0; i<listeNews.length; i++)
+	{
+		document.getElementById('listeNews').appendChild(createLigneNews(listeNews[i]));			
+	}
+}
+
+function videAdditionnalContenu()
+{
+	while (document.getElementById('contenuAdditionnal').hasChildNodes())
+		document.getElementById('contenuAdditionnal').removeChild(document.getElementById('contenuAdditionnal').firstChild);
+}
+
+function createLigneNews(newsData)
+{
+	var tr = document.createElement('tr');
+	
+	var td1 = document.createElement('td');
+	td1.className = 'padded';
+	if (newsData.date == '0000-00-00 00:00:00')
+	{
+		tr.className = 'etat11';
+		td1.innerHTML = "<i>Non publiée</i><br />";
+		
+		if (newsData.titre != '' && (newsData.contenu_fr != '' || newsData.contenu_en != ''))
+		{
+			tr.className = 'etat22';
+			
+			var boutonPublier = document.createElement('input');
+			boutonPublier.type = 'button';
+			boutonPublier.className = 'button';
+			boutonPublier.value = 'Publier';
+			boutonPublier.onclick = function () {			
+				if (confirm('Etes-vous certain de vouloir publier cette news ?'))
+				{
+					getDatas('dbPublishNews', '', 'id=' + newsData.id);
+					refreshNews();
+				}
+			}
+			td1.appendChild(boutonPublier);
+		}
+	}
+	else
+	{
+		tr.className = 'etat32';
+		td1.innerHTML = newsData.date;
+	}
+	
+	var td2 = document.createElement('td');
+	td2.className = 'padded';
+	if (newsData.titre == '')
+		td2.innerHTML = "<font color='red'><b>Pas de titre !</b></font>";
+	else
+		td2.innerHTML = "<b><u>" + newsData.titre + "</u></b>";
+	var br = document.createElement('br');
+	td2.appendChild(br);
+	var br2 = document.createElement('br');
+	td2.appendChild(br2);
+	var previewNews = getPreviewContenu(newsData);
+	td2.appendChild(previewNews);
+	var br3 = document.createElement('br');
+	td2.appendChild(br3);
+	
+	var td4 = document.createElement('td');
+	td4.className = 'actionEmission';
+	
+	var td5 = document.createElement('td');	
+	td5.className = 'actionEmission';
+
+	var boutonModifier = document.createElement('input');
+	boutonModifier.type = "button";
+	boutonModifier.className = "button";
+	boutonModifier.value = "Modifier";	
+	boutonModifier.onclick = function () {
+		var postAction = function() {
+			getDatas('dbUpdateTitreNews', '', 'id=' + newsData.id + '&titre=' + encode(document.getElementById('txtTitreNewsContenu' + newsData.id).value));
+			videAdditionnalContenu();
+			display('news');
+		}
+		var postActionCancel = function() {
+			//Retour à la page de l'émission :
+			videAdditionnalContenu();
+			display('news');
+			window.location.href = "#top";
+		}
+		
+		var txtTitreNewsContenu = document.createElement('input');
+		txtTitreNewsContenu.id = 'txtTitreNewsContenu' + newsData.id;
+		txtTitreNewsContenu.type = 'text';
+		txtTitreNewsContenu.style.width = '100%';
+		txtTitreNewsContenu.value = newsData.titre;
+		var brTitreNewsContenu = document.createElement('br');
+		var spanTitreNewsContenuError = document.createElement('span');
+		spanTitreNewsContenuError.id = 'txtTitreNewsContenu' + newsData.id + 'Error';
+		spanTitreNewsContenuError.style.color = 'red';
+		
+		txtTitreNewsContenu.onchange = function () {
+			document.getElementById('boutonValiderContenu').disabled = (!Verif_NonVide(this))
+		}
+
+		document.getElementById('contenuAdditionnal').appendChild(txtTitreNewsContenu);
+		document.getElementById('contenuAdditionnal').appendChild(brTitreNewsContenu);
+		document.getElementById('contenuAdditionnal').appendChild(spanTitreNewsContenuError);
+		displayFormEditContenu(newsData, postAction, postActionCancel, true);
+		document.getElementById('boutonValiderContenu').disabled = (!Verif_NonVide(document.getElementById('txtTitreNewsContenu' + newsData.id)));
+	}
+	
+	td4.appendChild(boutonModifier);
+
+	var boutonSupprimer = document.createElement('input');
+	boutonSupprimer.value = "Supprimer";
+	boutonSupprimer.type = "button";
+	boutonSupprimer.className = "button";
+	boutonSupprimer.style.color = "red";
+	boutonSupprimer.onclick = function () {
+		if (confirm('Etes-vous certain de vouloir supprimer ce contenu ?'))
+		{
+			getDatas('dbDeleteNews', '', 'id=' + newsData.id);
+			refreshNews();
+		}
+	}
+	td5.appendChild(boutonSupprimer);
+		
+	tr.appendChild(td1);
+	tr.appendChild(td2);
+	//tr.appendChild(td3);	
+	tr.appendChild(td4);		
+	tr.appendChild(td5);
+	
+	return tr;
+}
+
+function refreshNewsletter()
+{
+	refreshMailNewsletter();
+	
+	
+}
+
+function createLigneNewsletter(newsletterData)
+{
+
+}
+
+function refreshMailNewsletter()
+{
+
+}
+
+function createLigneMailNewsletter(newsletterData)
+{
+	
+}
+
+function refreshBonus()
+{
+
+}
+
+function createLigneBonus(bonusData)
+{
+
+}
+
+function refreshArtistesLabels()
+{
+	//Gestion des artistes :
+	
+	
+	//Gestion des labels :
+	if (!siteHaveLabel)
+	{
+		document.getElementById('labels').style.display = 'none';
+	}
+	else
+	{
+	
+	}
+}
+
+function createLigneArtiste(artisteData)
+{
+
+}
+
+function createLigneLabel(labelData)
+{
+
+}
+
 function refreshGoodiesEmission()
 {
 	if (isNew || !siteHaveGoodies || admin != '')
@@ -470,20 +740,26 @@ function getPreviewContenu(contenuData)
 			retour.className = 'padded';
 			
 			var spanTexteFrancais = document.createElement('span');
-			spanTexteFrancais.innerHTML = "<u>Texte en français :</u> <br />"
+			spanTexteFrancais.innerHTML = "<u>Texte en français :</u> <br /><br />"
 			
 			var divFrancais = document.createElement('div');
 			divFrancais.style.width = '100%';
 			divFrancais.className = 'padded';
-			divFrancais.innerHTML = contenuData.contenu_fr;
+			if (contenuData.contenu_fr == '')
+				divFrancais.innerHTML = "<font color='red'><i>Pas de texte</i></font>";
+			else
+				divFrancais.innerHTML = contenuData.contenu_fr;
 
 			var spanTexteAnglais = document.createElement('span');
-			spanTexteAnglais.innerHTML = "<u>Texte en anglais :</u> <br />"
+			spanTexteAnglais.innerHTML = "<u>Texte en anglais :</u> <br /><br />"
 			
 			var divAnglais = document.createElement('div');
 			divAnglais.style.width = '100%';
 			divAnglais.className = 'padded';
-			divAnglais.innerHTML = contenuData.contenu_en;
+			if (contenuData.contenu_en == '')
+				divAnglais.innerHTML = "<font color='red'><i>Pas de texte</i></font>";
+			else
+				divAnglais.innerHTML = contenuData.contenu_en;
 
 			retour.appendChild(spanTexteFrancais);
 			retour.appendChild(divFrancais);
@@ -872,20 +1148,36 @@ function refreshTypeContenu(id_contenu, id_type_contenu, bouton_valider, forced_
 			document.getElementById('formContenuContenuTxtEn').value = '';
 		};
 	}
+	//Mp3 :
 	if (typeContenu == 4)
 	{
 		bouton_valider.style.display = 'block';
 		return function () {return true;};
 	}
+	//Flash :
 	if (typeContenu == 5)
 	{
 		bouton_valider.style.display = 'block';
 		return function () {return true;};
 	}
+	//Lien youtube :
 	if (typeContenu == 6)
 	{
+		document.getElementById('formContenuLienVideo').value = document.getElementById('formContenuUrl').value;
+		document.getElementById('formContenuLienVideo').onkeyup = function () {
+			return validateAdresseYoutube(document.getElementById('formContenuLienVideo'), bouton_valider);
+		}
+		
 		bouton_valider.style.display = 'block';
-		return function () {return true;};
+		
+		return function () {
+			document.getElementById('formContenuUrl').value = document.getElementById('formContenuLienVideo').value.replace('http://www.youtube.com/watch?v=', 'http://www.youtube.com/v/');
+			//les contenu textes ne sont pas utilisés pour ce type :
+			document.getElementById('formContenuContenuFr').value = '';
+			document.getElementById('formContenuContenuEn').value = '';
+			document.getElementById('formContenuContenuTxtFr').value = '';
+			document.getElementById('formContenuContenuTxtEn').value = '';
+		};
 	}
 }
 
@@ -2525,16 +2817,19 @@ function validateExtension(control, extension, extension2)
 	}
 }
 
-function validateAdresseYoutube(control)
+function validateAdresseYoutube(control, bouton)
 {
+	if (bouton == undefined)
+		bouton = document.getElementById(control.id + 'Button');
+		
 	document.getElementById(control.id + 'Error').innerHTML = '';
 	if (control.value != '' && control.value.indexOf('http://www.youtube.com/watch?v=') != 0)
 	{
-		document.getElementById(control.id + 'Button').disabled = true; 
+		bouton.disabled = true; 
 		document.getElementById(control.id + 'Error').innerHTML = 'L\'adresse YouTube est incorrecte, il faut qu\'elle commence par "http://www.youtube.com/watch?v="';
 	}	
 	else
-		document.getElementById(control.id + 'Button').disabled = false; 
+		bouton.disabled = false; 
 }
 
 function refreshMorceaux()
@@ -2800,8 +3095,17 @@ function Verif_NonVide(control)
 			return false;
 		}
 		
-		erreur.innerHTML = "Une émission doit avoir un titre !";
-		return false;
+		if (control.id.indexOf('txtTitreEmission') == 0)
+		{
+			erreur.innerHTML = "Une émission doit avoir un titre !";
+			return false;
+		}
+		
+		if (control.id.indexOf('txtTitre') == 0)
+		{
+			erreur.innerHTML = "Vous devez obligatoirement saisir un titre !";
+			return false;
+		}		
 	}
 	else
 		return true;

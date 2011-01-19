@@ -399,7 +399,20 @@ function dbGetListeNews($id_site){
 
     include('var.php');
 
-    $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY date DESC;";
+    $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY NEWS.date ASC, NEWS.id DESC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+//Récupération de la liste des news publiées d'un site :
+function dbGetListeNewsActives($id_site){
+
+    include('var.php');
+
+    $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.date <> '0000-00-00 00:00:00' NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY date DESC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -408,7 +421,7 @@ function dbGetListeNews($id_site){
 }
 
 //Enregistrement d'une news pour un site :
-function dbInsertNews($id_site, $titre, $id_utilisateur, $date, $id_type_contenu, $url, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en){
+function dbInsertNews($id_site, $titre, $id_utilisateur, $id_type_contenu, $url, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en){
 
     include('var.php');
 
@@ -416,7 +429,48 @@ function dbInsertNews($id_site, $titre, $id_utilisateur, $date, $id_type_contenu
     $id_contenu = dbInsertContenu($id_type_contenu, $url, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en);
 
 	//Enregistrement de la news :
-    $query = "INSERT INTO NEWS (id_site, titre, id_contenu, id_utilisateur, zone) VALUES (".$id_site.", '".urldecode($titre)."', ".$id_contenu.", ".$id_utilisateur.", '".date("Y-m-d H:i:s")."');";
+    $query = "INSERT INTO NEWS (id_site, titre, id_contenu, id_utilisateur, date) VALUES (".$id_site.", '".urldecode($titre)."', ".$id_contenu.", ".$id_utilisateur.", '0000-00-00 00:00:00');";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+function dbInsertAndGetNews($id_site, $titre, $id_utilisateur)
+{
+    include('var.php');
+
+	//Enregistrement du contenu : 
+    $id_contenu = dbInsertContenu(1, '', '', '', '', '');
+
+	//Enregistrement de la newsletter :
+    $query = "INSERT INTO NEWS (id_site, titre, id_contenu, id_utilisateur, date) VALUES (".$id_site.", '".urldecode($titre)."', ".$id_contenu.", ".$id_utilisateur.", '0000-00-00 00:00:00');";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+	$new_id = mysql_insert_id();
+    mysql_close($link);
+
+	return dbGetNews($new_id);
+}
+
+function dbPublishNews($id)
+{
+    include('var.php');
+
+    $query = "UPDATE NEWS set date = '".date("Y-m-d H:i:s")."' WHERE id = ".$id.";";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+//Enregistrement d'un contenu d'un page pour une émission :
+function dbUpdateTitreNews($id, $titre){
+
+    include('var.php');
+
+    $query = "UPDATE NEWS set titre = '".urldecode($titre)."' WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -810,7 +864,7 @@ function dbGetParametresSite($id_site) {
 
     include('var.php');
 	
-	$query = "SELECT id_site, mail_admin, have_titre, have_texte, have_participants, id_default_participant, have_image_jpg, have_image_jpg_toprint, have_image_gif, have_teaser_mp3, have_teaser_video, have_goodies, have_zip, have_contenu_pages, have_statut_announced, template_reference_emission, template_nommage_fichiers_emission, template_nommage_morceaux_emission FROM PARAMETRES_SITE WHERE id_site = ".$id_site.";";
+	$query = "SELECT id_site, mail_admin, have_titre, have_texte, have_participants, id_default_participant, have_image_jpg, have_image_jpg_toprint, have_image_gif, have_teaser_mp3, have_teaser_video, have_goodies, have_bonus, have_news, have_newsletter, have_zip, have_contenu_pages, have_statut_announced, template_reference_emission, template_nommage_fichiers_emission, template_nommage_morceaux_emission FROM PARAMETRES_SITE WHERE id_site = ".$id_site.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -822,10 +876,10 @@ function dbGetParametresSite($id_site) {
 	    return 0;
 }
 
-function dbUpdateParametresSite($id_site, $mail_admin, $have_titre, $have_texte, $have_participants, $id_default_participant, $have_image_jpg, $have_image_jpg_toprint, $have_image_gif, $have_teaser_mp3, $have_teaser_video, $have_goodies, $have_zip, $have_contenu_pages, $have_statut_announced, $template_reference_emission, $template_nommage_fichiers_emission, $template_nommage_morceaux_emission) {
+function dbUpdateParametresSite($id_site, $mail_admin, $have_titre, $have_texte, $have_participants, $id_default_participant, $have_image_jpg, $have_image_jpg_toprint, $have_image_gif, $have_teaser_mp3, $have_teaser_video, $have_goodies, $have_bonus, $have_news, $have_newsletter, $have_zip, $have_contenu_pages, $have_statut_announced, $template_reference_emission, $template_nommage_fichiers_emission, $template_nommage_morceaux_emission) {
 
     include('var.php');
-	$query = "INSERT INTO PARAMETRES_SITE (id_site, mail_admin, have_titre, have_texte, have_participants, id_default_participant, have_image_jpg, have_image_jpg_toprint, have_image_gif, have_teaser_mp3, have_teaser_video, have_goodies, have_zip, have_contenu_pages, have_statut_announced, template_reference_emission, template_nommage_fichiers_emission, template_nommage_morceaux_emission) VALUES (".$id_site.", '".urldecode($mail_admin)."', ".$have_titre.", ".$have_texte.", ".$have_participants.", ".$id_default_participant.", ".$have_image_jpg.", ".$have_image_jpg_toprint.", ".$have_image_gif.", ".$have_teaser_mp3.", ".$have_teaser_video.", ".$have_goodies.", ".$have_zip.", ".$have_contenu_pages.", ".$have_statut_announced.", '".urldecode($template_reference_emission)."' , '".urldecode($template_nommage_fichiers_emission)."' , '".urldecode($template_nommage_morceaux_emission)."');";
+	$query = "INSERT INTO PARAMETRES_SITE (id_site, mail_admin, have_titre, have_texte, have_participants, id_default_participant, have_image_jpg, have_image_jpg_toprint, have_image_gif, have_teaser_mp3, have_teaser_video, have_goodies, have_bonus, have_news, have_newsletter, have_zip, have_contenu_pages, have_statut_announced, template_reference_emission, template_nommage_fichiers_emission, template_nommage_morceaux_emission) VALUES (".$id_site.", '".urldecode($mail_admin)."', ".$have_titre.", ".$have_texte.", ".$have_participants.", ".$id_default_participant.", ".$have_image_jpg.", ".$have_image_jpg_toprint.", ".$have_image_gif.", ".$have_teaser_mp3.", ".$have_teaser_video.", ".$have_goodies.", ".$have_bonus.", ".$have_news.", ".$have_newsletter.", ".$have_zip.", ".$have_contenu_pages.", ".$have_statut_announced.", '".urldecode($template_reference_emission)."' , '".urldecode($template_nommage_fichiers_emission)."' , '".urldecode($template_nommage_morceaux_emission)."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	

@@ -90,6 +90,9 @@ CREATE TABLE IF NOT EXISTS `PARAMETRES_SITE` (
   `have_teaser_mp3` tinyint(1) unsigned NOT NULL default 0,
   `have_teaser_video` tinyint(1) unsigned NOT NULL default 0,
   `have_goodies` tinyint(1) unsigned NOT NULL default 0,
+  `have_bonus` tinyint(1) unsigned NOT NULL default 0,
+  `have_news` tinyint(1) unsigned NOT NULL default 0,
+  `have_newsletter` tinyint(1) unsigned NOT NULL default 0,
   `have_zip` tinyint(1) unsigned NOT NULL default 0,
   `have_contenu_pages` tinyint(1) unsigned NOT NULL default 0,
   `have_statut_announced` tinyint(1) unsigned NOT NULL default 0,
@@ -99,11 +102,16 @@ CREATE TABLE IF NOT EXISTS `PARAMETRES_SITE` (
   PRIMARY KEY  (`id_site`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Table des parametres des sites' ;
 
-INSERT INTO `PARAMETRES_SITE` (`id_site`, `mail_admin`, `have_titre`, `have_texte`, `have_participants`, `id_default_participant`, `have_image_jpg`, `have_image_jpg_toprint`, `have_image_gif`, `have_teaser_mp3`, `have_teaser_video`, `have_goodies`, `have_zip`, `have_contenu_pages`, `have_statut_announced`, `template_reference_emission`, `template_nommage_fichiers_emission`, `template_nommage_morceaux_emission`) VALUES 
-(1, 'contact@thisisradioclash.org', 1, 0, 1, 0,  1, 1, 1, 1, 1, 0, 1, 1, 1, 'ThisIsRadioclash n°{numero} : {titre}', 'thisisradioclash-episode{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}'),
-(2, 'contact@thebrainradio.com', 	0, 0, 0, 2,  1, 0, 1, 0, 0, 1, 0, 1, 0, 'The Brain #{numero}', 'thebrain{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau} - {nom_label} - {annee}'),
-(3, 'contact@thebrainradio.com', 	0, 0, 1, 0,  1, 0, 1, 0, 0, 0, 0, 1, 0, 'AMIX #{numero} by {nom_participant}', 'thebrain-amix{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}'),
-(4, 'contact@prototop.be', 			0, 0, 0, 13, 1, 1, 0, 0, 0, 0, 1, 1, 0, 'Prototop #{numero}', 'prototop-{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}');
+--INSERT INTO `PARAMETRES_SITE` (`id_site`, `mail_admin`, `have_titre`, `have_texte`, `have_participants`, `id_default_participant`, `have_image_jpg`, `have_image_jpg_toprint`, `have_image_gif`, `have_teaser_mp3`, `have_teaser_video`, `have_goodies`, `have_bonus`, `have_news`, `have_newsletter`, `have_zip`, `have_contenu_pages`, `have_statut_announced`, `template_reference_emission`, `template_nommage_fichiers_emission`, `template_nommage_morceaux_emission`) VALUES 
+--(1, 'contact@thisisradioclash.org', 1, 0, 1, 0,  1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 'ThisIsRadioclash n°{numero} : {titre}', 'thisisradioclash-episode{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}'),
+--(2, 'contact@thebrainradio.com', 	0, 0, 0, 2,  1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 'The Brain #{numero}', 'thebrain{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau} - {nom_label} - {annee}'),
+--(3, 'contact@thebrainradio.com', 	0, 0, 1, 0,  1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 'AMIX #{numero} by {nom_participant}', 'thebrain-amix{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}'),
+--(4, 'contact@prototop.be', 			0, 0, 0, 13, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 'Prototop #{numero}', 'prototop-{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}');
+INSERT INTO `PARAMETRES_SITE` (`id_site`, `mail_admin`, `have_titre`, `have_texte`, `have_participants`, `id_default_participant`, `have_image_jpg`, `have_image_jpg_toprint`, `have_image_gif`, `have_teaser_mp3`, `have_teaser_video`, `have_goodies`, `have_bonus`, `have_news`, `have_newsletter`, `have_zip`, `have_contenu_pages`, `have_statut_announced`, `template_reference_emission`, `template_nommage_fichiers_emission`, `template_nommage_morceaux_emission`) VALUES 
+(1, 'cieplicki@gmail.com', 	1, 0, 1, 0,  1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, '#{numero} : {titre}', 'thisisradioclash-episode{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}'),
+(2, 'cieplicki@gmail.com', 	0, 0, 0, 2,  1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 'The Brain #{numero}', 'thebrain{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau} - {nom_label} - {annee}'),
+(3, 'cieplicki@gmail.com', 	0, 1, 1, 0,  1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 'AMIX #{numero} by {nom_participant}', 'AMIX_{numero}_by_{nom_participant}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}'),
+(4, 'cieplicki@gmail.com', 	0, 0, 0, 39, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 'Prototop #{numero}', 'Prototop_{numero}', '{time_min}:{time_sec} {nom_artiste} - {nom_morceau}');
 
 UPDATE `admin_thisisradioclash_dev`.`ETAT_EMISSION` SET `libelle` = 'Masquée' WHERE `ETAT_EMISSION`.`id` =1 LIMIT 1 ;
 UPDATE `admin_thisisradioclash_dev`.`ETAT_EMISSION` SET `libelle` = 'Annoncée' WHERE `ETAT_EMISSION`.`id` =2 LIMIT 1 ;
