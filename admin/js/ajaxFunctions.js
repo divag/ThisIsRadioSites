@@ -167,6 +167,7 @@ var alternate = 1;
 var currentItem = '';
 var isNew = false;
 var ordreParticipant = 1;
+var ordreGoodiesEmission = 1;
 var currentPage = 'home';
 
 function display(page)
@@ -302,18 +303,23 @@ function display(page)
 		if (!siteHaveTitre)
 			document.getElementById('trTitreEmission').style.display = 'none';
 				
+		refreshTextePresentation();
 		refreshImageFormZone();
 		refreshImageToPrintFormZone();
 		refreshImageGifFormZone();
 		refreshMp3FormZone();
 		refreshMp3TeaserFormZone();
 		refreshVideoTeaserFormZone();
+		refreshGoodiesEmission();
 		refreshParticipants();
 	}
 	else 
 	{
-		isNew = false;
-		currentItem = '';
+		if (page != 'editeurContenu')
+		{
+			isNew = false;
+			currentItem = '';
+		}
 	}	
 	
 	if (page == "contenuPageSite")
@@ -406,6 +412,230 @@ function refreshUtilisateurs()
 	}
 }
 
+function refreshGoodiesEmission()
+{
+	if (isNew || !siteHaveGoodies || admin != '')
+	{
+		document.getElementById('goodiesEmission').style.display = 'none';
+	}
+	else
+	{
+		document.getElementById('goodiesEmission').style.display = 'block';
+				
+		var boutonAddGoodiesEmission = document.getElementById('boutonAddGoodiesEmission');				
+		boutonAddGoodiesEmission.onclick = function () {
+		
+			getDatas('dbInsertAndGetGoodiesEmission', 'newGoodiesEmission', "id_emission=" + currentItem.id);
+					
+			var postAction = function() {
+				//Retour à la page de l'émission :
+				updateZipEmission();
+				display('playlist');
+			}
+			var postActionCancel = function() {
+				//Retour à la page de l'émission :
+				getDatas('dbDeleteGoodiesEmission', '', 'id_emission=' + currentItem.id + '&id_contenu=' + newGoodiesEmission.id_contenu);
+				display('playlist');
+				window.location.href = "#top";
+			}
+			displayFormEditContenu(newGoodiesEmission, postAction, postActionCancel, true);
+		}
+
+		while (document.getElementById('listeGoodiesEmission').hasChildNodes())
+			document.getElementById('listeGoodiesEmission').removeChild(document.getElementById('listeGoodiesEmission').firstChild);
+
+		//Récupération et affichage de la liste des contenus existants :
+		getDatas('dbGetListeGoodiesEmission', 'listeGoodiesEmission', "id_emission=" + currentItem.id);
+		alternate = 1;
+		ordreGoodiesEmission = 1;
+					
+		for(var j=0; j<listeGoodiesEmission.length; j++)
+		{
+			document.getElementById('listeGoodiesEmission').appendChild(createLigneGoodiesEmission(listeGoodiesEmission[j]));			
+		}
+	}
+}
+
+function getPreviewContenu(contenuData)
+{	
+	if (contenuData.id_contenu == undefined && contenuData.id != undefined)
+		contenuData.id_contenu = contenuData.id;
+		
+	if (contenuData.id_type_contenu != 0)
+	{
+		if (contenuData.id_type_contenu == 1)
+		{
+			var retour = document.createElement('span');
+			retour.style.width = '100%';
+			retour.className = 'padded';
+			
+			var spanTexteFrancais = document.createElement('span');
+			spanTexteFrancais.innerHTML = "<u>Texte en français :</u> <br />"
+			
+			var divFrancais = document.createElement('div');
+			divFrancais.style.width = '100%';
+			divFrancais.className = 'padded';
+			divFrancais.innerHTML = contenuData.contenu_fr;
+
+			var spanTexteAnglais = document.createElement('span');
+			spanTexteAnglais.innerHTML = "<u>Texte en anglais :</u> <br />"
+			
+			var divAnglais = document.createElement('div');
+			divAnglais.style.width = '100%';
+			divAnglais.className = 'padded';
+			divAnglais.innerHTML = contenuData.contenu_en;
+
+			retour.appendChild(spanTexteFrancais);
+			retour.appendChild(divFrancais);
+			retour.appendChild(spanTexteAnglais);
+			retour.appendChild(divAnglais);
+		}
+		if (contenuData.id_type_contenu == 2)
+		{
+			
+		}
+		if (contenuData.id_type_contenu == 3)
+		{
+			
+		}
+		if (contenuData.id_type_contenu == 4)
+		{
+			
+		}
+		if (contenuData.id_type_contenu == 5)
+		{
+			
+		}
+		if (contenuData.id_type_contenu == 6)
+		{
+			var retour = document.createElement('object');
+			retour.width = '265';
+			retour.height = '200';
+			var param1 = document.createElement('param');
+			param1.id = 'linkVideoGoodiesEmission_' + contenuData.id_contenu;
+			param1.value = contenuData.url;
+			param1.name = 'movie';
+			var param2 = document.createElement('param');
+			param2.name = 'allowFullScreen';
+			param2.value = 'true';
+			var param3 = document.createElement('param');
+			param3.name = 'allowscriptaccess';
+			param3.value = 'always';
+			var embed = document.createElement('embed');
+			embed.id = 'linkVideoGoodiesEmission_' + contenuData.id_contenu + 'src';
+			embed.src = contenuData.url;
+			embed.type = 'application/x-shockwave-flash';
+			embed.allowscriptaccess = 'always';
+			embed.allowfullscreen = 'true';
+			embed.width = '265';
+			embed.height = '200';
+
+			retour.appendChild(param1);
+			retour.appendChild(param2);
+			retour.appendChild(param3);
+			retour.appendChild(embed);
+		}
+	}
+	else
+	{
+		var retour = document.createElement('span');
+		retour.style.color = 'red';
+		retour.innerHTML = 'Pas de contenu !';
+	}
+	
+	return retour;
+}
+
+function createLigneGoodiesEmission(goodiesEmissionData)
+{
+	var tr = document.createElement('tr');
+	tr.className = 'etat32';
+	
+	goodiesEmissionData.ordre = ordreGoodiesEmission;
+	
+	var td1 = document.createElement('td');
+	td1.className = 'padded';
+	td1.innerHTML = goodiesEmissionData.ordre;
+
+	var td2 = document.createElement('td');
+	td2.style.width = '80px';
+
+	var linkMonterGoodies = document.createElement('input');
+	linkMonterGoodies.type = 'button';
+	linkMonterGoodies.className = 'button';
+	linkMonterGoodies.value = '+';
+	linkMonterGoodies.disabled = (goodiesEmissionData.ordre == 1);
+	linkMonterGoodies.onclick = function () {
+		getDatas('dbUpdateOrdreGoodiesEmission', 'result', 'id_emission=' + currentItem.id + '&ordre=' + goodiesEmissionData.ordre + '&newvalue=' + (parseInt(goodiesEmissionData.ordre)-1));
+		refreshGoodiesEmission();
+	}
+	td2.appendChild(linkMonterGoodies);
+	
+	var linkDescendreGoodies = document.createElement('input');
+	linkDescendreGoodies.type = 'button';
+	linkDescendreGoodies.className = 'button';
+	linkDescendreGoodies.value = '-';
+	linkDescendreGoodies.disabled = (goodiesEmissionData.ordre == listeGoodiesEmission.length);
+	linkDescendreGoodies.onclick = function () {
+		getDatas('dbUpdateOrdreGoodiesEmission', 'result', 'id_emission=' + currentItem.id + '&ordre=' + goodiesEmissionData.ordre + '&newvalue=' + (parseInt(goodiesEmissionData.ordre)+1));
+		refreshGoodiesEmission();
+	}
+	td2.appendChild(linkDescendreGoodies);
+	
+	var td3 = document.createElement('td');
+	td3.className = 'padded';
+	var previewGoodies = getPreviewContenu(goodiesEmissionData);
+	td3.appendChild(previewGoodies);
+
+	var td4 = document.createElement('td');
+	td4.className = 'actionEmission';
+	
+	var td5 = document.createElement('td');	
+	td5.className = 'actionEmission';
+
+	var boutonModifier = document.createElement('input');
+	boutonModifier.type = "button";
+	boutonModifier.className = "button";
+	boutonModifier.value = "Modifier";	
+	boutonModifier.onclick = function () {
+		var postAction = function() {
+			display('playlist');
+		}
+		var postActionCancel = function() {
+			//Retour à la page de l'émission :
+			display('playlist');
+			window.location.href = "#top";
+		}
+		displayFormEditContenu(goodiesEmissionData, postAction, postActionCancel, true);
+	}
+	
+	td4.appendChild(boutonModifier);
+	
+	var boutonSupprimer = document.createElement('input');
+	boutonSupprimer.value = "Supprimer";
+	boutonSupprimer.type = "button";
+	boutonSupprimer.className = "button";
+	boutonSupprimer.style.color = "red";
+	boutonSupprimer.onclick = function () {
+		if (confirm('Etes-vous certain de vouloir supprimer ce contenu ?'))
+		{
+			getDatas('dbDeleteGoodiesEmission', '', 'id_emission=' + goodiesEmissionData.id_emission + '&id_contenu=' + goodiesEmissionData.id_contenu + '&ordre=' + goodiesEmissionData.ordre);
+			refreshGoodiesEmission();
+		}
+	}
+	td5.appendChild(boutonSupprimer);
+		
+	tr.appendChild(td1);
+	tr.appendChild(td2);
+	tr.appendChild(td3);	
+	tr.appendChild(td4);		
+	tr.appendChild(td5);
+
+	ordreGoodiesEmission++;
+	
+	return tr;
+}
+
 function refreshContenuPageSite()
 {
 	document.getElementById('listeContenuPageSite').style.display = 'block';
@@ -477,6 +707,48 @@ function createLignePageSite(pageSite, haveContenu)
 	tr1.appendChild(td2);
 
 	return tr1;
+}
+
+function refreshTextePresentation()
+{
+	if (isNew || !siteHaveTexte || admin != '')
+	{
+		document.getElementById('textePresentationEmission').style.display = 'none';
+	}
+	else
+	{
+		document.getElementById('textePresentationEmission').style.display = 'block';
+
+		getDatas('dbGetContenu', 'contenuTextePresentation', 'id=' + currentItem.id_contenu_texte);
+		
+		if (contenuTextePresentation == 0)
+		{
+			alert('Texte de présentation manquant ! Il faut le dire à Divag !');
+		}
+		else
+		{
+			while (document.getElementById('previewPresentationEmission').hasChildNodes())
+				document.getElementById('previewPresentationEmission').removeChild(document.getElementById('previewPresentationEmission').firstChild);
+
+			document.getElementById('previewPresentationEmission').appendChild(getPreviewContenu(contenuTextePresentation));
+			
+			boutonModifierTextePresentation = document.getElementById('boutonTextePresentationEmission');			
+			boutonModifierTextePresentation.onclick = function () {
+				var postAction = function() {
+					//Retour à la page de l'émission :
+					updateZipEmission();
+					display('playlist');
+				}
+				var postActionCancel = function() {
+					//Retour à la page de l'émission :
+					display('playlist');
+					window.location.href = "#top";
+				}
+				displayFormEditContenu(contenuTextePresentation, postAction, postActionCancel, true);
+			}
+
+		}
+	}
 }
 
 function initialiseFormEditFormEditContenu(id_contenu, id_type_contenu, url, contenu_fr, contenu_en, contenu_txt_fr, contenu_txt_en)
@@ -621,6 +893,9 @@ function displayFormEditContenu(contenuData, postAction, postActionCancel, force
 {
 	window.location.href = "#top";
 	showWait();
+	
+	if (contenuData.id_contenu == undefined && contenuData.id != undefined)
+		contenuData.id_contenu = contenuData.id;
 	
 	var fieldsetContenu = document.getElementById('formContenuFieldset');
 	fieldsetContenu.className = 'etat42';
@@ -1812,7 +2087,7 @@ function refreshMp3FormZone()
 			document.getElementById('mp3Emission').className = 'etat32';
 			document.getElementById('yesMp3').style.display = 'block';
 			document.getElementById('linkMp3Emission').href = '../mp3/' + currentItem.nom_fichier + '.mp3';
-			document.getElementById('linkMp3Emission').innerHTML = 'This is radioclash n°' + currentItem.numero;
+			document.getElementById('linkMp3Emission').innerHTML = 'Emission n°' + currentItem.numero;
 			document.getElementById('timeMp3Emission').innerHTML = emissionHaveMp3;
 			var times = emissionHaveMp3.split(':');
 			currentItem.time_min = times[0];
@@ -1858,7 +2133,7 @@ function refreshMp3TeaserFormZone()
 			document.getElementById('mp3Teaser').className = 'etat32';
 			document.getElementById('yesMp3Teaser').style.display = 'block';
 			document.getElementById('linkMp3Teaser').href = '../mp3/' + currentItem.nom_fichier + '-teaser.mp3';
-			document.getElementById('linkMp3Teaser').innerHTML = 'Teaser de this is radioclash n°' + currentItem.numero;
+			document.getElementById('linkMp3Teaser').innerHTML = 'Teaser de l\'émission';
 			document.getElementById('fileMp3TeaserDeleteButton').disabled = false; 
 		}
 		else
