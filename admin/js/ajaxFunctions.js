@@ -751,7 +751,7 @@ function getPreviewContenu(contenuData)
 				divFrancais.innerHTML = contenuData.contenu_fr;
 
 			var spanTexteAnglais = document.createElement('span');
-			spanTexteAnglais.innerHTML = "<u>Texte en anglais :</u> <br /><br />"
+			spanTexteAnglais.innerHTML = "<br /><u>Texte en anglais :</u> <br /><br />"
 			
 			var divAnglais = document.createElement('div');
 			divAnglais.style.width = '100%';
