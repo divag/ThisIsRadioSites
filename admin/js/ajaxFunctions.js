@@ -370,7 +370,22 @@ function display(page)
 		//Vidage + Affichage de la liste des utilisateurs.
 		refreshUtilisateurs();		
 	}
-
+	
+	document.getElementById('buttonMenuhome').disabled = (page == 'editeurContenu');
+	document.getElementById('buttonMenuplaylists').disabled = (page == 'editeurContenu');
+	document.getElementById('buttonMenunews').disabled = (page == 'editeurContenu');
+	document.getElementById('buttonMenunewsletter').disabled = (page == 'editeurContenu');
+	document.getElementById('buttonMenuusers').disabled = (page == 'editeurContenu');
+	document.getElementById('buttonMenuartistesLabels').disabled = (page == 'editeurContenu');
+	document.getElementById('buttonMenubonus').disabled = (page == 'editeurContenu');
+	document.getElementById('buttonMenucontenuPageSite').disabled = (page == 'editeurContenu');
+	document.getElementById('buttonVisiterSite').disabled = (page == 'editeurContenu');
+	
+	if  (page == 'editeurContenu')
+		document.getElementById('lienVisiterSite').onclick = function () {return false};
+	else
+		document.getElementById('lienVisiterSite').onclick = function () {return true};
+	
 	hideWait();
 	window.location.href = "#top";
 }
