@@ -359,7 +359,7 @@ function display(page)
 		refreshBonus();		
 	
 	if (page == "artistesLabels")
-		refreshArtistesLabel();		
+		refreshArtistesLabels();		
 	
 	if (page == 'users')
 	{
@@ -675,7 +675,7 @@ function refreshArtistesLabels()
 {
 	//Gestion des artistes :
 	
-	
+
 	//Gestion des labels :
 	if (!siteHaveLabel)
 	{

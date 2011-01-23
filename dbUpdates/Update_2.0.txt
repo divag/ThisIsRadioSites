@@ -222,3 +222,20 @@ CREATE TABLE IF NOT EXISTS `BONUS` (
 
 ALTER TABLE `MORCEAU` ADD `nom_label` VARCHAR( 255 ) NOT NULL DEFAULT '',
 ADD `annee` VARCHAR( 255 ) NOT NULL DEFAULT '';
+
+-- Création de la table des artistes :
+DROP TABLE IF EXISTS `ARTISTE`;
+CREATE TABLE IF NOT EXISTS `ARTISTE` (
+  `nom` varchar(255) NOT NULL,
+  `url_site` varchar(255) NOT NULL,
+  PRIMARY KEY  (`nom`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Table des artistes' ;
+
+-- Création de la table des labels :
+DROP TABLE IF EXISTS `LABEL`;
+CREATE TABLE IF NOT EXISTS `LABEL` (
+  `nom` varchar(255) NOT NULL,
+  `url_site` varchar(255) NOT NULL,
+  PRIMARY KEY  (`nom`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Table des labels' ;
+

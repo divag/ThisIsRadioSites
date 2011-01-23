@@ -579,6 +579,94 @@ function dbDeleteBonus($id)
 }
 
 /*
+ARTISTES :
+==========
+*/
+
+//Récupération de la liste des artistes :
+function dbGetListeArtiste(){
+
+    include('var.php');
+
+    $query = "SELECT nom, url FROM ARTISTE ORDER BY nom ASC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+//Enregistrement d'un artiste :
+function dbInsertArtiste($nom, $url){
+
+    include('var.php');
+
+	//Enregistrement du mail :
+    $query = "INSERT INTO ARTISTE (nom, url) VALUES ('".urldecode($nom)."', '".urldecode($url)."');";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+//Mise à jour de l'url d'un artiste :
+function dbUpdateArtiste($nom, $url){
+
+    include('var.php');
+
+	//Update du mail :
+    $query = "UPDATE ARTISTE set url = '".urldecode($url)."' WHERE nom = '".urldecode($nom)."';";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+/*
+LABELS :
+========
+*/
+
+//Récupération de la liste des labels :
+function dbGetListeLabel(){
+
+    include('var.php');
+
+    $query = "SELECT nom, url FROM LABEL ORDER BY nom ASC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+    return $res;
+}
+
+//Enregistrement d'un label :
+function dbInsertLabel($nom, $url){
+
+    include('var.php');
+
+	//Enregistrement du mail :
+    $query = "INSERT INTO LABEL (nom, url) VALUES ('".urldecode($nom)."', '".urldecode($url)."');";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+//Mise à jour de l'url d'un label :
+function dbUpdateLabel($nom, $url){
+
+    include('var.php');
+
+	//Update du mail :
+    $query = "UPDATE LABEL set url = '".urldecode($url)."' WHERE nom = '".urldecode($nom)."';";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
+}
+
+/*
 MAILING_LIST :
 ==============
 */
@@ -601,12 +689,24 @@ function dbGetListeMailingListActive($id_site){
 
     include('var.php');
 
-    $query = "SELECT mail, id_site, est_annule FROM MAILING_LIST WHERE id_site = ".$id_site." AND est_annule = 0;";
+    $query = "SELECT mail, id_site, est_annule FROM MAILING_LIST WHERE id_site = ".$id_site." AND est_annule = 0 ORDER BY mail ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
     mysql_close($link);
     return $res;
+}
+
+//Récupération de la liste des inscriptions actives a la mailinglist d'un site :
+function dbCancelMailingList($id_site, $mail){
+
+    include('var.php');
+
+    $query = "UPDATE MAILING_LIST set est_annule = 1 WHERE id_site = ".$id_site." AND mail = '".urldecode($mail)."';";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+    mysql_close($link);
 }
 
 //Enregistrement d'une newsletter :
