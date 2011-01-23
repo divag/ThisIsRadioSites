@@ -284,10 +284,23 @@ function display(page)
 		document.getElementById('txtDateEmission').value = currentItem.date_sortie;
 		document.getElementById('txtDateEmission').disabled = (currentItem.etat == 3);
 		
+		//
+		// TODO : V3 : cf. jusqu'à //FIN TODO V3
+		// Car le lien du forum sera automatiquement alimenté.
+		//
+		
+		//La zone est toujours désactivée (ça serait même mieux que ça soit un lien
 		document.getElementById('txtUrlLienForumEmission').disabled = (isNew);
+		
+		//On change la condition en if (currentItem.etat == 3)
+		//Sinon on masque le lien.
 		if (!isNew)
 			document.getElementById('txtUrlLienForumEmission').value = decode(currentItem.url_lien_forum);
-			
+		
+		//
+		// FIN TODO V3
+		//
+		
 		document.getElementById('lblDateEmission').style.display = 'none';
 		document.getElementById('lblDateEmissionPublie').style.display = 'none';
 		document.getElementById('txtDateEmissionError').innerHTML = '';
@@ -303,6 +316,12 @@ function display(page)
 		else
 			document.getElementById('lblDateEmission').style.display = 'block';
 
+		/*
+		//
+		// TODO : V3 : On décommente la condition
+		// Car le lien du forum sera automatiquement alimenté.
+		//
+		
 		if (!siteHaveTitre && !siteHaveStatutAnnounced)
 		{
 			document.getElementById('formEnregistrerAnnuler').style.display = 'none';
@@ -310,9 +329,12 @@ function display(page)
 		}
 		else
 		{
+		*/
 			document.getElementById('formEnregistrerAnnuler').style.display = 'block';
 			document.getElementById('formEnregistrer').style.display = 'block';
+		/*
 		}
+		*/
 		
 		if (siteHaveZip && currentItem.etat == 3)
 			document.getElementById('boutonUpdateZipEmission').style.display = 'block';
@@ -321,7 +343,11 @@ function display(page)
 		{
 			document.getElementById('txtNumeroEmission').disabled = true;
 			document.getElementById('txtTitreEmission').disabled = true;
+			
+			// TODO : V3 : On supprime le masquage de "trLienForumEmission"
+			// Car le lien du forum sera automatiquement alimenté.
 			document.getElementById('trLienForumEmission').style.display = 'none';
+			
 			document.getElementById('trDateEmission').style.display = 'none';
 			document.getElementById('trBoutonsEmission').style.display = 'none';
 			document.getElementById('boutonAddParticipant').style.display = 'none';
