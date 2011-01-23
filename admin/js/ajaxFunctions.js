@@ -283,6 +283,11 @@ function display(page)
 		document.getElementById('txtTitreEmissionError').innerHTML = '';
 		document.getElementById('txtDateEmission').value = currentItem.date_sortie;
 		document.getElementById('txtDateEmission').disabled = (currentItem.etat == 3);
+		
+		document.getElementById('txtUrlLienForumEmission').disabled = (isNew);
+		if (!isNew)
+			document.getElementById('txtUrlLienForumEmission').value = decode(currentItem.url_lien_forum);
+			
 		document.getElementById('lblDateEmission').style.display = 'none';
 		document.getElementById('lblDateEmissionPublie').style.display = 'none';
 		document.getElementById('txtDateEmissionError').innerHTML = '';
@@ -316,11 +321,12 @@ function display(page)
 		{
 			document.getElementById('txtNumeroEmission').disabled = true;
 			document.getElementById('txtTitreEmission').disabled = true;
+			document.getElementById('trLienForumEmission').style.display = 'none';
 			document.getElementById('trDateEmission').style.display = 'none';
 			document.getElementById('trBoutonsEmission').style.display = 'none';
 			document.getElementById('boutonAddParticipant').style.display = 'none';
 		}
-
+		
 		if (!siteHaveStatutAnnounced)
 			document.getElementById('trDateEmission').style.display = 'none';
 
@@ -2771,6 +2777,7 @@ function formEnregistrer()
 	enreg['etat'] = currentItem.etat;
 	enreg['time_min'] = currentItem.time_min;
 	enreg['time_sec'] = currentItem.time_sec;
+	enreg['url_lien_forum'] = document.getElementById('txtUrlLienForumEmission').value;
 
 	//alert('numero=' + enreg.numero + '&titre=' + encode(enreg.titre) + '&date_sortie=' + enreg.date_sortie + '&etat=' + enreg.etat + '&time_min=' + enreg.time_min + '&time_sec=' + enreg.time_sec);
 	if (isNew)
@@ -2780,7 +2787,7 @@ function formEnregistrer()
 			addDefaultParticipantEmission(enreg['numero']);
 	}
 	else
-		getDatas('dbUpdateEmission', 'result', 'id=' + enreg.id + '&id_site=' + id_site + '&numero=' + enreg.numero + '&titre=' + encode(enreg.titre) + '&date_sortie=' + enreg.date_sortie + '&etat=' + enreg.etat + '&time_min=' + enreg.time_min + '&time_sec=' + enreg.time_sec);
+		getDatas('dbUpdateEmission', 'result', 'id=' + enreg.id + '&id_site=' + id_site + '&numero=' + enreg.numero + '&titre=' + encode(enreg.titre) + '&date_sortie=' + enreg.date_sortie + '&etat=' + enreg.etat + '&time_min=' + enreg.time_min + '&time_sec=' + enreg.time_sec + '&url_lien_forum=' + encode(enreg.url_lien_forum));
 
 	isNew = false;
 	alert('Enregistrement réussi !');
@@ -3063,6 +3070,21 @@ function ltrim(stringToTrim) {
 }
 function rtrim(stringToTrim) {
 	return stringToTrim.replace(/\s+$/,"");
+}
+function Verif_IsUrl(control)
+{
+		control.value = trim(control.value);
+		var valeur = control.value;
+		var erreur = document.getElementById(control.id + 'Error');
+		erreur.innerHTML = '';
+
+		if (valeur != '' && valeur.indexOf('http://') != 0)
+		{
+			erreur.innerHTML = "L'adresse n'est pas valide !";
+			return false;
+		}
+		else
+			return true;
 }
 
 function Verif_NonVide(control)

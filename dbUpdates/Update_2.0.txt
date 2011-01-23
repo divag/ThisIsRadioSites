@@ -17,6 +17,7 @@ ALTER TABLE `EMISSION` ADD `id_site` INT( 10 ) UNSIGNED NOT NULL AFTER `id`;
 UPDATE EMISSION SET id_site = 1;
 
 ALTER TABLE `EMISSION` ADD `id_contenu_texte` BIGINT( 20 ) UNSIGNED NOT NULL DEFAULT 0 AFTER `titre`;
+ALTER TABLE `EMISSION` ADD `url_lien_forum` VARCHAR( 255 ) NOT NULL DEFAULT '' AFTER `teaser_video`;
 
 -- changement de l'id de l'émission pour un participant :
 ALTER TABLE `PARTICIPANT` ADD `id_emission` BIGINT( 20 ) UNSIGNED NOT NULL FIRST;

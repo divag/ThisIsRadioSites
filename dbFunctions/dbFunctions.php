@@ -997,7 +997,7 @@ function dbGetLastEmission($id_site){
 
     include('var.php');
 
-	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND etat=3 ORDER BY date_sortie DESC LIMIT 0,1;";
+	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." AND etat=3 ORDER BY date_sortie DESC LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1011,7 +1011,7 @@ function dbListeEmissionsForFeed($id_site){
 
     include('var.php');
 
-	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site=".$id_site." AND etat=3 ORDER BY date_sortie DESC;";
+	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site=".$id_site." AND etat=3 ORDER BY date_sortie DESC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1103,7 +1103,7 @@ function dbGetListeEmissionsComingSoon($id_site){
 
     include('var.php');
 
-	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND etat = 2 ORDER BY numero ASC;";
+	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." AND etat = 2 ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1182,7 +1182,7 @@ function dbGetListeEmissions($id_site){
 
     include('var.php');
 
-	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND (etat = 2 OR etat = 3) ORDER BY numero ASC;";
+	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." AND (etat = 2 OR etat = 3) ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1201,7 +1201,7 @@ function dbGetEmission($p_id){
 
     include('var.php');
 
-	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id = ".$p_id.";";
+	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id = ".$p_id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1217,7 +1217,7 @@ function dbGetEmissionByNumero($p_id_site, $p_numero){
 
     include('var.php');
 
-	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$p_id_site." AND numero = ".$p_numero.";";
+	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$p_id_site." AND numero = ".$p_numero.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1234,7 +1234,7 @@ function dbGetNextEmission($id_site, $p_numero){
 
     include('var.php');
 
-	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND etat = 3 AND numero < ".$p_numero." ORDER BY numero DESC LIMIT 0,1;";
+	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." AND etat = 3 AND numero < ".$p_numero." ORDER BY numero DESC LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1244,7 +1244,7 @@ function dbGetNextEmission($id_site, $p_numero){
 	    return $row;
     else
 	{
-		$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND etat = 3 ORDER BY numero DESC LIMIT 0,1;";
+		$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." AND etat = 3 ORDER BY numero DESC LIMIT 0,1;";
 		$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 		$select_base=mysql_selectdb($db);
 		$res=mysql_db_query ($db, $query);	
@@ -1259,7 +1259,7 @@ function dbGetPrevEmission($id_site, $p_numero){
 
     include('var.php');
 
-	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION WHERE id_site = ".$id_site." AND etat = 3 AND numero < ".$p_numero." ORDER BY numero ASC LIMIT 0,1;";
+	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." AND etat = 3 AND numero < ".$p_numero." ORDER BY numero ASC LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1463,7 +1463,7 @@ function dbListeAllEmission($id_site){
 
     include('var.php');
 
-    $query = "SELECT EMISSION.id, EMISSION.id_site, numero, titre, id_contenu_texte, date_sortie, etat, libelle, time_min, time_sec, teaser_video FROM EMISSION, ETAT_EMISSION WHERE EMISSION.id_site = ".$id_site." AND EMISSION.etat = ETAT_EMISSION.id ORDER BY numero ASC;";
+    $query = "SELECT EMISSION.id, EMISSION.id_site, numero, titre, id_contenu_texte, date_sortie, etat, libelle, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION, ETAT_EMISSION WHERE EMISSION.id_site = ".$id_site." AND EMISSION.etat = ETAT_EMISSION.id ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1475,7 +1475,7 @@ function dbListeAllEmissionForChef($id_site, $admin){
 
     include('var.php');
 
-    $query = "SELECT DISTINCT EMISSION.id, EMISSION.id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION, PARTICIPANT WHERE EMISSION.id_site = ".$id_site." AND EMISSION.etat = 2 AND EMISSION.id = PARTICIPANT.id_emission AND PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($admin)."' ORDER BY numero ASC;";
+    $query = "SELECT DISTINCT EMISSION.id, EMISSION.id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION, PARTICIPANT WHERE EMISSION.id_site = ".$id_site." AND EMISSION.etat = 2 AND EMISSION.id = PARTICIPANT.id_emission AND PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($admin)."' ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1487,7 +1487,7 @@ function dbListeAllEmissionForChefSansAnnonce($id_site, $admin){
 
     include('var.php');
 
-    $query = "SELECT DISTINCT EMISSION.id, EMISSION.id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video FROM EMISSION, PARTICIPANT WHERE EMISSION.id_site = ".$id_site." AND EMISSION.etat = 1 AND EMISSION.id = PARTICIPANT.id_emission AND PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($admin)."' ORDER BY numero ASC;";
+    $query = "SELECT DISTINCT EMISSION.id, EMISSION.id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION, PARTICIPANT WHERE EMISSION.id_site = ".$id_site." AND EMISSION.etat = 1 AND EMISSION.id = PARTICIPANT.id_emission AND PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($admin)."' ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1618,11 +1618,11 @@ function dbUpdateTeaserVideoEmission($id, $teaser_video){
     mysql_close($link);
 }
 
-function dbUpdateEmission($id, $id_site, $numero, $titre, $date_sortie, $etat, $time_min, $time_sec){
+function dbUpdateEmission($id, $id_site, $numero, $titre, $date_sortie, $etat, $time_min, $time_sec, $url_lien_forum){
 
     include('var.php');
 
-    $query = "UPDATE EMISSION SET id_site = ".$id_site.", numero = ".$numero.", titre = '".urldecode($titre)."', date_sortie = '".$date_sortie."', etat = ".$etat.", time_min = ".$time_min.", time_sec = ".$time_sec." WHERE id = ".$id.";";
+    $query = "UPDATE EMISSION SET id_site = ".$id_site.", numero = ".$numero.", titre = '".urldecode($titre)."', date_sortie = '".$date_sortie."', etat = ".$etat.", time_min = ".$time_min.", time_sec = ".$time_sec.", url_lien_forum = '".urldecode($url_lien_forum)."' WHERE id = ".$id.";";
     //$query = "UPDATE EMISSION SET titre = '".$titre."', date_sortie = '".$date_sortie."', WHERE numero = ".$numero.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
