@@ -35,7 +35,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 	echo '      <link>'.$linkEmission.'</link>';
 	echo '      <description><![CDATA[';
 	echo '        <img src="'.$imageEmission.'" alt="cover" width="346" height="346" /><br />';
-	echo '        00:00 This is radioclash - Introduction Jingle<br />';
+	echo "00:00 This is radioclash - Introduction Jingle<br />\n";
 
 	
 		$playlist = dbGetPlaylist($idEmission);
@@ -50,20 +50,20 @@ while($emission=mysql_fetch_array($listeEmissions))
 				$nomUtilisateurEnCours = strtoupper($array['nom_utilisateur']);
 				
 				if ($utilisateurEnCours['url_site'] != "http://" && $utilisateurEnCours['url_site'] != "")
-					echo "<a href=\"".$utilisateurEnCours['url_site']."\"><b><u>".$nomUtilisateurEnCours."</u></b></a><br />";
+					echo "<a href=\"".$utilisateurEnCours['url_site']."\"><b><u>".$nomUtilisateurEnCours."</u></b></a><br />\n";
 				else
-					echo "<b><u>".$nomUtilisateurEnCours."</u></b><br />";
+					echo "<b><u>".$nomUtilisateurEnCours."</u></b><br />\n";
 			}
 			
-			echo "<span>".getNomMorceauEmission (toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], $array['nom_label'], $array['annee'])."</span><br />";
+			echo "<span>".getNomMorceauEmission (toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], $array['nom_label'], $array['annee'])."</span><br />\n";
 			$i++;
 		}
 
-		echo "<br />";
+		echo "<br />\n";
 		if ($chef != '')
 		{
 			echo utf8_encode("<p style=\"color:gray;\">Une émission présidée par ").$chef.".</p>";
-			echo "<br />";
+			echo "<br />\n";
 		}
 
 	echo '      ]]></description>';
