@@ -399,7 +399,11 @@ function dbGetListeNews($id_site){
 
     include('var.php');
 
-    $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY NEWS.date ASC, NEWS.id DESC;";
+    $query  = "(SELECT \"A\" AS ordreUnion, NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.date = '0000-00-00 00:00:00' AND NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site.") ";
+    $query .= "UNION ";
+    $query .= "(SELECT \"B\" AS ordreUnion, NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.date != '0000-00-00 00:00:00' AND NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site.") ";
+    $query .= "ORDER BY ordreUnion, date DESC , id DESC;";
+    //$query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY NEWS.date ASC, NEWS.id DESC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
