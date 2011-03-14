@@ -46,12 +46,12 @@ function getNomFichierEmission($numero, $titre, $nomParticipants)
 {
 	$replaceArray = array(
 	  '{numero}' => str_pad($numero, 3, "0", STR_PAD_LEFT), 
-	  '{titre}' => $titre, 
-	  '{nom_participant}' => str_replace(", ", " & ", $nomParticipants)
+	  '{titre}' => clean($titre), 
+	  '{nom_participant}' => clean(str_replace(", ", " & ", $nomParticipants))
 	);
 	
 	$nomFichier = str_replace(array_keys($replaceArray), array_values($replaceArray), TEMPLATE_NOM_FICHIER_EMISSION);
-	return clean($nomFichier);
+	return $nomFichier;
 }
 
 function getNomMorceauEmission ($time_min, $time_sec, $nom_artiste, $nom_morceau, $nom_label, $annee)

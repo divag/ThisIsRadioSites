@@ -1311,6 +1311,24 @@ function dbGetUtilisateur($p_nom_utilisateur){
 }
 
 //R�cup�ration d'un utilisateur :
+function dbGetUtilisateurByLogin($p_login_utilisateur){
+
+    include('var.php');
+
+	$query = "SELECT id, nom, login_forum, url_site, mail, password FROM UTILISATEUR WHERE login_forum = '".urldecode($p_login_utilisateur)."';";
+	$link=mysql_connect($hote,$login,$passwd); 
+	mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+	mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+		return $row;
+	else
+		return 0;
+}
+
+//R�cup�ration d'un utilisateur :
 function dbGetUtilisateurByMail($p_mail_utilisateur){
 
     include('var.php');
