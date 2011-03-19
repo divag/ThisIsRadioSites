@@ -18,14 +18,14 @@ function wd_remove_accents($str, $charset='utf-8')
 function clean($badstring)
 {
     $pattern = Array("?", "?", "?", "?", "?", "?", "?", "?", "?", "?", "'");
-    $rep_pat = Array("e", "e", "e", "c", "a", "a", "i", "i", "u", "o", "_");
+    $rep_pat = Array("e", "e", "e", "c", "a", "a", "i", "i", "u", "o", "-");
     $cleaned= str_replace($pattern, $rep_pat, $badstring);
     $cleaned= wd_remove_accents($cleaned);
 	
     $file_bad = array("@-@", "@_@", "@[^A-Za-z0-9_\ ]@", "@\ +@");
     $file_good = array(" ", " ", "", " ");
     $cleaned= preg_replace($file_bad, $file_good, $cleaned);
-    $cleaned= str_replace(" ", "_", trim($cleaned));
+    $cleaned= str_replace(" ", "-", trim($cleaned));
 	
     return $cleaned;
 }
