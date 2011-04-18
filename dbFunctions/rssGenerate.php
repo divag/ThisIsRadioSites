@@ -31,7 +31,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 	$dateEmission = date('D, d M Y H:i:s O', strtotime($emission['date_sortie']));
 	
 	echo '    <item>';
-	echo '      <title>'.$titreEmission.'</title>';
+	echo '      <title>ThisIsRadioclash '.$titreEmission.'</title>';
 	echo '      <link>'.$linkEmission.'</link>';
 	echo '      <description><![CDATA[';
 	echo '        <img src="'.$imageEmission.'" alt="cover" width="346" height="346" /><br />';

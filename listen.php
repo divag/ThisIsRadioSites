@@ -30,28 +30,28 @@ while($emission=mysql_fetch_array($listeEmissions))
 	$imageEmission = $pics.getNomFichierEmission($emission['numero'], $emission['titre'], null).".jpg";
 	$linkEmission = "playlist.php?episode=".$emission['numero'];
 
-	echo "<li>\n";
+	echo "<li>";
 	if ($emission['etat'] == 3)
 	{
-		echo "  <a href=\"".$linkEmission."\">\n";
-		echo "    <img src=\"".$imageEmission."\" title=\"".$texteEmission."\"/><br />\n";
-		echo "    <span class=\"lienEmission\">".$texteEmission."</span>\n";
-		echo "  </a>\n";
+		echo "  <a href=\"".$linkEmission."\">";
+		echo "    <img src=\"".$imageEmission."\" title=\"".$texteEmission."\"/><br />";
+		echo "    <span class=\"lienEmission\">".$texteEmission."</span>";
+		echo "  </a>";
 	}
 	else
 	{
-		echo "    <img src=\"".$pics."comingsoon.jpg\" title=\"".$texteEmission."\"/><br />\n";
-		echo "    <span class=\"lienEmission\" class=\"lienEmission\">".$texteEmission."</span>\n";
+		echo "    <img src=\"".$pics."comingsoon.jpg\" title=\"".$texteEmission."\"/><br />";
+		echo "    <span class=\"lienEmission\" class=\"lienEmission\">".$texteEmission."</span>";
 	}
-	echo "</li>\n";
+	echo "</li>";
 }
 	
-echo "<li class=\"proposez\">\n";
-	echo "  <a href=\"".$lienForum."\" target=\"blank\">\n";
-	echo "    <img src=\"".$pics."proposez.jpg\" title=\"Proposez un th&egrave;me sur le forum !\"/><br />\n";
-	echo "    >> <span>FORUM</span> <<\n";
-	echo "  </a>\n";
-echo "</li>\n";
+echo "<li class=\"proposez\">";
+	echo "  <a href=\"".$lienForum."\" target=\"blank\">";
+	echo "    <img src=\"".$pics."proposez.jpg\" title=\"Proposez un th&egrave;me sur le forum !\"/><br />";
+	echo "    >> <span>FORUM</span> <<";
+	echo "  </a>";
+echo "</li>";
 
 ?>
 </ul>

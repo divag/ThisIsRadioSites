@@ -1,10 +1,67 @@
-<?php      
+<?php 
 	include('../dbFunctions/dbFunctions.php');
 	include('../sitevars.php');
 	include('../'.$zipModule);
 
-	$id = $_POST['id'];
-	//$id = $_GET['id'];
+//Récupération de la liste des émissions :
+$listeEmissions = dbGetListeEmissions($id_site);
+
+echo "<ul>\n";
+	
+while($emission=mysql_fetch_array($listeEmissions))
+{
+	$base = "../";
+	$imageEmission = $base.$pics.getNomFichierEmission($emission['numero'], $emission['titre'], null).".jpg";
+	$oldImageEmission = $base.$pics."thisisradioclash-episode".$emission['numero'].".jpg";
+	$imageGifEmission = $base.$pics.getNomFichierEmission($emission['numero'], $emission['titre'], null).".gif";
+	$oldImageGifEmission = $base.$pics."thisisradioclash-episode".$emission['numero'].".gif";
+	$imageToPrintEmission = $base.$pics.getNomFichierEmission($emission['numero'], $emission['titre'], null)."-toPrint.jpg";
+	$oldImageToPrintEmission = $base.$pics."thisisradioclash-episode".$emission['numero']."-toPrint.jpg";
+	$mp3Emission = $base.$mp3s.getNomFichierEmission($emission['numero'], $emission['titre'], null).".mp3";
+	$oldMp3Emission = $base.$mp3s."thisisradioclash-episode".$emission['numero'].".mp3";
+	$oldZipEmission = $base.$zips."thisisradioclash-episode".$emission['numero'].".zip";
+	
+	echo "<li>\n";
+	if (file_exists($oldImageEmission))
+	{
+		rename($oldImageEmission, $imageEmission);
+		echo $oldImageEmission." >> ".$imageEmission."<br />";
+	}
+	if (file_exists($oldImageGifEmission))
+	{
+		rename($oldImageGifEmission, $imageGifEmission);
+		echo $oldImageGifEmission." >> ".$imageGifEmission."<br />";
+	}
+	if (file_exists($oldImageToPrintEmission))
+	{
+		rename($oldImageToPrintEmission, $imageToPrintEmission);
+		echo $oldImageToPrintEmission." >> ".$imageToPrintEmission."<br />";
+	}
+	if (file_exists($oldMp3Emission))
+	{
+		rename($oldMp3Emission, $mp3Emission);
+		echo $oldMp3Emission." >> ".$mp3Emission."<br />";
+	}
+	if (file_exists($oldZipEmission))
+	{
+		unlink($oldZipEmission);
+		echo "Suppression de l'ancien ZIP >> ".$oldZipEmission."<br />";
+	}
+	
+	if ($emission['etat'] == 3)
+	{
+		echo "<b>Mise à jour du ZIP de l'émission ID=".$emission['id']."</b>";
+		createZipEmission($emission['id']);
+	}
+	
+	echo "</li>\n";
+}
+	
+echo "</ul>\n";
+
+function createZipEmission($id)
+{
+	include('../sitevars.php');
 	
 	$emission = dbGetEmission($id);
 	$nomParticipants = listeParticipantsEmission($id);
@@ -27,8 +84,8 @@
 	// Creation du nom du fichier zip
 	$nomFichierZip = $filename;
 
-	// Si le zip a dÃ©jÃ  Ã©tÃ© gÃ©nÃ©rÃ© il faut l"effacer de suite pour eviter de creer un zip 
-	// contenant le zip prÃ©cÃ©dent
+	// Si le zip a déjà été généré il faut l"effacer de suite pour eviter de creer un zip 
+	// contenant le zip précédent
 	if(file_exists($nomFichierZip))
 	 @unlink($nomFichierZip);
 
@@ -70,14 +127,14 @@
 	$fichier_playlist.="\r\n";
 	$fichier_playlist.="\r\n";
 	if ($chef != '')
-	    $fichier_playlist.="Une Ã©mission prÃ©sidÃ©e par ".$chef."\r\n";
+	    $fichier_playlist.="Une émission présidée par ".$chef."\r\n";
 		
 	$fichier_playlist.="\r\n";
 		
 	if ($emission['teaser_video'] != '')
 	{
 		$fichier_playlist.="\r\n";
-		$fichier_playlist.="Teaser vidÃ©o : ";
+		$fichier_playlist.="Teaser vidéo : ";
 		$fichier_playlist.="\r\n - ".$emission['teaser_video'];
 		$fichier_playlist.="\r\n";
 	}	
@@ -117,11 +174,11 @@
 	}
 
 	//
-	// TODO : Ajouter les bonus des Ã©missions, et le texte de prÃ©sentation
+	// TODO : Ajouter les bonus des émissions, et le texte de présentation
 	//
 	
 	$fd = fopen ($nomFichierZip, "wb");
 	$out = fwrite ($fd, $radioclashZip -> getZippedfile());
-	fclose ($fd);
-    
+	fclose ($fd);}
+
 ?>

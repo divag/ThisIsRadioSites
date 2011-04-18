@@ -1,0 +1,73 @@
+a {
+	cursor:pointer;
+}
+
+.mailLink {
+    border-width:0px;	
+	cursor:pointer;
+}
+.mailLink span {
+	position:relative;
+	padding-left:5px;
+}
+
+div.entete {
+	float: left;
+}
+
+div.links{
+	float: right;
+	text-align: right;
+	position:relative;
+	right:0px;
+}
+
+input {
+	width:100%;
+	/*
+	background-color: rgb(44, 44, 44);
+	color: rgb(201, 201, 201);
+	border: 1px solid rgb(69, 69, 69);
+	*/
+	border: 1px solid gray;
+	margin-bottom:0px;
+	padding-left:2px;
+	padding-right:2px;
+}
+input.button:hover {
+
+}
+input.button {
+	padding:2px;
+	cursor:pointer;
+	/*color:white;*/
+}
+
+input.buttonMail {
+	padding:0px;
+}
+
+.comment-text {
+}
+
+.error {
+	border-color:red;
+}
+
+.red {
+	color:red;
+}
+
+#spanMailAdresse {
+	font-weight:bold;
+	color:green;
+}
+
+form {
+	margin:0px;
+	white-space: no-wrap;
+}
+
+.clear {
+	clear: both;
+}

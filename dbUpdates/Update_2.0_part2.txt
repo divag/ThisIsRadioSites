@@ -1,0 +1,4 @@
+UPDATE `ETAT_EMISSION` SET `libelle` = 'Masquée' WHERE `id` =1 LIMIT 1 ;
+UPDATE `ETAT_EMISSION` SET `libelle` = 'Annoncée' WHERE `id` =2 LIMIT 1 ;
+UPDATE `ETAT_EMISSION` SET `libelle` = 'Publiée' WHERE `id` =3 LIMIT 1 ;
+UPDATE `ETAT_EMISSION` SET `libelle` = 'Supprimée' WHERE `id` =4 LIMIT 1 ;

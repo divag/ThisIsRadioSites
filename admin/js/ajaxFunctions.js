@@ -2813,7 +2813,9 @@ function formEnregistrer()
 			addDefaultParticipantEmission(enreg['numero']);
 	}
 	else
+	{
 		getDatas('dbUpdateEmission', 'result', 'id=' + enreg.id + '&id_site=' + id_site + '&numero=' + enreg.numero + '&titre=' + encode(enreg.titre) + '&date_sortie=' + enreg.date_sortie + '&etat=' + enreg.etat + '&time_min=' + enreg.time_min + '&time_sec=' + enreg.time_sec + '&url_lien_forum=' + encode(enreg.url_lien_forum));
+	}
 
 	isNew = false;
 	alert('Enregistrement réussi !');

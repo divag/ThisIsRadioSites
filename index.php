@@ -69,8 +69,10 @@ threeSixtyPlayer.config.imageRoot = '<?php echo $soundmanager ?>css/';
 		var fileBottomNavCloseImage = "<?php echo $lightbox ?>css/closelabel.gif";
 	</script>
 	<script type="text/javascript" src="<?php echo $lightbox ?>js/lightbox.js"></script>
-	
+	<script type="text/javascript" src="js/jQuery/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="js/my.js"></script>
 	<link rel="stylesheet" href="<?php echo $lightbox ?>css/lightbox.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="css/mailing.css" type="text/css" media="screen" />
 
 </head>
 <body>
@@ -195,9 +197,14 @@ writeEntete('');
 
 <h2 class="gris">Articles, diffusions hertziennes, rebonds...</i></h2>
 <div class="listeLiens">
+	<a href="http://www.cannibalcaniche.com" title="Click to visit the Cannibal Caniche Radio website"><img src="css/logo_cannibalcaniche.gif" alt="Cannibal Caniche"/></a>
+	<a href="http://www.jetfm.asso.fr/site/-Festival-sonor-.html" title="Click to visit the SONOR Festival website"><img src="css/logo_festival_sonor_2011.gif" alt="Festival SONOR"/></a>
+	<a href="http://www.jetfm.asso.fr" title="Click to visit the JET FM Radio website"><img src="css/logo_jetfm.gif" alt="Jet FM"/></a>
+	<a href="http://www.48fm.fr" title="Click to visit the 48 FM Radio website"><img src="css/logo_48fm.gif" alt="48 FM"/></a>
+	<a href="http://www.campusfm.fr" title="Click to visit the Toulouse Radio Campus website"><img src="css/logo_radiocampus_toulouse.gif" alt="Radio Campus Toulouse"/></a>
+	<a href="http://www.radiogalere.org" title="Click to visit the Radio Galere website"><img src="css/logo_radiogalere.gif" alt="Radio RPG"/></a>
 	<a href="http://radiocampus.ulb.ac.be" title="Click to visit the Bruxelles Radio Campus website"><img src="css/logo_radiocampus_bruxelles.gif" alt="Radio Campus Bruxelles"/></a>
 	<a href="http://radiopaysdegueret.fr" title="Click to visit the Radio RPG website"><img src="css/logo_radiorpg.gif" alt="Radio Galere"/></a>
-	<a href="http://www.radiogalere.org" title="Click to visit the Radio Galere website"><img src="css/logo_radiogalere.gif" alt="Radio RPG"/></a>
 	<a href="css/articleliberation.jpg" rel="lightbox" title="Click to see press article talking about ThisIsRadioclash !" rev="css/articleliberation.jpg"><img src="css/logo_liberation.gif" alt="Logo Liberation" /></a>
 </div>
 
