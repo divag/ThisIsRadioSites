@@ -86,7 +86,7 @@ include('../sitevars.php');
 		</ul>
 		<p><u>Voici vos identifiants de connexion &agrave; This Is Radioclash, acc&egrave;s \"CHEF\" :</u></p>
 		 <ul>
-		   <li>Login : \"".$utilisateur['nom']."\"</li>
+		   <li>Login : \"".$utilisateur['login_forum']."\"</li>
 		   <li>Mot de passe : \"".$utilisateur['password']."\"</li>
 		 </ul>
 		</div>";

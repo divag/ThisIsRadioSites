@@ -1043,7 +1043,8 @@ function dbGetNomsParticipantsActifs($id_site){
 
     include('var.php');
 
-	$query = "SELECT DISTINCT login_forum FROM UTILISATEUR, PARTICIPANT, EMISSION WHERE UTILISATEUR.nom = PARTICIPANT.nom_utilisateur AND PARTICIPANT.id_emission = EMISSION.id AND EMISSION.id_site = ".$id_site." AND EMISSION.etat = 3;";
+	$query = "SELECT DISTINCT nom_utilisateur FROM PARTICIPANT, EMISSION WHERE PARTICIPANT.id_emission = EMISSION.id AND EMISSION.id_site = ".$id_site." AND EMISSION.etat = 3;";
+//	$query = "SELECT DISTINCT login_forum FROM UTILISATEUR, PARTICIPANT, EMISSION WHERE UTILISATEUR.nom = PARTICIPANT.nom_utilisateur AND PARTICIPANT.id_emission = EMISSION.id AND EMISSION.id_site = ".$id_site." AND EMISSION.etat = 3;";
     $link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1074,7 +1075,7 @@ function listeParticipants($id_site)
 	$liste = "";
     while($array=mysql_fetch_array($listeParticipants))
 	{
-		$liste = $liste.$separateur.$array['login_forum'];
+		$liste = $liste.$separateur.$array['nom_utilisateur'];
 		$separateur = ", ";
 	}
 	
@@ -1298,6 +1299,24 @@ function dbGetUtilisateur($p_nom_utilisateur){
     include('var.php');
 
 	$query = "SELECT id, nom, login_forum, url_site, mail, password FROM UTILISATEUR WHERE nom = '".urldecode($p_nom_utilisateur)."';";
+	$link=mysql_connect($hote,$login,$passwd); 
+	mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+	mysql_close($link);
+	
+	if ($row=mysql_fetch_array($res))
+		return $row;
+	else
+		return 0;
+}
+
+//R�cup�ration d'un utilisateur :
+function dbGetUtilisateurById($p_id_utilisateur){
+
+    include('var.php');
+
+	$query = "SELECT id, nom, login_forum, url_site, mail, password FROM UTILISATEUR WHERE id = ".$p_id_utilisateur.";";
 	$link=mysql_connect($hote,$login,$passwd); 
 	mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
