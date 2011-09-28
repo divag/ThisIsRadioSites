@@ -8,6 +8,8 @@ $listeEmissions = dbGetListeEmissions($id_site);
 
 echo "<ul>\n";
 	
+$id_to_zip = 0;
+
 while($emission=mysql_fetch_array($listeEmissions))
 {
 	$base = "../";
@@ -17,9 +19,12 @@ while($emission=mysql_fetch_array($listeEmissions))
 	$oldImageGifEmission = $base.$pics."thisisradioclash-episode".$emission['numero'].".gif";
 	$imageToPrintEmission = $base.$pics.getNomFichierEmission($emission['numero'], $emission['titre'], null)."-toPrint.jpg";
 	$oldImageToPrintEmission = $base.$pics."thisisradioclash-episode".$emission['numero']."-toPrint.jpg";
+	$mp3TeaserEmission = $base.$mp3s.getNomFichierEmission($emission['numero'], $emission['titre'], null)."-teaser.mp3";
+	$oldMp3TeaserEmission = $base.$mp3s."thisisradioclash-episode".$emission['numero']."-teaser.mp3";
 	$mp3Emission = $base.$mp3s.getNomFichierEmission($emission['numero'], $emission['titre'], null).".mp3";
 	$oldMp3Emission = $base.$mp3s."thisisradioclash-episode".$emission['numero'].".mp3";
 	$oldZipEmission = $base.$zips."thisisradioclash-episode".$emission['numero'].".zip";
+	$zipEmission = $base.$zips.getNomFichierEmission($emission['numero'], $emission['titre'], null).".zip";
 	
 	echo "<li>\n";
 	if (file_exists($oldImageEmission))
@@ -42,18 +47,28 @@ while($emission=mysql_fetch_array($listeEmissions))
 		rename($oldMp3Emission, $mp3Emission);
 		echo $oldMp3Emission." >> ".$mp3Emission."<br />";
 	}
+	if (file_exists($oldMp3TeaserEmission))
+	{
+		rename($oldMp3TeaserEmission, $mp3TeaserEmission);
+		echo $oldMp3TeaserEmission." >> ".$mp3TeaserEmission."<br />";
+	}
 	if (file_exists($oldZipEmission))
 	{
 		unlink($oldZipEmission);
 		echo "Suppression de l'ancien ZIP >> ".$oldZipEmission."<br />";
 	}
-	
-	if ($emission['etat'] == 3)
+	if ($emission['etat'] == 3 && !file_exists($zipEmission))
 	{
-		echo "<b>Mise à jour du ZIP de l'émission ID=".$emission['id']."</b>";
+		if ($id_to_zip == 0)
+			$id_to_zip = $emission['id'];
+			
+		echo "<b>A mettre à jour : ".$emission['id']."</b>";
+	}
+	if ($emission['id'] == 45)
+	{
+		echo "<br />>>>>>>>>> <b>Mise à jour du ZIP de l'émission ID=".$emission['id']."</b>";
 		createZipEmission($emission['id']);
 	}
-	
 	echo "</li>\n";
 }
 	

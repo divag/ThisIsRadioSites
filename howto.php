@@ -74,6 +74,7 @@ une seule obligation : coller au th&egrave;me.
 <p class="gris italique">THIS IS RADIOCLASH EST UN PROJET AUTOGERE QUI S'ECRIT EN DIRECT AVEC VOUS</p>
 <p class="big gras">
 LE GENERIQUE EST <a href="mp3/generiqueradioclash.mp3" target="blank" title="G&eacute;n&eacute;rique de THIS IS RADIOCLASH"><span>ICI</span></a><br />
+FAITES VOTRE PROPRE GENERIQUE AVEC LES ELEMENTS SEPARES QUI SONT <a href="mp3/elementsgeneriqueradioclash.zip" target="blank" title="El&eacute;ments s&eacute;par&eacute;s du g&eacute;n&eacute;rique de THIS IS RADIOCLASH"><span>ICI</span></a><br />
 LA TAILLE DES POCHETTES<br />
 EST <span class="gris">346 X 346 pixels</span>
 </p>

@@ -8,6 +8,9 @@ $lastEmission = dbGetLastEmission($id_site);
 $nomLastParticipants = listeParticipantsEmission($lastEmission['id']);
 $texteLastEmission = getReferenceEmission($lastEmission['numero'], $lastEmission['titre'], $nomParticipants);
 $nomFichierEmission = getNomFichierEmission($lastEmission['numero'], $lastEmission['titre'], $nomParticipants);
+$contenuImageNews = dbGetContenuPageSite($id_site, "index", "image page accueil");
+if ($contenuImageNews != 0)
+	$lienImageNews = $contenuImageNews['url'];
 
 if (file_exists($pics.$nomFichierEmission.".gif"))
 	$imageLastEmission = $pics.$nomFichierEmission.".gif";
@@ -124,7 +127,7 @@ writeEntete('');
 			
 			$videoTeasers = '';
 			$nbVideoTeasers = 0;
-
+			
 			while($emission=mysql_fetch_array($listeEmissions))
 			{
 				$texteEmission = $emission['numero']." : ".$emission['titre'];
@@ -162,7 +165,8 @@ writeEntete('');
 				echo "  <span class=\"sortie\">Publication : ".$dateEmission."</span>";
 				echo "</li>";
 				
-				if ($nbVideoTeasers == 0 && $emission['teaser_video'] != '')
+				//if ($nbVideoTeasers == 0 && $emission['teaser_video'] != '')
+				if ($emission['teaser_video'] != '')
 				{
 					$videoTeasers .= "<object width=\"265\" height=\"200\">\n";
 					$videoTeasers .= "	<param name=\"movie\" value=\"".$emission['teaser_video']."\"></param>\n";
@@ -184,7 +188,8 @@ writeEntete('');
 			if ($videoTeasers != '')
 				echo $videoTeasers;
 				
-			echo "<img src=\"css/news.gif\" />";
+			if ($contenuImageNews != 0)
+				echo "<img src=\"".$lienImageNews."\" />";
 			
 			?>
 		</td>
@@ -202,9 +207,9 @@ writeEntete('');
 	<a href="http://www.jetfm.asso.fr" title="Click to visit the JET FM Radio website"><img src="css/logo_jetfm.gif" alt="Jet FM"/></a>
 	<a href="http://www.48fm.fr" title="Click to visit the 48 FM Radio website"><img src="css/logo_48fm.gif" alt="48 FM"/></a>
 	<a href="http://www.campusfm.fr" title="Click to visit the Toulouse Radio Campus website"><img src="css/logo_radiocampus_toulouse.gif" alt="Radio Campus Toulouse"/></a>
-	<a href="http://www.radiogalere.org" title="Click to visit the Radio Galere website"><img src="css/logo_radiogalere.gif" alt="Radio RPG"/></a>
+	<a href="http://www.radiogalere.org" title="Click to visit the Radio Galere website"><img src="css/logo_radiogalere.gif" alt="Radio Galere"/></a>
 	<a href="http://radiocampus.ulb.ac.be" title="Click to visit the Bruxelles Radio Campus website"><img src="css/logo_radiocampus_bruxelles.gif" alt="Radio Campus Bruxelles"/></a>
-	<a href="http://radiopaysdegueret.fr" title="Click to visit the Radio RPG website"><img src="css/logo_radiorpg.gif" alt="Radio Galere"/></a>
+	<a href="http://radiopaysdegueret.fr" title="Click to visit the Radio RPG website"><img src="css/logo_radiorpg.gif" alt="Radio RPGRadio RPG"/></a>
 	<a href="css/articleliberation.jpg" rel="lightbox" title="Click to see press article talking about ThisIsRadioclash !" rev="css/articleliberation.jpg"><img src="css/logo_liberation.gif" alt="Logo Liberation" /></a>
 </div>
 

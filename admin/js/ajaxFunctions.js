@@ -1185,7 +1185,6 @@ function refreshTypeContenu(id_contenu, id_type_contenu, bouton_valider, forced_
 		return function () {
 			document.getElementById('formContenuUrl').value = document.getElementById('fileContenuImageFolder').value + document.getElementById('fileContenuImageId').value + document.getElementById('fileContenuImage').value.substring(document.getElementById('fileContenuImage').value.lastIndexOf('.'));
 			document.getElementById('fileContenuImageUrl').value = document.getElementById('fileContenuImageFolder').value + document.getElementById('fileContenuImageId').value + document.getElementById('fileContenuImage').value.substring(document.getElementById('fileContenuImage').value.lastIndexOf('.'));
-			
 			//On doit également renseigner l'extension du fichier dans la zone du formulaire d'upload :
 			document.getElementById('fileContenuImageExtension').value = document.getElementById('fileContenuImage').value.substring(document.getElementById('fileContenuImage').value.lastIndexOf('.'));
 			

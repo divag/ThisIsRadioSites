@@ -1,6 +1,6 @@
 <?php
 
-function writeHead()
+function writeHead($title = 'This is Radioclash from Incongru satellite')
 {
 	echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n";
 	
@@ -8,7 +8,7 @@ function writeHead()
 	echo "<meta name=\"keywords\" content=\"radioclash, radio, clash, music, musique, émission, radioshow, mix, free mp3, musiques incongrues\" />\n";
 	echo "<meta name=\"description\" content=\"Projet d'émissions de radio collaboratives.\" />\n";
 	echo "<meta name=\"robots\" content=\"all\" />\n";
-	echo "<title>This is Radioclash from Incongru satellite</title>\n";
+	echo "<title>".$title."</title>\n";
 	echo "<link rel=\"shortcut icon\" type=\"image/png\" href=\"css/favicon.png\" />\n";
 	echo "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"http://feeds.feedburner.com/thisisradioclash\" />\n";
 	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/thisisradioclash.css\" />\n";
