@@ -192,7 +192,7 @@ writeEntete('playlist');
 			<a class="myShortcut" cible="lecteur"><span class="nomEmission"><font>&nbsp;<?php echo $nomEmission ?>&nbsp;</font></span></a><span class="mp3link"> (<a href="<?php echo $audioEmission ?>" target="blank"><span class="red gras">MP3</span></a><span <?php echo $hideZipEmission ?>> - <a href="<?php echo $zipEmission ?>" target="blank"><span class="red gras">ZIP</span></a></span>)</span>
 		</h2>
 		
-		<span class="metadataShortCut" id="metadataShortCut0">00:00 This is radioclash - Introduction Jingle</span><br />
+		<span class="metadataShortCut" id="lecteurmetadataShortCut0">00:00 This is radioclash - Introduction Jingle</span><br />
 		<?php 
 		$playlist = dbGetPlaylist($idEmission);
 		$nomUtilisateurEnCours = "";
@@ -210,7 +210,7 @@ writeEntete('playlist');
 				else
 					echo "<span><strong><u>".$nomUtilisateurEnCours."</u></strong></span></a><br />\n";
 			}
-			echo "<span class=\"metadataShortCut\" id=\"metadataShortCut".$i."\">".getNomMorceauEmission(toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], $array['nom_label'], $array['annee'])."</span><br />\n";
+			echo "<span class=\"metadataShortCut\" id=\"lecteurmetadataShortCut".$i."\">".getNomMorceauEmission(toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], $array['nom_label'], $array['annee'])."</span><br />\n";
 			$i++;
 		}
 		

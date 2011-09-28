@@ -1087,14 +1087,14 @@ ThreeSixtyPlayer.prototype.Metadata = function(oSound, oParent) {
       if (soundManager.radioclashSpecialFeatures) {
 
 		var classAttributeName = 'class';
-		if (document.getElementById('metadataShortCut' + index).getAttribute('class') == null)
+		if (document.getElementById(oSound._360data.oLink.id + 'metadataShortCut' + index).getAttribute('class') == null)
 			classAttributeName = 'className';
 	  
 		 if (metadata.currentItem != null)
-			document.getElementById('metadataShortCut' + metadata.currentItem).setAttribute(classAttributeName, "metadataShortCut");
+			document.getElementById(oSound._360data.oLink.id + 'metadataShortCut' + metadata.currentItem).setAttribute(classAttributeName, "metadataShortCut");
 			//document.getElementById('metadataShortCut' + metadata.currentItem).style.color = "black";
 
-		document.getElementById('metadataShortCut' + index).setAttribute(classAttributeName, "metadataShortCutPlaying");
+		document.getElementById(oSound._360data.oLink.id + 'metadataShortCut' + index).setAttribute(classAttributeName, "metadataShortCutPlaying");
 		//document.getElementById('metadataShortCut' + index).style.color = "red";
 	  }
 	  // self.setPageTitle(metadata[index].title+' | '+metadata.mainTitle);

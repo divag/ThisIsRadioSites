@@ -124,7 +124,7 @@ writeEntete('');
 			
 			$videoTeasers = '';
 			$nbVideoTeasers = 0;
-			
+
 			while($emission=mysql_fetch_array($listeEmissions))
 			{
 				$texteEmission = $emission['numero']." : ".$emission['titre'];
