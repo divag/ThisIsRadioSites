@@ -79,6 +79,17 @@ writeHead();
 <link rel="stylesheet" type="text/css" href="<?php echo $soundmanager ?>css/360player.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $soundmanager ?>css/360player-visualization.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $soundmanager ?>css/360divagSpecialFeatures.css" />
+
+<!-- Opengraph tags (@see http://ogp.me/) -->
+<meta property="og:site_name" content="This is Radioclash" />
+<meta property="og:title" content="<?php echo $nomEmission ?> | This is Radioclash" />
+<meta property="og:image" content="http://www.thisisradioclash.org/<?php echo $imageEmission ?>" />
+<meta property="og:audio" content="http://www.thisisradioclash.org/<?php echo $audioEmission ?>" />
+<meta property="og:audio:title" content="This is Radioclash - <?php echo $nomEmission ?>" />
+<meta property="og:audio:artist" content="<?php echo $nomParticipants ?>" />
+<meta property="og:audio:album" content="This is Radioclash" />
+<meta property="og:audio:type" content="application/mp3" />
+
 <!-- special IE-only canvas fix -->
 <!--[if IE]><script type="text/javascript" src="<?php echo $soundmanager ?>script/excanvas.js"></script><![endif]-->
 
