@@ -145,7 +145,7 @@ writeEntete('');
 				if (emissionHaveTeaser($emission['numero']))
 				{
 					$nomParticipants = '';
-					$nomFichierEmission = 'frdfd';
+					$nomFichierEmission = getNomFichierEmission($emission['numero'], $emission['titre'], '');
 					//$nomParticipants = listeParticipantsEmission($emission['id']);
 					//$nomFichierEmission = getNomFichierEmission($emission['numero'], $emission['titre'], $nomParticipants);
 
