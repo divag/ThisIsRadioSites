@@ -234,6 +234,7 @@ function display(page)
 		document.getElementById('buttonMenuartistesLabels').style.display = 'none';
 		
 		document.getElementById('ajoutEmission').style.display = 'none';
+		
 		document.getElementById('txtEnvoiMail').value = '';
 		document.getElementById('boutonEnvoiMail').disabled = true;
 	}
@@ -1080,8 +1081,17 @@ function initialiseFormEditFormEditContenu(id_contenu, id_type_contenu, url, con
 	document.getElementById('fileContenuImageUrl').value = url;
 
 	document.getElementById('formContenuUrl').value = url;
-	document.getElementById('formContenuContenuFr').value = contenu_fr;
-	document.getElementById('formContenuContenuEn').value = contenu_en;
+	
+	CKEDITOR.instances.formContenuContenuFr.setData(contenu_fr, function()
+    {
+        this.checkDirty();  // true
+    });
+	//document.getElementById('formContenuContenuFr').value = contenu_fr;
+	CKEDITOR.instances.formContenuContenuEn.setData(contenu_en, function()
+    {
+        this.checkDirty();  // true
+    });
+	//document.getElementById('formContenuContenuEn').value = contenu_en;
 	document.getElementById('formContenuContenuTxtFr').value = contenu_txt_fr;
 	document.getElementById('formContenuContenuTxtEn').value = contenu_txt_en;
 }
@@ -1163,8 +1173,16 @@ function refreshTypeContenu(id_contenu, id_type_contenu, bouton_valider, forced_
 		
 		return function () { 
 			//les contenu textes ne sont pas utilisés pour ce type :
-			document.getElementById('formContenuContenuFr').value = '';
-			document.getElementById('formContenuContenuEn').value = '';
+			CKEDITOR.instances.formContenuContenuFr.setData('', function()
+			{
+				this.checkDirty();  // true
+			});
+			CKEDITOR.instances.formContenuContenuEn.setData('', function()
+			{
+				this.checkDirty();  // true
+			});
+			//document.getElementById('formContenuContenuFr').value = '';
+			//document.getElementById('formContenuContenuEn').value = '';
 			document.getElementById('formContenuContenuTxtFr').value = '';
 			document.getElementById('formContenuContenuTxtEn').value = '';
 		};
@@ -1185,12 +1203,21 @@ function refreshTypeContenu(id_contenu, id_type_contenu, bouton_valider, forced_
 		return function () {
 			document.getElementById('formContenuUrl').value = document.getElementById('fileContenuImageFolder').value + document.getElementById('fileContenuImageId').value + document.getElementById('fileContenuImage').value.substring(document.getElementById('fileContenuImage').value.lastIndexOf('.'));
 			document.getElementById('fileContenuImageUrl').value = document.getElementById('fileContenuImageFolder').value + document.getElementById('fileContenuImageId').value + document.getElementById('fileContenuImage').value.substring(document.getElementById('fileContenuImage').value.lastIndexOf('.'));
+			
 			//On doit également renseigner l'extension du fichier dans la zone du formulaire d'upload :
 			document.getElementById('fileContenuImageExtension').value = document.getElementById('fileContenuImage').value.substring(document.getElementById('fileContenuImage').value.lastIndexOf('.'));
 			
 			//Les contenus textes ne sont pas utilisés pour ce type :
-			document.getElementById('formContenuContenuFr').value = '';
-			document.getElementById('formContenuContenuEn').value = '';
+			CKEDITOR.instances.formContenuContenuFr.setData('', function()
+			{
+				this.checkDirty();  // true
+			});
+			CKEDITOR.instances.formContenuContenuEn.setData('', function()
+			{
+				this.checkDirty();  // true
+			});
+			//document.getElementById('formContenuContenuFr').value = '';
+			//document.getElementById('formContenuContenuEn').value = '';
 			document.getElementById('formContenuContenuTxtFr').value = '';
 			document.getElementById('formContenuContenuTxtEn').value = '';
 		};
@@ -1220,8 +1247,16 @@ function refreshTypeContenu(id_contenu, id_type_contenu, bouton_valider, forced_
 		return function () {
 			document.getElementById('formContenuUrl').value = document.getElementById('formContenuLienVideo').value.replace('http://www.youtube.com/watch?v=', 'http://www.youtube.com/v/');
 			//les contenu textes ne sont pas utilisés pour ce type :
-			document.getElementById('formContenuContenuFr').value = '';
-			document.getElementById('formContenuContenuEn').value = '';
+			CKEDITOR.instances.formContenuContenuFr.setData('', function()
+			{
+				this.checkDirty();  // true
+			});
+			CKEDITOR.instances.formContenuContenuEn.setData('', function()
+			{
+				this.checkDirty();  // true
+			});
+			//document.getElementById('formContenuContenuFr').value = '';
+			//document.getElementById('formContenuContenuEn').value = '';
 			document.getElementById('formContenuContenuTxtFr').value = '';
 			document.getElementById('formContenuContenuTxtEn').value = '';
 		};
@@ -1255,7 +1290,8 @@ function displayFormEditContenu(contenuData, postAction, postActionCancel, force
 	
 	var validateFunction = function () {
 		actionsBeforeValidate();
-		getDatas('dbUpdateContenu', '', 'id=' + contenuData.id_contenu + '&id_type_contenu=' + ddlTypeContenu.value + '&url=' + encode(document.getElementById('formContenuUrl').value) + '&contenu_fr=' + encode(document.getElementById('formContenuContenuFr').value) + '&contenu_en=' + encode(document.getElementById('formContenuContenuEn').value) + '&contenu_txt_fr=' + encode(document.getElementById('formContenuContenuTxtFr').value) + '&contenu_txt_en=' + encode(document.getElementById('formContenuContenuTxtEn').value));
+		getDatas('dbUpdateContenu', '', 'id=' + contenuData.id_contenu + '&id_type_contenu=' + ddlTypeContenu.value + '&url=' + encode(document.getElementById('formContenuUrl').value) + '&contenu_fr=' + encode(CKEDITOR.instances.formContenuContenuFr.getData()) + '&contenu_en=' + encode(CKEDITOR.instances.formContenuContenuEn.getData()) + '&contenu_txt_fr=' + encode(document.getElementById('formContenuContenuTxtFr').value) + '&contenu_txt_en=' + encode(document.getElementById('formContenuContenuTxtEn').value));
+		//getDatas('dbUpdateContenu', '', 'id=' + contenuData.id_contenu + '&id_type_contenu=' + ddlTypeContenu.value + '&url=' + encode(document.getElementById('formContenuUrl').value) + '&contenu_fr=' + encode(document.getElementById('formContenuContenuFr').value) + '&contenu_en=' + encode(document.getElementById('formContenuContenuEn').value) + '&contenu_txt_fr=' + encode(document.getElementById('formContenuContenuTxtFr').value) + '&contenu_txt_en=' + encode(document.getElementById('formContenuContenuTxtEn').value));
 		postAction();
 	}
 	
@@ -1263,7 +1299,7 @@ function displayFormEditContenu(contenuData, postAction, postActionCancel, force
 		actionsBeforeValidate = refreshTypeContenu(contenuData.id_contenu);
 		validateFunction = function () {
 			actionsBeforeValidate();
-			getDatas('dbUpdateContenu', '', 'id=' + contenuData.id_contenu + '&id_type_contenu=' + ddlTypeContenu.value + '&url=' + encode(document.getElementById('formContenuUrl').value) + '&contenu_fr=' + encode(document.getElementById('formContenuContenuFr').value) + '&contenu_en=' + encode(document.getElementById('formContenuContenuEn').value) + '&contenu_txt_fr=' + encode(document.getElementById('formContenuContenuTxtFr').value) + '&contenu_txt_en=' + encode(document.getElementById('formContenuContenuTxtEn').value));
+			getDatas('dbUpdateContenu', '', 'id=' + contenuData.id_contenu + '&id_type_contenu=' + ddlTypeContenu.value + '&url=' + encode(document.getElementById('formContenuUrl').value) + '&contenu_fr=' + encode(CKEDITOR.instances.formContenuContenuFr.getData()) + '&contenu_en=' + encode(CKEDITOR.instances.formContenuContenuEn.getData()) + '&contenu_txt_fr=' + encode(document.getElementById('formContenuContenuTxtFr').value) + '&contenu_txt_en=' + encode(document.getElementById('formContenuContenuTxtEn').value));
 			postAction();
 		}
 	}
