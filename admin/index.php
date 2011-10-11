@@ -105,7 +105,7 @@ if(isset($_POST['nomCompte']))
 		location.href = 'noIE.html';
 	else
 	{
-		if (location.href.indexOf('www') == -1)
+		if (location.href.indexOf('<?php echo $radioclashHome ?>') == -1)
 			location.href = '<?php echo $radioclashHome ?>admin/';
 	}
 	
