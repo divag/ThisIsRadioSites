@@ -1196,6 +1196,20 @@ function dbGetListeEmissions($id_site){
 	return $res;
 }
 
+//R�cup�ration de l'�mission :
+function dbGetListeEmissionsByDate($id_site){
+
+    include('var.php');
+
+	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." AND (etat = 2 OR etat = 3) ORDER BY date_sortie DESC;";
+	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
+	$select_base=mysql_selectdb($db);
+	$res=mysql_db_query ($db, $query);	
+	mysql_close($link);
+	
+	return $res;
+}
+
 /*
 PAGE D'UNE PLAYLIST :
 =====================
