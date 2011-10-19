@@ -35,7 +35,6 @@ while($emission=mysql_fetch_array($listeEmissions))
 	echo '      <link>'.$linkEmission.'</link>';
 	echo '      <description><![CDATA[';
 	echo '        <img src="'.$imageEmission.'" alt="cover" width="346" height="346" /><br />';
-	echo "00:00 ".$nomSite." - Introduction Jingle<br />\n";
 	
 	$playlist = dbGetPlaylist($idEmission);
 	if ($siteHaveParticipants)
@@ -43,7 +42,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 		$nomUtilisateurEnCours = "";
 		$chef = dbGetChefEmission($idEmission);
 	}
-	$i = 1;
+	$i = 0;
 	while($array=mysql_fetch_array($playlist))
 	{
 		if ($siteHaveParticipants)
@@ -59,6 +58,11 @@ while($emission=mysql_fetch_array($listeEmissions))
 					echo "<b><u>".$nomUtilisateurEnCours."</u></b><br />\n";
 			}
 		}			
+		if ($i == 0 && (toTime($array['time_min']) != "00" || toTime($array['time_sec']) != "00"))
+		{
+			echo "00:00 ".$nomSite." - Introduction Jingle<br />\n";
+			$i++;
+		}
 		echo "<span>".getNomMorceauEmission (toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], $array['nom_label'], $array['annee'])."</span><br />\n";
 		$i++;
 	}
