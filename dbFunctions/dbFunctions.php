@@ -416,7 +416,7 @@ function dbGetListeNewsActives($id_site){
 
     include('var.php');
 
-    $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.date <> '0000-00-00 00:00:00' NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY date DESC;";
+    $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.date <> '0000-00-00 00:00:00' AND NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY NEWS.date DESC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	
@@ -1015,7 +1015,11 @@ function dbListeEmissionsForFeed($id_site){
 
     include('var.php');
 
-	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site=".$id_site." AND etat=3 ORDER BY date_sortie DESC;";
+	if ($id_site == 2)
+		$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site in (".$id_site.", ".($id_site+1).") AND etat=3 ORDER BY date_sortie DESC;";
+	else
+		$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site=".$id_site." AND etat=3 ORDER BY date_sortie DESC;";
+	
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_db_query ($db, $query);	

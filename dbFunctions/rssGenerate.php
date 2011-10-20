@@ -5,7 +5,9 @@ include('../dbFunctions/dbFunctions.php');
 include('../sitevars.php');
 
 $listeEmissions = dbListeEmissionsForFeed($id_site);
-
+if ($siteHaveNews)
+	$listeNews = dbGetListeNewsActives($id_site);
+	
 echo '<rss version="2.0">';
 echo '  <channel>';
 echo '    <title>'.$nomSite.'</title>';
@@ -17,14 +19,60 @@ echo '      <link>'.$radioclashHome.'</link>';
 echo '    </image>';
 echo '    <language>en-us</language>';
 
+$haveNewsForFeed = false;
+
+if($siteHaveNews && $news=mysql_fetch_array($listeNews))
+{	
+	$haveNewsForFeed = true;
+	$dateNewsToCompare = strtotime($news['date']);
+}
+
+$haveEmissionsForFeed = false;
+
 while($emission=mysql_fetch_array($listeEmissions))
 {
+	$haveEmissionsForFeed = true;
+
 	$idEmission = $emission['id'];
+	$dateEmissionToCompare = strtotime($emission['date_sortie']);
+	
+	if ($siteHaveNews)
+	{
+		while ($haveNewsForFeed && $dateEmissionToCompare < $dateNewsToCompare)
+		{
+			$dateNews = date('D, d M Y H:i:s O', strtotime($news['date']));	
+			echo '    <item>';
+			echo '      <title>News : '.$news['titre'].'</title>';
+			echo '      <link>'.$radioclashHome.'</link>';
+			echo '      <description><![CDATA[';	
+			echo '          <span>'.$news['contenu_fr'].'</span>';
+			echo '      ]]></description>';
+			echo '      <pubDate>'.$dateNews.'</pubDate>';
+			echo '    </item>';
+			
+			if ($news=mysql_fetch_array($listeNews))
+				$dateNewsToCompare = strtotime($news['date']);
+			else
+				$haveNewsForFeed = false;				
+		}
+	}
+	
 	$numeroEmission = $emission['numero'];
 	$nomParticipants = listeParticipantsEmission($idEmission);
-	$nomFichier = getNomFichierEmission($numeroEmission, $emission['titre'], $nomParticipants);
-	$titreEmission = getReferenceEmission($numeroEmission, $emission['titre'], $nomParticipants);
-	$imageEmission = $radioclashHome.$pics.$nomFichier.".jpg";
+	
+	if ($emission['id_site'] != $id_site)
+	{
+		$nomFichier = getNomFichierEmissionSite($emission['id_site'], $numeroEmission, $emission['titre'], $nomParticipants);
+		$titreEmission = getReferenceEmissionSite($emission['id_site'], $numeroEmission, $emission['titre'], $nomParticipants);
+		$imageEmission = $radioclashHome.$pics.$nomFichier.".jpg";
+	}
+	else
+	{
+		$nomFichier = getNomFichierEmission($numeroEmission, $emission['titre'], $nomParticipants);
+		$titreEmission = getReferenceEmission($numeroEmission, $emission['titre'], $nomParticipants);
+		$imageEmission = $radioclashHome.$pics.$nomFichier.".jpg";
+	}
+	
 	$mp3Emission = $radioclashHome.$mp3s.$nomFichier.".mp3";
 	$linkEmission = $radioclashHome."playlist.php?episode=".$numeroEmission;
 	$lengthEmission = getBytesLengthEmission($numeroEmission);
@@ -63,7 +111,11 @@ while($emission=mysql_fetch_array($listeEmissions))
 			echo "00:00 ".$nomSite." - Introduction Jingle<br />\n";
 			$i++;
 		}
-		echo "<span>".getNomMorceauEmission (toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], $array['nom_label'], $array['annee'])."</span><br />\n";
+		
+		if ($emission['id_site'] != $id_site)
+			echo "<span>".getNomMorceauEmissionSite($emission['id_site'], toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], $array['nom_label'], $array['annee'])."</span><br />\n";
+		else
+			echo "<span>".getNomMorceauEmission (toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], $array['nom_label'], $array['annee'])."</span><br />\n";
 		$i++;
 	}
 
@@ -81,6 +133,27 @@ while($emission=mysql_fetch_array($listeEmissions))
 	echo '      <enclosure url="'.$mp3Emission.'" type="audio/mpeg" length="'.$lengthEmission.'"/>';
 	echo '      <pubDate>'.$dateEmission.'</pubDate>';
 	echo '    </item>';
+}
+
+if ($siteHaveNews)
+{
+	while ($haveNewsForFeed)
+	{
+		$dateNews = date('D, d M Y H:i:s O', strtotime($news['date']));	
+		echo '    <item>';
+		echo '      <title>News : '.$news['titre'].'</title>';
+		echo '      <link>'.$radioclashHome.'</link>';
+		echo '      <description><![CDATA[';	
+		echo '          <span>'.$news['contenu_fr'].'</span>';
+		echo '      ]]></description>';
+		echo '      <pubDate>'.$dateNews.'</pubDate>';
+		echo '    </item>';
+		
+		if ($news=mysql_fetch_array($listeNews))
+			$dateNewsToCompare = strtotime($news['date']);
+		else
+			$haveNewsForFeed = false;				
+	}
 }
 
 echo '  </channel>';

@@ -3027,9 +3027,43 @@ function createLigneParticipantPlaylist(participantData)
 				
 				newMorceau['time_min'] = morceau.substring(0, morceau.indexOf(':'));
 				newMorceau['time_sec'] = morceau.substring(morceau.indexOf(':') + 1, morceau.indexOf(' '));
-				newMorceau['nom_artiste'] = morceau.substring(morceau.indexOf(' ') + 1, morceau.indexOf(' - '));
-				newMorceau['nom_morceau'] = morceau.substring(morceau.indexOf(' - ') + 3);				
+				//newMorceau['nom_artiste'] = morceau.substring(morceau.indexOf(' ') + 1, morceau.indexOf(' - '));
+				//newMorceau['nom_morceau'] = morceau.substring(morceau.indexOf(' - ') + 3);
+				
+				var morceauDecoupe = morceau.substring(morceau.indexOf(' ') + 1).split(" - ");
+				newMorceau['nom_artiste'] = morceauDecoupe[0];
+				newMorceau['nom_morceau'] = morceauDecoupe[1];
+				
+				if (siteHaveLabel && morceauDecoupe[2] != undefined)
+				{
+					newMorceau['nom_label'] = morceauDecoupe[2];
+					if (siteHaveAnnee && morceauDecoupe[3] != undefined)
+						newMorceau['annee'] = morceauDecoupe[3];
+				}				
+				else
+				{
+					if (siteHaveAnnee && morceauDecoupe[2] != undefined)
+						newMorceau['annee'] = morceauDecoupe[2];
+				}
 
+				if (siteHaveAnnee && (newMorceau['annee'].length != 4))
+				{
+					erreur = true;
+					break;
+				}
+				
+				var nbElementsTemplate = 2;
+				if (siteHaveLabel)
+					nbElementsTemplate++;
+				if (siteHaveAnnee)
+					nbElementsTemplate++;
+				
+				if (morceauDecoupe.length != nbElementsTemplate)
+				{
+					erreur = true;
+					break;
+				}
+				
 				newPlaylist.push(newMorceau);
 			}
 		}
@@ -3044,14 +3078,76 @@ function createLigneParticipantPlaylist(participantData)
 		
 			document.getElementById('spnErrorPlaylist' + participantData.nom_utilisateur).style.color = 'blue';
 			
-			document.getElementById('spnErrorPlaylist' + participantData.nom_utilisateur).innerHTML = '<br /><u><b>' + newPlaylist.length + ' morceaux trouvés :</b></u>';
-			document.getElementById('spnErrorPlaylist' + participantData.nom_utilisateur).innerHTML += '<table width="100%">';
-			document.getElementById('spnErrorPlaylist' + participantData.nom_utilisateur).innerHTML += '<tr><td width="10%"><b><u>Minutes</u></b> </td><td width="10%"><b><u>Secondes</u></b> </td><td width="40%"><b><u>Nom artiste</u></b> </td><td width="40%"><b><u>Nom morceaux</u></b> </td></tr>';
+			document.getElementById('spnErrorPlaylist' + participantData.nom_utilisateur).innerHTML = '<h3>' + newPlaylist.length + ' morceaux trouvés :</h3>';
+			
+			var tableMorceaux = document.createElement('table');
+			tableMorceaux.width = '100%';
+			tableMorceaux.border = '1';
+			
+			var headerTableMorceaux = document.createElement('tr');
+			var cellHeaderTableMorceaux1 = document.createElement('td');
+			cellHeaderTableMorceaux1.innerHTML = '<b><u>Min</u></b>';
+			headerTableMorceaux.appendChild(cellHeaderTableMorceaux1);
+			var cellHeaderTableMorceaux2 = document.createElement('td');
+			cellHeaderTableMorceaux2.innerHTML = '<b><u>Sec</u></b>';
+			headerTableMorceaux.appendChild(cellHeaderTableMorceaux2);
+			var cellHeaderTableMorceaux3 = document.createElement('td');
+			cellHeaderTableMorceaux3.innerHTML = '<b><u>Artiste</u></b>';
+			headerTableMorceaux.appendChild(cellHeaderTableMorceaux3);
+			var cellHeaderTableMorceaux4 = document.createElement('td');
+			cellHeaderTableMorceaux4.innerHTML = '<b><u>Morceau</u></b>';
+			headerTableMorceaux.appendChild(cellHeaderTableMorceaux4);
+			if (siteHaveLabel)
+			{
+				var cellHeaderTableMorceaux5 = document.createElement('td');
+				cellHeaderTableMorceaux5.innerHTML = '<b><u>Label</u></b>';
+				headerTableMorceaux.appendChild(cellHeaderTableMorceaux5);
+			}
+			if (siteHaveAnnee)
+			{
+				var cellHeaderTableMorceaux6 = document.createElement('td');
+				cellHeaderTableMorceaux6.innerHTML = '<b><u>Année</u></b>';
+				headerTableMorceaux.appendChild(cellHeaderTableMorceaux6);
+			}
+			
+			tableMorceaux.appendChild(headerTableMorceaux);
+			//document.getElementById('spnErrorPlaylist' + participantData.nom_utilisateur).innerHTML += '<table width="100%">';
+			//document.getElementById('spnErrorPlaylist' + participantData.nom_utilisateur).innerHTML += '<tr><td width="10%"><b><u>Minutes</u></b> </td><td width="10%"><b><u>Secondes</u></b> </td><td width="40%"><b><u>Nom artiste</u></b> </td><td width="40%"><b><u>Nom morceaux</u></b> </td><td width="40%"><b><u>Nom du label</u></b> </td><td width="40%"><b><u>Année</u></b> </td></tr>';
 			
 			for (var i=0; i<newPlaylist.length; i++)
-				document.getElementById('spnErrorPlaylist' + participantData.nom_utilisateur).innerHTML += '<tr><td>' + newPlaylist[i]['time_min'] + '</td><td>' + newPlaylist[i]['time_sec'] + '</td><td>' + newPlaylist[i]['nom_artiste'] + '</td><td>' + newPlaylist[i]['nom_morceau'] + "</td></tr>";
-
-			document.getElementById('spnErrorPlaylist' + participantData.nom_utilisateur).innerHTML += '</table>';
+			{
+				var ligneTableMorceaux = document.createElement('tr');
+				var cellLigneTableMorceaux1 = document.createElement('td');
+				cellLigneTableMorceaux1.innerHTML = newPlaylist[i]['time_min'];
+				ligneTableMorceaux.appendChild(cellLigneTableMorceaux1);
+				var cellLigneTableMorceaux2 = document.createElement('td');
+				cellLigneTableMorceaux2.innerHTML = newPlaylist[i]['time_sec'];
+				ligneTableMorceaux.appendChild(cellLigneTableMorceaux2);
+				var cellLigneTableMorceaux3 = document.createElement('td');
+				cellLigneTableMorceaux3.innerHTML = newPlaylist[i]['nom_artiste'];
+				ligneTableMorceaux.appendChild(cellLigneTableMorceaux3);
+				var cellLigneTableMorceaux4 = document.createElement('td');
+				cellLigneTableMorceaux4.innerHTML = newPlaylist[i]['nom_morceau'];
+				ligneTableMorceaux.appendChild(cellLigneTableMorceaux4);
+				if (siteHaveLabel)
+				{
+					var cellLigneTableMorceaux5 = document.createElement('td');
+					cellLigneTableMorceaux5.innerHTML = newPlaylist[i]['nom_label'];
+					ligneTableMorceaux.appendChild(cellLigneTableMorceaux5);
+				}
+				if (siteHaveAnnee)
+				{
+					var cellLigneTableMorceaux6 = document.createElement('td');
+					cellLigneTableMorceaux6.innerHTML = newPlaylist[i]['annee'];
+					ligneTableMorceaux.appendChild(cellLigneTableMorceaux6);
+				}
+				
+				tableMorceaux.appendChild(ligneTableMorceaux);
+				//document.getElementById('spnErrorPlaylist' + participantData.nom_utilisateur).innerHTML += '<tr><td>' + newPlaylist[i]['time_min'] + '</td><td>' + newPlaylist[i]['time_sec'] + '</td><td>' + newPlaylist[i]['nom_artiste'] + '</td><td>' + newPlaylist[i]['nom_morceau'] + '</td><td>' + newPlaylist[i]['nom_label'] + '</td><td>' + newPlaylist[i]['annee'] + '</td></tr>';
+			}
+			document.getElementById('spnErrorPlaylist' + participantData.nom_utilisateur).appendChild(tableMorceaux);			
+			//document.getElementById('spnErrorPlaylist' + participantData.nom_utilisateur).innerHTML += '</table>';
+			
 			document.getElementById('txtMorceauPlaylist' + participantData.nom_utilisateur).style.display = 'none';
 			document.getElementById('btnValiderPlaylist' + participantData.nom_utilisateur).style.display = 'none';
 			document.getElementById('btnEnregistrerPlaylist' + participantData.nom_utilisateur).style.display = 'block';
@@ -3101,6 +3197,12 @@ function createLigneParticipantPlaylist(participantData)
 	{
 		var data = listeMorceauxParticipant[j];
 		txtMorceaux.value = txtMorceaux.value + '\n' + toTime(data.time_min) + ':' + toTime(data.time_sec) + ' ' + data.nom_artiste + ' - ' + data.nom_morceau;
+		
+		if (siteHaveLabel)
+			txtMorceaux.value = txtMorceaux.value + ' - ' + data.nom_label;
+		
+		if (siteHaveAnnee)
+			txtMorceaux.value = txtMorceaux.value + ' - ' + data.annee;
 	}
 
 	var br1 = document.createElement('br');

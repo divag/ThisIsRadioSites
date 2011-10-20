@@ -69,4 +69,52 @@ function getNomMorceauEmission ($time_min, $time_sec, $nom_artiste, $nom_morceau
 	return $nomMorceau;
 }
 
+function getReferenceEmissionSite($id_site, $numero, $titre, $nomParticipants)
+{
+	$replaceArray = array(
+	  '{numero}' => str_pad($numero, 3, "0", STR_PAD_LEFT), 
+	  '{titre}' => $titre, 
+	  '{nom_participant}' => str_replace(", ", " & ", $nomParticipants)
+	);
+	
+	$config_site = dbGetParametresSite($id_site);
+	$templateReferenceEmission_site = $config_site['template_reference_emission'];
+
+	$reference = str_replace(array_keys($replaceArray), array_values($replaceArray), $templateReferenceEmission_site);
+	return $reference;
+}
+
+function getNomFichierEmissionSite($id_site, $numero, $titre, $nomParticipants)
+{
+	$replaceArray = array(
+	  '{numero}' => str_pad($numero, 3, "0", STR_PAD_LEFT), 
+	  '{titre}' => clean($titre), 
+	  '{nom_participant}' => clean(str_replace(", ", " & ", $nomParticipants))
+	);
+	
+	$config_site = dbGetParametresSite($id_site);
+	$templateNommageFichiersEmission_site = $config_site['template_nommage_fichiers_emission'];
+
+	$nomFichier = str_replace(array_keys($replaceArray), array_values($replaceArray), $templateNommageFichiersEmission_site);
+	return $nomFichier;
+}
+
+function getNomMorceauEmissionSite($id_site, $time_min, $time_sec, $nom_artiste, $nom_morceau, $nom_label, $annee)
+{
+	$replaceArray = array(
+	  '{time_min}' => $time_min,
+	  '{time_sec}' => $time_sec,
+	  '{nom_artiste}' => $nom_artiste,
+	  '{nom_morceau}' => $nom_morceau,
+	  '{nom_label}' => $nom_label,
+	  '{annee}' => $annee
+	);
+	
+	$config_site = dbGetParametresSite($id_site);
+	$templateNommageMorceauxEmission_site = $config_site['template_nommage_morceaux_emission'];
+
+	$nomMorceau = str_replace(array_keys($replaceArray), array_values($replaceArray), $templateNommageMorceauxEmission_site);
+	return $nomMorceau;
+}
+
 ?>

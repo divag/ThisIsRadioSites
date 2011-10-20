@@ -361,7 +361,7 @@ else
 			</table>
 			</fieldset>
 			<fieldset id="goodiesEmission" class="etat22">
-				<legend>Goodies de l'&eacute;mission</legend>
+				<legend>Goodies : Liens YouTube en cadeaux avec l'&eacute;mission</legend>
 				<input id="boutonAddGoodiesEmission" type="button" class="button" value="Ajouter un goodies" /><br />
 				<br />
 				<u>Voici la liste des goodies :</u>
