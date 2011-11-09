@@ -1798,6 +1798,22 @@ function getBytesLengthEmission($numero)
 		return 0;
 }
 
+function getBytesLengthEmissionSite($id_site, $numero)
+{
+	$emission = dbGetEmissionByNumero($id_site, $numero);
+	$idEmission = $emission['id'];
+	$titre = $emission['titre'];
+	$nomParticipants = listeParticipantsEmission($idEmission);
+	
+	$filePath = "../amix/".MP3S.getNomFichierEmissionSite($id_site, $numero, $titre, $nomParticipants).".mp3";
+	if (file_exists($filePath))
+	{
+		return filesize($filePath);
+	}
+	else
+		return 0;
+}
+
 function dbGetEmissionCompleteFlag($id)
 {
 	$emission = dbGetEmission($id);

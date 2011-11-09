@@ -64,24 +64,35 @@ while($emission=mysql_fetch_array($listeEmissions))
 	{
 		$nomFichier = getNomFichierEmissionSite($emission['id_site'], $numeroEmission, $emission['titre'], $nomParticipants);
 		$titreEmission = getReferenceEmissionSite($emission['id_site'], $numeroEmission, $emission['titre'], $nomParticipants);
-		$imageEmission = $radioclashHome.$pics.$nomFichier.".jpg";
+		$imageEmission = $radioclashHome."amix/".$pics.$nomFichier.".jpg";
+		$lengthEmission = getBytesLengthEmissionSite($emission['id_site'], $numeroEmission);
+		$mp3Emission = $radioclashHome."amix/".$mp3s.$nomFichier.".mp3";
+		$linkEmission = $radioclashHome."amix/"."playlist.php?episode=".$numeroEmission;
 	}
 	else
 	{
 		$nomFichier = getNomFichierEmission($numeroEmission, $emission['titre'], $nomParticipants);
 		$titreEmission = getReferenceEmission($numeroEmission, $emission['titre'], $nomParticipants);
 		$imageEmission = $radioclashHome.$pics.$nomFichier.".jpg";
+		$lengthEmission = getBytesLengthEmission($numeroEmission);
+		$mp3Emission = $radioclashHome.$mp3s.$nomFichier.".mp3";
+		$linkEmission = $radioclashHome."playlist.php?episode=".$numeroEmission;
 	}
 	
-	$mp3Emission = $radioclashHome.$mp3s.$nomFichier.".mp3";
-	$linkEmission = $radioclashHome."playlist.php?episode=".$numeroEmission;
-	$lengthEmission = getBytesLengthEmission($numeroEmission);
 	$dateEmission = date('D, d M Y H:i:s O', strtotime($emission['date_sortie']));
 	
-	echo '    <item>';
-	echo '      <title>'.$nomSite.' '.$titreEmission.'</title>';
-	echo '      <link>'.$linkEmission.'</link>';
+	echo '    <item>\n';
+	echo '      <title>'.$nomSite.' '.$titreEmission.'</title>\n';
+	echo '      <link>'.$linkEmission.'</link>\n';
 	echo '      <description><![CDATA[';
+	
+	if ($emission['id_site'] != $id_site && $emission['id_contenu_texte'] != '')
+	{
+		$texte_presentation = dbGetContenu($emission['id_contenu_texte']);
+		echo $texte_presentation['contenu_fr'].'<br />';
+	}
+	
+	
 	echo '        <img src="'.$imageEmission.'" alt="cover" width="346" height="346" /><br />';
 	
 	$playlist = dbGetPlaylist($idEmission);
@@ -108,7 +119,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 		}			
 		if ($i == 0 && (toTime($array['time_min']) != "00" || toTime($array['time_sec']) != "00"))
 		{
-			echo "00:00 ".$nomSite." - Introduction Jingle<br />\n";
+			echo "00:00 Introduction<br />\n";
 			$i++;
 		}
 		
@@ -121,18 +132,18 @@ while($emission=mysql_fetch_array($listeEmissions))
 
 	if ($siteHaveParticipants)
 	{
-		echo "<br />\n";
+		echo "<br />";
 		if ($chef != '')
 		{
 			echo utf8_encode("<p style=\"color:gray;\">Une émission présidée par ").$chef.".</p>";
-			echo "<br />\n";
+			echo "<br />";
 		}
 	}
-	
 	echo '      ]]></description>';
-	echo '      <enclosure url="'.$mp3Emission.'" type="audio/mpeg" length="'.$lengthEmission.'"/>';
-	echo '      <pubDate>'.$dateEmission.'</pubDate>';
-	echo '    </item>';
+	
+	echo '      <enclosure url="'.$mp3Emission.'" type="audio/mpeg" length="'.$lengthEmission.'"/>\n';	
+	echo '      <pubDate>'.$dateEmission.'</pubDate>\n';
+	echo '    </item>\n\n';
 }
 
 if ($siteHaveNews)
