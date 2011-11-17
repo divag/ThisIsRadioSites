@@ -1,0 +1,56 @@
+/* Styles for divag speciel features */
+
+.sm2-inline-list {
+ display:none;
+}
+
+.sm2-inline-list-first {
+ display:block;
+}
+
+.myShortcut {
+color:white;
+text-decoration:none;
+}
+
+.myShortcut span {
+	display:none;
+}
+
+.myShortcutPlaying {
+color:red;
+text-decoration:none;
+}
+.myShortcutPaused{
+color:red;
+font-style:italic;
+}
+
+.myShortcut {
+cursor:pointer;
+}
+
+.myShortcut div {
+height:60px;
+width:100%;
+background-position:top;
+background-repeat:no-repeat;
+background-image:url(../image/button-play.png);
+}
+
+.myShortcut div:hover {
+background-image:url(../image/button-play-light.png);
+}
+.myShortcutPlaying div {
+background-image:url(../image/button-play-light.png);
+}
+.myShortcutPlaying div:hover {
+background-image:url(../image/button-pause-light.png);
+}
+.myShortcutPaused div {
+background-image:url(../image/button-pause.png);
+}
+.myShortcutPaused div:hover {
+background-image:url(../image/button-play-light.png);
+}
+
