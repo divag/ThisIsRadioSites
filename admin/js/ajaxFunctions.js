@@ -2909,10 +2909,10 @@ function validateAdresseYoutube(control, bouton)
 		bouton = document.getElementById(control.id + 'Button');
 		
 	document.getElementById(control.id + 'Error').innerHTML = '';
-	if (control.value != '' && control.value.indexOf('http://www.youtube.com/watch?v=') != 0)
+	if (control.value != '' && control.value.indexOf('http://youtu.be/') != 0)
 	{
 		bouton.disabled = true; 
-		document.getElementById(control.id + 'Error').innerHTML = 'L\'adresse YouTube est incorrecte, il faut qu\'elle commence par "http://www.youtube.com/watch?v="';
+		document.getElementById(control.id + 'Error').innerHTML = 'L\'adresse YouTube est incorrecte, il faut qu\'elle commence par "http://youtu.be/"';
 	}	
 	else
 		bouton.disabled = false; 
