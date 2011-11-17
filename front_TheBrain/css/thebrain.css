@@ -1,0 +1,394 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	background:#95A0F9 url(background.jpg) top left repeat-y;
+	font-size: 14px;
+	color: #FFFFFF;
+}
+
+body.index {
+	background:#000000;
+}
+
+img {
+	border-width: 0px;
+}
+
+a {
+	font-weight: bold;
+	color: #FF99CB;
+	text-decoration: none;
+	outline:0;
+}
+
+a span {
+	text-decoration: underline;
+}
+
+.underline {
+	text-decoration: underline;
+}
+
+h3 {
+	padding:7px;
+	margin:0px;
+}
+
+/* 
+ENTETE : 
+========
+*/
+/*
+h1.entete {
+	position: relative;
+    left:50px;
+}
+*/
+div.enteteIndex {
+	text-align: center;
+}
+
+h1.enteteIndex span {
+	visibility:hidden;
+	display:none;
+}
+
+div.entete {
+	text-align: left;
+}
+
+div.logo {
+	padding:0px;
+	margin:0px;
+	float:left;
+}
+
+div.logo span {
+	visibility:hidden;
+	display:none;
+}
+
+
+/* 
+MENU : 
+======
+*/
+div.menuIndex {
+	text-align: center;
+}
+
+ul.menuIndex {
+	margin-left: auto;
+	margin-right: auto;
+	width: 835px;
+}
+
+div.menuIndex ul li {
+	float: left;
+	list-style-type: none;
+	padding:3px;
+}
+
+ul.enligne {
+	padding:0px;
+	margin:0px;
+	white-space:nowrap;
+}
+
+ul.enligne li {
+	display:inline;
+	float: left;
+	list-style-type: none;
+	padding:3px;
+}
+
+div.menu {
+	padding:0px;
+	margin:0px;
+	padding-left: 7px;
+	float:left;
+}
+
+div.menu img {
+	width:405px;
+}
+
+div.amix img {
+	width:305px;
+	height:305px;
+}
+
+ul.menu {
+	padding:0px;
+	margin:0px;
+}
+
+ul.menu li{
+	font-size: 18px;
+	font-weight: bold;
+	float: left;
+	list-style-type: none;
+	border: 5px solid rgb(141, 215, 255);
+	border-left: 0px solid black;
+	padding: 5px;
+	width:85px;
+	text-align:center;
+}
+
+ul.links li{
+	width:100px;
+	font-size: 14px;
+}
+
+.clear {
+	clear:both;
+}
+
+ul.menu li.first {
+	border: 5px solid rgb(141, 215, 255);
+}
+
+ul.menu li.secondLine {
+	border-top-width: 0px;
+}
+
+/*
+div.menu ul li {
+	float: left;
+	list-style-type: none;
+	margin-bottom:15px;
+}
+
+div.menu ul li span {
+	visibility:hidden;
+	display:none;
+}
+
+ul.menu li {
+	margin-right:0px;
+	width: 125px;
+}
+ul.menu li img {
+	width: 125px;
+	height: 58px;
+}
+
+ul.menuSmall li {
+	margin-right:0px;
+	width: 125px;
+}
+
+ul.menuSmall li img {
+	width: 125px;
+	height: 58px;
+}
+*/
+
+/* 
+Page LISTEN : 
+=============
+*/
+
+ul.listeEmissions{
+/*	width: 100%;*/
+	font-size:12px;
+	margin:0px;
+	padding:0px;
+}
+
+ul.listeEmissions li img{
+	width: 90px;
+	height: 90px;
+	opacity:0.8;
+}
+
+ul.listeEmissions li img:hover {
+	opacity:1.0;
+}
+
+ul.listeEmissions li {
+	float: left;
+	list-style-type: none;
+	width: 90px;
+	height: 140px;
+	margin-left:5px;
+	margin-bottom:5px;
+	display:inline;
+}
+
+ul.amix li {
+	float: left;
+	list-style-type: none;
+	width: 150px;
+	height: 200px;
+	padding:5px;
+}
+
+ul.amix li img{
+	width: 150px;
+	height: 150px;
+	padding-bottom:5px;
+}
+
+span.lienEmission {
+	font-weight: bold;
+	text-decoration:none;
+}
+
+span.lienDownloadEmission {
+	margin-top:5px;
+	color:blue;
+	font-weight: normal;
+	text-decoration:underline;
+}
+
+span.lienDownloadEmissionAmix {
+	font-weight: bold;
+}
+
+/* 
+Page PLAYLIST : 
+===============
+*/
+/*
+.metadata {
+	position: absolute;
+	top: 4px;
+	left: 0px;
+	width: 250px;
+}
+*/
+
+/*
+Page NEWS :
+===========
+*/
+
+/*
+.imageNews  {
+	width:5%;
+	vertical-align:top;
+	padding-top:20px;
+	padding-left:10px;
+}
+
+.listeLiens a, .listeLiens a img {
+	margin-right:5px;
+	vertical-align:middle;
+}
+*/
+
+/* 
+Textes et mises en formes : 
+===========================
+*/
+.pageContent {
+	padding:7px;
+}
+
+.pageContent h2 {
+	padding-top:0px;
+	margin-top:0px;
+}
+
+table.maxSize {
+     width:100%
+}
+
+.presentation {
+	color:rgb(141, 215, 255);
+}
+
+.translate {
+	font-weight:bold;
+	font-style:italic;
+}
+
+.red {
+	color:red;
+}
+
+.gris {
+	color:gray;
+}
+
+.gras {
+	font-weight:bold;
+}
+
+.italique {
+	font-style:italic;
+}
+
+.upper {
+	text-transform:uppercase;
+}
+
+.big {
+	font-size:14px;
+}
+
+.right {
+	text-align:right;
+	margin-right:5px;
+}
+
+.center {
+	text-align:center;
+}
+
+.top {
+	vertical-align:top;
+}
+*/
+/* 
+FOOTER : 
+========
+*/
+/*
+.footerHosting {
+	width:100%;
+	text-align:right;
+	font-size: 10px;
+}
+*/
+.metadataShortCut {
+	color:black;
+	font-weight:normal;
+}
+.metadataShortCutPlaying {
+	color:yellow;
+	font-weight:bold;
+}
+/*
+.nomEmission{
+	vertical-align:top;
+	color: rgb(0, 0, 0);
+	font-style:normal;
+	text-decoration:none;
+}
+.nomEmission font{
+	position:relative;
+	top:-3px;
+}
+
+.linkTeaser {
+	text-decoration:none;
+}
+
+.playlistCell {
+	width:544px;
+	padding-left:5px;
+}
+.playerCell {
+	width:270px;
+}
+.mp3link {
+	font-size:12px;
+	position:relative;
+	top:2px;
+}
+.titreEmission {
+	margin-top:0px;
+	padding-top:0px;
+}
+*/
