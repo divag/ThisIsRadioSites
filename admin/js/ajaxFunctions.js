@@ -1245,7 +1245,7 @@ function refreshTypeContenu(id_contenu, id_type_contenu, bouton_valider, forced_
 		bouton_valider.style.display = 'block';
 		
 		return function () {
-			document.getElementById('formContenuUrl').value = document.getElementById('formContenuLienVideo').value.replace('http://www.youtube.com/watch?v=', 'http://www.youtube.com/v/');
+			document.getElementById('formContenuUrl').value = document.getElementById('formContenuLienVideo').value.replace('http://www.youtube.com/watch?v=', 'http://www.youtube.com/v/').replace('http://youtu.be/', 'http://www.youtube.com/v/');
 			//les contenu textes ne sont pas utilisés pour ce type :
 			CKEDITOR.instances.formContenuContenuFr.setData('', function()
 			{
@@ -2529,7 +2529,7 @@ function updateVideoTeaser()
 {
 	showWait();
 	var urlTeaserVideo = document.getElementById('txtVideoTeaser').value;
-	urlTeaserVideo = urlTeaserVideo.replace('http://www.youtube.com/watch?v=', 'http://www.youtube.com/v/');
+	urlTeaserVideo = urlTeaserVideo.replace('http://www.youtube.com/watch?v=', 'http://www.youtube.com/v/').replace('http://youtu.be/', 'http://www.youtube.com/v/');
 	getDatas('dbUpdateTeaserVideoEmission', 'result', 'id=' + currentItem.id + '&teaser_video=' + encode(urlTeaserVideo));
 	getDatas('dbGetEmission', 'currentEmissionDatas', 'id=' + currentItem.id);
 	currentItem.teaser_video = currentEmissionDatas.teaser_video;
@@ -2909,10 +2909,10 @@ function validateAdresseYoutube(control, bouton)
 		bouton = document.getElementById(control.id + 'Button');
 		
 	document.getElementById(control.id + 'Error').innerHTML = '';
-	if (control.value != '' && control.value.indexOf('http://www.youtube.com/watch?v=') != 0)
+	if (control.value != '' && control.value.indexOf('http://www.youtube.com/watch?v=') != 0 && control.value.indexOf('http://youtu.be/') != 0)
 	{
 		bouton.disabled = true; 
-		document.getElementById(control.id + 'Error').innerHTML = 'L\'adresse YouTube est incorrecte, il faut qu\'elle commence par "http://www.youtube.com/watch?v="';
+		document.getElementById(control.id + 'Error').innerHTML = 'L\'adresse YouTube est incorrecte, il faut qu\'elle commence par "http://youtu.be/" ou "http://www.youtube.com/watch?v="';
 	}	
 	else
 		bouton.disabled = false; 
