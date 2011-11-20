@@ -588,9 +588,11 @@ function PagePlayer() {
 	  if (o.getAttribute('class') == null)
 	      classAttributeName = 'className';
 
+	  var isShortcut = false;
 	  if (self.config.divagSpecialFeatures) {
 		if (o.getAttribute(classAttributeName) != null && o.getAttribute(classAttributeName).indexOf('myShortcut') == 0)
 		{			
+			isShortcut = true;
 			var linkToPlay = document.getElementById(o.getAttribute('cible'));
 			o=linkToPlay;
 		}
@@ -599,10 +601,10 @@ function PagePlayer() {
 //Ajout Gaëtan (FIN)
 
 //Ajout Gaëtan (DEBUT) : On affiche uniquement le lecteur en cours.
-    if (self.config.divagSpecialFeatures) {
+    if (isShortcut  && self.config.divagSpecialFeatures) {
 	  // - On masque tous les lecteurs
 	  var elementsToHide = self.getElementsByClassName('playlist','ul');
-	  
+
 	  for (var i=0; i<elementsToHide.length; i++)
 	      elementsToHide[i].style.display = 'none';
 		  

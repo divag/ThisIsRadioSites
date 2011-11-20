@@ -1,4 +1,16 @@
 
+div.player {
+	position:fixed;
+	bottom:0px;
+	left:0px;
+	width:100%;
+	z-index:99;
+}
+
+div.playerHeight {
+	height:60px;
+}
+
 ul.playlist li ul li {
  position:relative;
  margin:0px;

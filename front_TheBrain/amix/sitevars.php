@@ -8,7 +8,7 @@
 // 3 = The Brain AMIX
 // 4 = Prototop
 //=====================
-$id_site = 2;
+$id_site = 3;
 define('ID_SITE',$id_site);
 
 //Attention, le fichier dbFunctions doit être chargé !
@@ -55,17 +55,14 @@ define('TEMPLATE_NOM_MORCEAU_EMISSION',$templateNommageMorceauxEmission);
 //=========================
 //Pages/Liens du site web :
 //=========================
-
-$pageNews = 'news';
-$pageListen = 'playlists';
+$siteTheBrain = dbGetSite(2);
+$theBrainHome = $siteTheBrain['url'];
 $pageEmission = 'listen';
-$pageAmix = 'amix';
-$pageLinks = 'links';
-$lienPodcast = 'http://feeds.feedburner.com/TheBrainRadioshow';
-$rssFeed = 'http://feeds.feedburner.com/TheBrainRadioshow';
+
+$lienPodcast = 'http://feeds.feedburner.com/thisisradioclash';
+$rssFeed = 'http://feeds.feedburner.com/thisisradioclash';
 $lienForum = "http://www.musiques-incongrues.net/";
-$lienFacebook = "http://www.facebook.com/#!/pages/The-Brain-radioshow/338103325189?ref=ts";
-$lienDeeperInside = "http://deeperinside.thebrainradio.com/";
+$lienFacebook = "http://www.facebook.com/thisisradioclash?ref=mf";
 
 //=========
 //Modules :

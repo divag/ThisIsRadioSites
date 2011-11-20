@@ -21,14 +21,17 @@ else
 		else
 		{
 			$idEmission = $emission['id'];
-			$nomEmission = getReferenceEmission($numero, null, null);
+			$nomParticipants = listeParticipantsEmission($emission['id']);
+			$nomEmission = getReferenceEmission($emission['numero'], null, $nomParticipants);
 			$anneeEmission = date('Y', strtotime($emission['date_sortie']));
 			$moisEmission = date('m', strtotime($emission['date_sortie']));
 			$dateEmission = $moisEmission."/".$anneeEmission;
-			$nomFichierEmission = getNomFichierEmission($numero, null, null);
+			$nomFichierEmission = getNomFichierEmission($numero, null, $nomParticipants);
 			
-			$gifEmission = $pics.$nomFichierEmission.".gif";
-			$imageEmission = $pics.$nomFichierEmission.".jpg";
+			if (file_exists($pics.$nomFichierEmission.".gif"))
+				$imageEmission = $pics.$nomFichierEmission.".gif";
+			else
+				$imageEmission = $pics.$nomFichierEmission.".jpg";
 			
 			$audioEmission = $mp3s.$nomFichierEmission.".mp3";
 			
@@ -38,6 +41,8 @@ else
 			
 			$listeGoodies = dbGetListeGoodiesEmission($idEmission);
 			
+			$contenuTexteEmission = dbGetContenu($emission['id_contenu_texte']);
+			$texteEmission = $contenuTexteEmission['contenu_fr'];
 			$linkEmissionAutoRedirect = $pageEmission.".php?episode=".$nextEmission['numero']."&auto=1";
 			
 			$firstPlay = 0;
@@ -51,9 +56,9 @@ else
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<?php
-	writeHead('listen');
-	?>
+<?php
+writeHead('listen_amix');
+?>
 
 	<!-- required -->
 	<link rel="stylesheet" type="text/css" href="<?php echo $soundmanager ?>demo/css/divagSpecialFeatures.css" />
@@ -142,62 +147,78 @@ else
 <body>
 <?php
 writeEntete('listen');
-?>
+
+			echo "<div class=\"entete\">\n";
+			echo "  <div class=\"logo\">\n";
+			echo "  <a href=\"".$theBrainHome."\" title=\"The Brain radioshow\"> \n";
+			echo "    <img class=\"entete\" src=\"css/logoSite.jpg\" alt=\"The Brain radioshow logo\"/><br />\n";
+			echo "	  <span>The Brain radioshow home</span>\n";
+			echo "  </a>\n";
+			echo "  </div>\n";
+
+			/********/
+			/* MENU */
+			/********/
+			echo "<div class=\"menu amix\">\n";
+			echo "  <ul class=\"menu\">\n";
+			
+			//Lien vers le site AMIX :
+			echo "    <li class=\"first\"><a href=\"".$theBrainHome."/\" title=\"Friends mixes\">\n";
+			echo "      <span>HOME</span>\n";
+			echo "    </a></li>\n";
+			//Lien vers les playlists :
+			echo "    <li><a href=\"".$theBrainHome."playlists.php\" title=\"Ecouter\">\n";
+			echo "      <span>SHOWS</span>\n";
+			echo "    </a></li>\n";
+			//Lien vers le site AMIX :
+			echo "    <li><a href=\"".$radioclashHome."\" title=\"Friends mixes\">\n";
+			echo "      <span>AMIX</span>\n";
+			echo "    </a></li>\n";
+			
+			echo "  </ul>\n";
+			
+			echo "<br />";
+			echo "<a href=\"".$imageEmission."\" rel=\"lightbox\" title=\"Click to download/print the cover\" rev=\"".$imageEmission."\"><img src=\"".$imageEmission."\"/></a>\n";
+			
+			echo "<br class=\"clear\" />";
+			echo "</div>\n";
+			echo "<br class=\"clear\" />";
+			echo "</div>\n";
+			echo "<br class=\"clear\" />";
+
+?>					
 
 <div class="pageContent">
 
-<ul class="enligne" style="height:350px;">
-<li>
-	<a href="<?php echo $imageEmission ?>" rel="lightbox" title="Click to download/print the cover" rev="<?php echo $imageEmission ?>"><img src="<?php echo $imageEmission ?>" width="350" height="350" border="0" /></a>
-</li>
-<li class="center">
-	<a href="<?php echo $pageListen ?>.php" title="Accueil">
-		<img src="css/logoListen.jpg" alt=\"The Brain radioshow logo\" />
-		<br /><span>SHOWS</span>
-	</a>
-	<br />
-	<br />
-	<h2><?php echo $nomEmission ?>
-		<br />
-		<span style="font-size:smaller;"><?php echo $dateEmission ?></span>
-	</h2>
-	<br />
-	<a class="myShortcut" cible="lecteur">
-		<div>
-		<span class="nomEmission"><font>&nbsp;PLAY&nbsp;</font></span>
-		</div>
-	</a>
-	<br />
-	<?php 
-	if ($commentsEmission == "")
-		echo "<br />";
-	?>
-	<a href="<?php echo $audioEmission ?>" class="exclude">
-		<span class="lienDownloadEmission">Download</span>
-	</a>
-	<br />
-	<a href="<?php echo $lienPodcast ?>">
-		<span class="lienDownloadEmission">Podcast</span>
-	</a>
-	<?php 
-	if ($commentsEmission != "")
-	{
-		echo "<br />";
-		echo "<a href=\"".$commentsEmission."\">";
-		echo "    <span class=\"lienDownloadEmission\">Comments</span>";
-		echo "</a>";
-	}
-	?>
-	<br />
-	<a href="<?php echo $lienDeeperInside ?>">
-		<span class="lienDownloadEmission">Deeper Inside</span>
-	</a>
-</li>
-<li>
-	<img src="<?php echo $gifEmission ?>" height="350" border="0" />
-</li>
-</ul>
-<br class="clear" />
+<h2><?php echo $nomEmission ?>
+</h2>
+
+<span class="presentation"><?php echo $texteEmission ?></span>
+
+<div style="height:60px;align:middle;">
+<div style="width:65px;float:left;">
+			<a class="myShortcut" cible="lecteur">
+				<div>
+				<span class="nomEmission"><font>&nbsp;PLAY&nbsp;</font></span>
+				</div>
+			</a>
+</div>
+<h3 style="padding-top:20px;">
+			&nbsp;/&nbsp;
+			<a href="<?php echo $audioEmission ?>" class="exclude">
+				<span class="lienDownloadEmission lienDownloadEmissionAmix">Download</span>
+			</a>
+			<?php 
+			if ($commentsEmission != "")
+			{
+				echo "&nbsp;/&nbsp;<a href=\"".$commentsEmission."\">";
+				echo "    <span class=\"lienDownloadEmission lienDownloadEmissionAmix\">Comments</span>";
+				echo "</a>";
+			}
+			?>
+</h3>
+</div>
+<br />
 <div class="player">
 	 <ul class="playlist" style="display:none;">
 	  <li>

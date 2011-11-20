@@ -40,8 +40,11 @@ while($emission=mysql_fetch_array($listeEmissions))
 	}
 	else
 	{
-		echo "    <img src=\"".$pics."comingsoon.jpg\" title=\"".$texteEmission."\"/><br />";
-		echo "    <span class=\"lienEmission\" class=\"lienEmission\">".$texteEmission."</span>";
+		if ($emission['etat'] == 2)
+		{
+			echo "    <img src=\"".$pics."comingsoon.jpg\" title=\"".$texteEmission."\"/><br />";
+			echo "    <span class=\"lienEmission\" class=\"lienEmission\">".$texteEmission."</span>";
+		}
 	}
 	echo "</li>";
 }

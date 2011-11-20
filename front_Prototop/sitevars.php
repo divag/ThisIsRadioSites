@@ -55,6 +55,7 @@ define('TEMPLATE_NOM_MORCEAU_EMISSION',$templateNommageMorceauxEmission);
 //Pages/Liens du site web :
 //=========================
 
+$pageEmission = 'index';
 $pageNews = 'news';
 $pageHowto = 'howto';
 $pageListen = 'listen';
