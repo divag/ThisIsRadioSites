@@ -16,6 +16,8 @@ $oldImageToPrintEmission = $base.$pics.getNomFichierEmission($emission['numero']
 $imageToPrintEmission = $base.$pics.getNomFichierEmission($_POST["numero"], $_POST["titre"], $nomParticipants)."-toPrint.jpg";
 $oldMp3Emission = $base.$mp3s.getNomFichierEmission($emission['numero'], $emission['titre'], $nomParticipants).".mp3";
 $mp3Emission = $base.$mp3s.getNomFichierEmission($_POST["numero"], $_POST["titre"], $nomParticipants).".mp3";
+$oldMp3TeaserEmission = $base.$mp3s.getNomFichierEmission($emission['numero'], $emission['titre'], $nomParticipants)."-teaser.mp3";
+$mp3TeaserEmission = $base.$mp3s.getNomFichierEmission($_POST["numero"], $_POST["titre"], $nomParticipants)."-teaser.mp3";
 $oldZipEmission = $base.$zips.getNomFichierEmission($emission['numero'], $emission['titre'], $nomParticipants).".zip";
 
 if (file_exists($oldImageEmission))
@@ -29,6 +31,9 @@ if (file_exists($oldImageToPrintEmission))
 	
 if (file_exists($oldMp3Emission))
 	rename($oldMp3Emission, $mp3Emission);
+	
+if (file_exists($oldMp3TeaserEmission))
+	rename($oldMp3TeaserEmission, $mp3TeaserEmission);
 	
 if (file_exists($oldZipEmission))
 	unlink($oldZipEmission);
