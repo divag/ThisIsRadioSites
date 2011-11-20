@@ -36,17 +36,15 @@
 	$radioclashZip = new createZip;  
 
 	// On genere le fichier de la playlist :	
-	$fichier_playlist = "ThisIsRadioclash ".$ref_emission."\r\n";
+	$fichier_playlist = $nomSite." ".$ref_emission."\r\n";
 	$fichier_playlist.= "\r\n";
 	$fichier_playlist.= "\r\n";
 	
-	
-	$fichier_playlist.=" 00:00 This is radioclash - Introduction Jingle\r\n";
-	
+		
 	$playlist = dbGetPlaylist($id);
 	$nomUtilisateurEnCours = "";
 	$chef = dbGetChefEmission($id);
-	$i = 1;
+	$i = 0;
 	while($array=mysql_fetch_array($playlist))
 	{
 		if ($nomUtilisateurEnCours != strtoupper($array['nom_utilisateur']))
@@ -63,6 +61,11 @@
 			$fichier_playlist.="\r\n";
 		}
 		
+		if ($i == 0 && (toTime($array['time_min']) != "00" || toTime($array['time_sec']) != "00"))
+		{
+			echo "00:00 Introduction\r\n";
+			$i++;
+		}
 		$fichier_playlist.=" ".getNomMorceauEmission(toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], $array['nom_label'], $array['annee'])."\r\n";
 		$i++;
 	}
