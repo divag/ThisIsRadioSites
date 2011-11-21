@@ -80,6 +80,7 @@ $css = "modules/css/";
 $js = "modules/js/";
 //Envoi de mails :
 $urlSendMail = 'http://int-musicdestock.fr/radioclashMailing/sendMail.php';
+$urlSendMail = $radioclashHome.'dbFunctions/sendEmailFile.php';
 define('URL_SEND_MAIL',$urlSendMail);
 
 //==========

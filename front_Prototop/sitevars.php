@@ -27,6 +27,7 @@ define('MAIL_ADMIN',$mailAdmin);
 //=================
 //Options du site :
 //=================
+$nomSite = $site['nom'];
 $siteHaveTitre = $config['have_titre'];							//ok
 $siteHaveTexte = $config['have_texte'];							//ok
 $siteHaveParticipants = $config['have_participants'];			//ok
@@ -81,6 +82,7 @@ $css = "modules/css/";
 $js = "modules/js/";
 //Envoi de mails :
 $urlSendMail = 'http://int-musicdestock.fr/radioclashMailing/sendMail.php';
+$urlSendMail = $radioclashHome.'dbFunctions/sendEmailFile.php';
 define('URL_SEND_MAIL',$urlSendMail);
 
 //==========
