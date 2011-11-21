@@ -16,12 +16,14 @@
 	$nom_emission = getNomFichierEmission($numero, $titre, $nomParticipants);
     $chemin_destination = '../'.$zips;
 	
-    if (!file_exists($chemin_destination))
+	echo "/*";
+	
+	if (!file_exists($chemin_destination))
     {
         mkdir($chemin_destination, 0777);
-        chmod($chemin_destination, 0777);
-    }    
-
+		chmod($chemin_destination, 0777);
+	}    
+	
 	$filename = $chemin_destination.$nom_emission.'.zip';
 
 	// Creation du nom du fichier zip
@@ -39,8 +41,7 @@
 	$fichier_playlist = $nomSite." ".$ref_emission."\r\n";
 	$fichier_playlist.= "\r\n";
 	$fichier_playlist.= "\r\n";
-	
-		
+			
 	$playlist = dbGetPlaylist($id);
 	$nomUtilisateurEnCours = "";
 	$chef = dbGetChefEmission($id);
@@ -69,7 +70,7 @@
 		$fichier_playlist.=" ".getNomMorceauEmission(toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], $array['nom_label'], $array['annee'])."\r\n";
 		$i++;
 	}
-	
+
 	$fichier_playlist.="\r\n";
 	$fichier_playlist.="\r\n";
 	if ($chef != '')
@@ -90,7 +91,7 @@
 	$fichier_playlist.=">> ".$radioclashHome." <<\r\n";
 	$fichier_playlist.=">> ".$lienForum." <<\r\n";
 	$fichier_playlist.="\r\n";
-
+	
 	$radioclashZip -> addFile($fichier_playlist, $nom_emission.'.txt'); 
 
 	if (file_exists('../'.$mp3s.$nom_emission.'.mp3'))
@@ -122,9 +123,10 @@
 	//
 	// TODO : Ajouter les bonus des émissions, et le texte de présentation
 	//
-	
+
 	$fd = fopen ($nomFichierZip, "wb");
 	$out = fwrite ($fd, $radioclashZip -> getZippedfile());
 	fclose ($fd);
-    
+	
+	echo "*/";
 ?>
