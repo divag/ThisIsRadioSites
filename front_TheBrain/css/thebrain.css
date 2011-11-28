@@ -113,8 +113,8 @@ div.menu img {
 }
 
 div.amix img {
-	width:305px;
-	height:305px;
+	width:315px;
+	height:315px;
 }
 
 ul.menu {
@@ -146,10 +146,10 @@ ul.links li{
 ul.menu li.first {
 	border: 5px solid rgb(141, 215, 255);
 }
-
 ul.menu li.secondLine {
 	border-top-width: 0px;
 }
+
 
 /*
 div.menu ul li {
@@ -193,6 +193,7 @@ ul.listeEmissions{
 	font-size:12px;
 	margin:0px;
 	padding:0px;
+white-space:nowrap;
 }
 
 ul.listeEmissions li img{
@@ -215,20 +216,6 @@ ul.listeEmissions li {
 	display:inline;
 }
 
-ul.amix li {
-	float: left;
-	list-style-type: none;
-	width: 150px;
-	height: 200px;
-	padding:5px;
-}
-
-ul.amix li img{
-	width: 150px;
-	height: 150px;
-	padding-bottom:5px;
-}
-
 span.lienEmission {
 	font-weight: bold;
 	text-decoration:none;
@@ -239,10 +226,6 @@ span.lienDownloadEmission {
 	color:blue;
 	font-weight: normal;
 	text-decoration:underline;
-}
-
-span.lienDownloadEmissionAmix {
-	font-weight: bold;
 }
 
 /* 
@@ -276,6 +259,37 @@ Page NEWS :
 	vertical-align:middle;
 }
 */
+
+ul.listeNews {
+	padding:0px;
+	padding-top:10px;
+	padding-bottom:10px;
+	margin:0px;
+}
+
+ul.listeNews li{
+	list-style-type: none;
+	padding: 5px;
+	text-align:left;
+}
+
+ul.listeNews li h3{
+	margin:0px;
+	padding:0px;
+	font-weight: bold;
+}
+
+ul.listeNews li p{
+	margin:0px;
+	padding:0px;
+}
+
+ul.listeNews li .date{
+	padding-top:0px;
+	font-style: italic;
+	font-size:12px;
+	color:#666666;
+}
 
 /* 
 Textes et mises en formes : 
