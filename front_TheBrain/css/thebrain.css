@@ -91,7 +91,7 @@ div.menuIndex ul li {
 ul.enligne {
 	padding:0px;
 	margin:0px;
-	white-space:nowrap;
+	/*white-space:nowrap;*/
 }
 
 ul.enligne li {
@@ -193,7 +193,7 @@ ul.listeEmissions{
 	font-size:12px;
 	margin:0px;
 	padding:0px;
-white-space:nowrap;
+/*white-space:nowrap;*/
 }
 
 ul.listeEmissions li img{

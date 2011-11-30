@@ -11,7 +11,7 @@ function writeHead()
 	echo "<meta name=\"description\" content=\"The Brain radioshow\" />\n";
 	echo "<meta name=\"robots\" content=\"all\" />\n";
 	echo "<title>The Brain radioshow</title>\n";
-	echo "<link rel=\"shortcut icon\" type=\"image/png\" href=\"css/favicon.png\" />\n";
+	echo "<link rel=\"shortcut icon\" type=\"image/png\" href=\"css/favicon.ico\" />\n";
 	echo "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$lienPodcast."\" />\n";
 	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/thebrain.css\" />\n";
 	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/mailing.css\" />\n";

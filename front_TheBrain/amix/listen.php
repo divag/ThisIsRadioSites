@@ -33,6 +33,8 @@ else
 			else
 				$imageEmission = $pics.$nomFichierEmission.".jpg";
 			
+			$imagePrintEmission = $pics.$nomFichierEmission.".jpg";
+			
 			$audioEmission = $mp3s.$nomFichierEmission.".mp3";
 			
 			$commentsEmission = $emission['url_lien_forum'];
@@ -178,7 +180,7 @@ writeEntete('listen');
 			echo "  </ul>\n";
 			
 			echo "<br />";
-			echo "<a href=\"".$imageEmission."\" rel=\"lightbox\" title=\"Click to download/print the cover\" rev=\"".$imageEmission."\"><img src=\"".$imageEmission."\"/></a>\n";
+			echo "<a href=\"".$imagePrintEmission."\" rel=\"lightbox\" title=\"Click to download/print the cover\" rev=\"".$imagePrintEmission."\"><img src=\"".$imageEmission."\"/></a>\n";
 			
 			echo "<br class=\"clear\" />";
 			echo "</div>\n";
@@ -220,7 +222,7 @@ writeEntete('listen');
 </div>
 <br />
 <div class="player">
-	 <ul class="playlist" style="display:none;">
+	 <ul class="playlist"<?php if (!$auto) echo " style=\"display:none;\""; ?>>
 	  <li>
 	   <a id="lecteur" href="<?php echo $audioEmission ?>"><span class="titre">The Brain <?php echo $nomEmission ?></span></a>
 	   <div class="metadata">

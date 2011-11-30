@@ -151,9 +151,12 @@ writeEntete('listen');
 	<a href="<?php echo $imageEmission ?>" rel="lightbox" title="Click to download/print the cover" rev="<?php echo $imageEmission ?>"><img src="<?php echo $imageEmission ?>" width="350" height="350" border="0" /></a>
 </li>
 <li class="center">
-	<a href="<?php echo $pageListen ?>.php" title="Accueil">
+	<a href="<?php echo $radioclashHome ?>" title="Accueil">
 		<img src="css/logoListen.jpg" alt=\"The Brain radioshow logo\" />
-		<br /><span>SHOWS</span>
+	</a>
+	<br />
+	<a href="<?php echo $pageListen ?>.php" title="Shows">
+		<span>SHOWS</span>
 	</a>
 	<br />
 	<br />
@@ -199,7 +202,7 @@ writeEntete('listen');
 </ul>
 <br class="clear" />
 <div class="player">
-	 <ul class="playlist" style="display:none;">
+	 <ul class="playlist"<?php if (!$auto) echo " style=\"display:none;\""; ?>>
 	  <li>
 	   <a id="lecteur" href="<?php echo $audioEmission ?>"><span class="titre">The Brain <?php echo $nomEmission ?></span></a>
 	   <div class="metadata">

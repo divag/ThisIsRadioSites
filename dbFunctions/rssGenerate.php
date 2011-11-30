@@ -5,6 +5,7 @@ include('../dbFunctions/dbFunctions.php');
 include('../sitevars.php');
 
 $listeEmissions = dbListeEmissionsForFeed($id_site);
+
 if ($siteHaveNews)
 	$listeNews = dbGetListeNewsActives($id_site);
 	
@@ -63,7 +64,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 	if ($emission['id_site'] != $id_site)
 	{
 		$nomFichier = getNomFichierEmissionSite($emission['id_site'], $numeroEmission, $emission['titre'], $nomParticipants);
-		$titreEmission = getReferenceEmissionSite($emission['id_site'], $numeroEmission, $emission['titre'], $nomParticipants);
+		$titreEmission = htmlencode(getReferenceEmissionSite($emission['id_site'], $numeroEmission, $emission['titre'], $nomParticipants));
 		$imageEmission = $radioclashHome."amix/".$pics.$nomFichier.".jpg";
 		$lengthEmission = getBytesLengthEmissionSite($emission['id_site'], $numeroEmission);
 		$mp3Emission = $radioclashHome."amix/".$mp3s.$nomFichier.".mp3";
@@ -72,7 +73,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 	else
 	{
 		$nomFichier = getNomFichierEmission($numeroEmission, $emission['titre'], $nomParticipants);
-		$titreEmission = getReferenceEmission($numeroEmission, $emission['titre'], $nomParticipants);
+		$titreEmission = htmlencode(getReferenceEmission($numeroEmission, $emission['titre'], $nomParticipants));
 		$imageEmission = $radioclashHome.$pics.$nomFichier.".jpg";
 		$lengthEmission = getBytesLengthEmission($numeroEmission);
 		$mp3Emission = $radioclashHome.$mp3s.$nomFichier.".mp3";
@@ -99,7 +100,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 	if ($siteHaveParticipants)
 	{
 		$nomUtilisateurEnCours = "";
-		$chef = dbGetChefEmission($idEmission);
+		$chef = htmlencode(dbGetChefEmission($idEmission));
 	}
 	$i = 0;
 	while($array=mysql_fetch_array($playlist))
@@ -109,7 +110,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 			if ($nomUtilisateurEnCours != strtoupper($array['nom_utilisateur']))
 			{
 				$utilisateurEnCours = dbGetUtilisateur(urlencode(addslashes($array['nom_utilisateur'])));
-				$nomUtilisateurEnCours = strtoupper($array['nom_utilisateur']);
+				$nomUtilisateurEnCours = strtoupper(htmlencode($array['nom_utilisateur']));
 				
 				if ($utilisateurEnCours['url_site'] != "http://" && $utilisateurEnCours['url_site'] != "")
 					echo "<a href=\"".$utilisateurEnCours['url_site']."\"><b><u>".$nomUtilisateurEnCours."</u></b></a><br />\n";
@@ -165,6 +166,11 @@ if ($siteHaveNews)
 		else
 			$haveNewsForFeed = false;				
 	}
+}
+
+function htmlencode($value)
+{
+	return str_replace("&", "&amp;", $value);
 }
 
 echo '  </channel>';

@@ -48,7 +48,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 		{
 			echo "</ul>";
 			echo "<br class=\"clear\" />";
-			echo "<h3><span>".$anneeEmission."'S ARCHIVES</span></h3>";
+			echo "<h3><span>".$anneeEmission."</span></h3>";
 			echo "<ul class=\"listeEmissions\">\n";
 			$tmpAnnee = $anneeEmission;
 		}
