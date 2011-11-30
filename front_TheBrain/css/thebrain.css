@@ -113,8 +113,8 @@ div.menu img {
 }
 
 div.amix img {
-	width:315px;
-	height:315px;
+	width:305px;
+	height:305px;
 }
 
 ul.menu {
@@ -214,6 +214,20 @@ ul.listeEmissions li {
 	margin-left:5px;
 	margin-bottom:5px;
 	display:inline;
+}
+
+ul.amix li {
+	float: left;
+	list-style-type: none;
+	width: 150px;
+	height: 250px;
+	padding:5px;
+}
+
+ul.amix li img{
+	width: 150px;
+	height: 150px;
+	padding-bottom:5px;
 }
 
 span.lienEmission {
