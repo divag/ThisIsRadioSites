@@ -168,12 +168,19 @@ writeEntete('');
 				//if ($nbVideoTeasers == 0 && $emission['teaser_video'] != '')
 				if ($emission['teaser_video'] != '')
 				{
-					$videoTeasers .= "<object width=\"265\" height=\"200\">\n";
-					$videoTeasers .= "	<param name=\"movie\" value=\"".$emission['teaser_video']."\"></param>\n";
-					$videoTeasers .= "	<param name=\"allowFullScreen\" value=\"true\"></param>\n";
-					$videoTeasers .= "	<param name=\"allowscriptaccess\" value=\"always\"></param>\n";
-					$videoTeasers .= "	<embed src=\"".$emission['teaser_video']."\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"265\" height=\"200\"></embed>\n";
-					$videoTeasers .= "</object>\n";
+					if (strstr($emission['teaser_video'],"youtube.com"))
+					{
+						$videoTeasers .= "<object width=\"265\" height=\"200\">\n";
+						$videoTeasers .= "	<param name=\"movie\" value=\"".$emission['teaser_video']."\"></param>\n";
+						$videoTeasers .= "	<param name=\"allowFullScreen\" value=\"true\"></param>\n";
+						$videoTeasers .= "	<param name=\"allowscriptaccess\" value=\"always\"></param>\n";
+						$videoTeasers .= "	<embed src=\"".$emission['teaser_video']."\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"265\" height=\"200\"></embed>\n";
+						$videoTeasers .= "</object>";
+					}
+					if (strstr($emission['teaser_video'],"http://player.vimeo.com"))
+					{
+						$videoTeasers .= "<iframe src=\"".$emission['teaser_video']."\" width=\"265\" height=\"200\" frameborder=\"0\" webkitallowfullscreen=\"\" mozallowfullscreen=\"\" allowfullscreen=\"\"></iframe>\n";
+					}
 					$videoTeasers .= "<br />\n";
 					
 					$nbVideoTeasers++;

@@ -832,32 +832,46 @@ function getPreviewContenu(contenuData)
 		}
 		if (contenuData.id_type_contenu == 6)
 		{
-			var retour = document.createElement('object');
-			retour.width = '265';
-			retour.height = '200';
-			var param1 = document.createElement('param');
-			param1.id = 'linkVideoGoodiesEmission_' + contenuData.id_contenu;
-			param1.value = contenuData.url;
-			param1.name = 'movie';
-			var param2 = document.createElement('param');
-			param2.name = 'allowFullScreen';
-			param2.value = 'true';
-			var param3 = document.createElement('param');
-			param3.name = 'allowscriptaccess';
-			param3.value = 'always';
-			var embed = document.createElement('embed');
-			embed.id = 'linkVideoGoodiesEmission_' + contenuData.id_contenu + 'src';
-			embed.src = contenuData.url;
-			embed.type = 'application/x-shockwave-flash';
-			embed.allowscriptaccess = 'always';
-			embed.allowfullscreen = 'true';
-			embed.width = '265';
-			embed.height = '200';
+			if (contenuData.url.indexOf('http://player.vimeo.com/') == 0)
+			{
+				var retour = document.createElement('iframe');
+				retour.width = '265';
+				retour.height = '200';
+				retour.frameborder = '0';
+				retour.webkitallowfullscreen = '';
+				retour.mozallowfullscreen = '';
+				retour.allowfullscreen = '';
+				retour.src = contenuData.url;
+			}
+			else
+			{
+				var retour = document.createElement('object');
+				retour.width = '265';
+				retour.height = '200';
+				var param1 = document.createElement('param');
+				param1.id = 'linkVideoGoodiesEmission_' + contenuData.id_contenu;
+				param1.value = contenuData.url;
+				param1.name = 'movie';
+				var param2 = document.createElement('param');
+				param2.name = 'allowFullScreen';
+				param2.value = 'true';
+				var param3 = document.createElement('param');
+				param3.name = 'allowscriptaccess';
+				param3.value = 'always';
+				var embed = document.createElement('embed');
+				embed.id = 'linkVideoGoodiesEmission_' + contenuData.id_contenu + 'src';
+				embed.src = contenuData.url;
+				embed.type = 'application/x-shockwave-flash';
+				embed.allowscriptaccess = 'always';
+				embed.allowfullscreen = 'true';
+				embed.width = '265';
+				embed.height = '200';
 
-			retour.appendChild(param1);
-			retour.appendChild(param2);
-			retour.appendChild(param3);
-			retour.appendChild(embed);
+				retour.appendChild(param1);
+				retour.appendChild(param2);
+				retour.appendChild(param3);
+				retour.appendChild(embed);
+			}
 		}
 	}
 	else
@@ -1245,7 +1259,7 @@ function refreshTypeContenu(id_contenu, id_type_contenu, bouton_valider, forced_
 		bouton_valider.style.display = 'block';
 		
 		return function () {
-			document.getElementById('formContenuUrl').value = document.getElementById('formContenuLienVideo').value.replace('http://www.youtube.com/watch?v=', 'http://www.youtube.com/v/').replace('http://youtu.be/', 'http://www.youtube.com/v/');
+			document.getElementById('formContenuUrl').value = document.getElementById('formContenuLienVideo').value.replace('http://www.youtube.com/watch?v=', 'http://www.youtube.com/v/').replace('http://youtu.be/', 'http://www.youtube.com/v/').replace('http://vimeo.com/', 'http://player.vimeo.com/video/');
 			//les contenu textes ne sont pas utilisés pour ce type :
 			CKEDITOR.instances.formContenuContenuFr.setData('', function()
 			{
@@ -2529,7 +2543,7 @@ function updateVideoTeaser()
 {
 	showWait();
 	var urlTeaserVideo = document.getElementById('txtVideoTeaser').value;
-	urlTeaserVideo = urlTeaserVideo.replace('http://www.youtube.com/watch?v=', 'http://www.youtube.com/v/').replace('http://youtu.be/', 'http://www.youtube.com/v/');
+	urlTeaserVideo = urlTeaserVideo.replace('http://www.youtube.com/watch?v=', 'http://www.youtube.com/v/').replace('http://youtu.be/', 'http://www.youtube.com/v/').replace('http://vimeo.com/', 'http://player.vimeo.com/video/');
 	getDatas('dbUpdateTeaserVideoEmission', 'result', 'id=' + currentItem.id + '&teaser_video=' + encode(urlTeaserVideo));
 	getDatas('dbGetEmission', 'currentEmissionDatas', 'id=' + currentItem.id);
 	currentItem.teaser_video = currentEmissionDatas.teaser_video;
@@ -2571,9 +2585,23 @@ function refreshVideoTeaserFormZone()
 		{
 			document.getElementById('videoTeaser').className = 'etat32';
 			document.getElementById('yesVideoTeaser').style.display = 'block';
-			document.getElementById('linkVideoTeaserValue').value = currentItem.teaser_video;
-			document.getElementById('linkVideoTeaserSrc').src = currentItem.teaser_video;
-			document.getElementById('txtVideoTeaser').value = currentItem.teaser_video;
+			
+			if (currentItem.teaser_video.indexOf('http://player.vimeo.com/') == 0)
+			{
+				document.getElementById('divVideoTeaserYoutube').style.display = 'none';
+				document.getElementById('divVideoTeaserVimeo').style.display = 'block';
+				document.getElementById('iframeVideoTeaserVimeo').src = currentItem.teaser_video;
+				document.getElementById('txtVideoTeaser').value = currentItem.teaser_video;
+			}
+			else
+			{
+				document.getElementById('divVideoTeaserYoutube').style.display = 'block';
+				document.getElementById('divVideoTeaserVimeo').style.display = 'none';
+				document.getElementById('linkVideoTeaserValue').value = currentItem.teaser_video;
+				document.getElementById('linkVideoTeaserSrc').src = currentItem.teaser_video;
+				document.getElementById('txtVideoTeaser').value = currentItem.teaser_video;
+			}
+
 		}
 		else
 		{
@@ -2909,10 +2937,10 @@ function validateAdresseYoutube(control, bouton)
 		bouton = document.getElementById(control.id + 'Button');
 		
 	document.getElementById(control.id + 'Error').innerHTML = '';
-	if (control.value != '' && control.value.indexOf('http://www.youtube.com/watch?v=') != 0 && control.value.indexOf('http://youtu.be/') != 0)
+	if (control.value != '' && control.value.indexOf('http://www.youtube.com/watch?v=') != 0 && control.value.indexOf('http://youtu.be/') != 0 && control.value.indexOf('http://vimeo.com/') != 0)
 	{
 		bouton.disabled = true; 
-		document.getElementById(control.id + 'Error').innerHTML = 'L\'adresse YouTube est incorrecte, il faut qu\'elle commence par "http://youtu.be/" ou "http://www.youtube.com/watch?v="';
+		document.getElementById(control.id + 'Error').innerHTML = 'L\'adresse YouTube/Vimeo est incorrecte, il faut qu\'elle commence par : <ul><li>"http://youtu.be/"</li><li>"http://www.youtube.com/watch?v="</li><li>http://vimeo.com/</li></ul>';
 	}	
 	else
 		bouton.disabled = false; 

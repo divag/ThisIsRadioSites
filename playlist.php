@@ -232,12 +232,19 @@ writeEntete('playlist');
 			
 			if ($emission['teaser_video'] != '')
 			{
-				echo "<object width=\"400\" height=\"350\">";
-				echo "	<param name=\"movie\" value=\"".$emission['teaser_video']."\"></param>";
-				echo "	<param name=\"allowFullScreen\" value=\"true\"></param>";
-				echo "	<param name=\"allowscriptaccess\" value=\"always\"></param>";
-				echo "	<embed src=\"".$emission['teaser_video']."\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"400\" height=\"350\"></embed>";
-				echo "</object>";
+				if (strstr($emission['teaser_video'],"youtube.com"))
+				{
+					echo "<object width=\"400\" height=\"350\">";
+					echo "	<param name=\"movie\" value=\"".$emission['teaser_video']."\"></param>";
+					echo "	<param name=\"allowFullScreen\" value=\"true\"></param>";
+					echo "	<param name=\"allowscriptaccess\" value=\"always\"></param>";
+					echo "	<embed src=\"".$emission['teaser_video']."\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"400\" height=\"350\"></embed>";
+					echo "</object>";
+				}
+				if (strstr($emission['teaser_video'],"http://player.vimeo.com"))
+				{
+					echo "<iframe src=\"".$emission['teaser_video']."\" width=\"400\" height=\"350\" frameborder=\"0\" webkitallowfullscreen=\"\" mozallowfullscreen=\"\" allowfullscreen=\"\"></iframe>";
+				}
 			}
 		}
 

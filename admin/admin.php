@@ -46,8 +46,8 @@ if(isset($_POST) && isset($_POST['login']) && isset($_POST['password']) && $_POS
 					if ($siteAAfficher['id'] != $site['id'])
 					{
 						$contenuListeSites .= "\n			<td style=\"text-align:center;padding:5px;\">";
-						$contenuListeSites .= "\n			    <form id=\"acces_site_".$siteAAfficher['id']."\" method=\"post\" action=\"".$siteAAfficher['url']."admin/admin.php\">\n";
-						$contenuListeSites .= "\n			        <input type=\"hidden\" name=\"login\" value=\"".$utilisateur['nom']."\" />\n";
+						$contenuListeSites .= "\n			    <form id=\"acces_site_".$siteAAfficher['id']."\" method=\"post\" action=\"".$siteAAfficher['url']."admin/admin.php?ModPagespeed=off\">\n";
+						$contenuListeSites .= "\n			        <input type=\"hidden\" name=\"login\" value=\"".$utilisateur['login_forum']."\" />\n";
 						$contenuListeSites .= "\n			        <input type=\"hidden\" name=\"password\" value=\"".$utilisateur['password']."\" />\n";
 						$contenuListeSites .= "\n			        <a href=\"#\" style=\"border-width:0px;\" onclick=\"document.forms['acces_site_".$siteAAfficher['id']."'].submit();\" title=\"Accéder à l'administration du site ".$siteAAfficher['nom']."\">\n";
 						$contenuListeSites .= "\n			            <img style=\"text-align:center;border-width:0px;\" src=\"css/logo_site".$siteAAfficher['id'].".jpg\" />\n";
@@ -361,7 +361,7 @@ else
 			</table>
 			</fieldset>
 			<fieldset id="goodiesEmission" class="etat22">
-				<legend>Goodies : Liens YouTube en cadeaux avec l'&eacute;mission</legend>
+				<legend>Goodies : Liens YouTube/Vimeo en cadeaux avec l'&eacute;mission</legend>
 				<input id="boutonAddGoodiesEmission" type="button" class="button" value="Ajouter un goodies" /><br />
 				<br />
 				<u>Voici la liste des goodies :</u>
@@ -439,7 +439,7 @@ else
 				<span id="yesMp3Teaser"><a id="linkMp3Teaser">Fichier du teaser</a></span>
 			</fieldset>
 			<fieldset id="videoTeaser">
-			<legend>[<span style="color:red;">TEASER</span>] Adresse YOUTUBE du teaser vid&eacute;o</legend>
+			<legend>[<span style="color:red;">TEASER</span>] Adresse YOUTUBE/VIMEO du teaser vid&eacute;o</legend>
 				<input type="hidden" id="txtChelouQuiContientLidDeLemissionEtQueSiIlNestPasLaAlorsLaZoneSuivanteNeFonctionnePlus" /> 
 				<input type="text" id="txtVideoTeaser" style="width:265px;" onkeyup="return validateAdresseYoutube(this);" /> 
 				<input id="txtVideoTeaserButton" type="button" class="button" value="Modifier" onclick="updateVideoTeaser()" /><br />
@@ -447,12 +447,17 @@ else
 				<br />
 				<span id="noVideoTeaser" style="color:red;"><i>Aucun teaser vid&eacute;o n'a &eacute;t&eacute; trouv&eacute;.</i></span>
 				<span id="yesVideoTeaser">
-					<object width="265" height="200">
-						<param id="linkVideoTeaserValue" name="movie"></param>
-						<param name="allowFullScreen" value="true"></param>
-						<param name="allowscriptaccess" value="always"></param>
-						<embed id="linkVideoTeaserSrc" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="265" height="200"></embed>
-					</object>
+					<div id="divVideoTeaserYoutube">
+						<object width="265" height="200">
+							<param id="linkVideoTeaserValue" name="movie"></param>
+							<param name="allowFullScreen" value="true"></param>
+							<param name="allowscriptaccess" value="always"></param>
+							<embed id="linkVideoTeaserSrc" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="265" height="200"></embed>
+						</object>
+					</div>
+					<div id="divVideoTeaserVimeo">
+						<iframe id="iframeVideoTeaserVimeo" width="265" height="200" frameborder="0" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
+					</div>
 				</span>
 			</fieldset>
 		</td></tr>
