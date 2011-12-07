@@ -68,7 +68,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 		$imageEmission = $radioclashHome."amix/".$pics.$nomFichier.".jpg";
 		$lengthEmission = getBytesLengthEmissionSite($emission['id_site'], $numeroEmission);
 		$mp3Emission = $radioclashHome."amix/".$mp3s.$nomFichier.".mp3";
-		$linkEmission = $radioclashHome."amix/"."playlist.php?episode=".$numeroEmission;
+		$linkEmission = $radioclashHome."amix/".$pageEmission.".php?episode=".$numeroEmission;
 	}
 	else
 	{
@@ -77,7 +77,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 		$imageEmission = $radioclashHome.$pics.$nomFichier.".jpg";
 		$lengthEmission = getBytesLengthEmission($numeroEmission);
 		$mp3Emission = $radioclashHome.$mp3s.$nomFichier.".mp3";
-		$linkEmission = $radioclashHome."playlist.php?episode=".$numeroEmission;
+		$linkEmission = $radioclashHome.$pageEmission.".php?episode=".$numeroEmission;
 	}
 	
 	$dateEmission = date('D, d M Y H:i:s O', strtotime($emission['date_sortie']));

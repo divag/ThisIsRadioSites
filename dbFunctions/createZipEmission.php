@@ -14,6 +14,7 @@
 	
 	$ref_emission = getReferenceEmission($numero, $titre, $nomParticipants);
 	$nom_emission = getNomFichierEmission($numero, $titre, $nomParticipants);
+	$linkEmission = $radioclashHome.$pageEmission.".php?episode=".$numero;
     $chemin_destination = '../'.$zips;
 	
 	echo "/*";
@@ -38,7 +39,7 @@
 	$radioclashZip = new createZip;  
 
 	// On genere le fichier de la playlist :	
-	$fichier_playlist = $nomSite." ".$ref_emission."\r\n";
+	$fichier_playlist = $nomSite." ".$ref_emission." : (".$linkEmission.")\r\n";
 	$fichier_playlist.= "\r\n";
 	$fichier_playlist.= "\r\n";
 			
