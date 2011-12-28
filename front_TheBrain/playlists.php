@@ -70,7 +70,12 @@ while($emission=mysql_fetch_array($listeEmissions))
 </ul>
 
 <br class="clear" />
-<h4><span>PLEASE WAIT FOR OLDER SHOWS, THEY ARE COMING LATER...</span></h4>
+<h4>
+	<span>PLEASE WAIT FOR OLDER SHOWS, THEY ARE COMING LATER...<br />
+		<span style="font-weight:normal;">Anyway you still can see them on the old website : <a href="http://thebrain.lautre.net/archiveplaylist/archiveplaylist.html" title="The Brain old website">let's click here</a>
+		</span>
+	</span>
+</h4>
 
 <?php
 writePiedDePage('playlists');

@@ -58,8 +58,26 @@ else
 	<!-- required -->
 	<link rel="stylesheet" type="text/css" href="<?php echo $soundmanager ?>demo/css/divagSpecialFeatures.css" />
 
+	<?php	
+		$playlist = dbGetPlaylist($idEmission);
+		$i = 0;
+		$description = "<u><b>The Brain ".$nomEmission." : </b></u><br />";
+		while($array=mysql_fetch_array($playlist))
+		{
+			if ($i == 0 && (toTime($array['time_min']) != "00" || toTime($array['time_sec']) != "00"))
+			{
+				$description .= "<span>00:00 Introduction</span><br />\n";
+				$i++;
+			}
+			$description .= "<span>".str_replace(" class=\"upper\"", "", getNomMorceauEmission(toTime($array['time_min']), toTime($array['time_sec']), "<span class=\"upper\">".$array['nom_artiste']."</span>", $array['nom_morceau'], $array['nom_label'], $array['annee']))."</span><br />\n";
+			$i++;
+		}
+	?>
+	
+	
 	<!-- Opengraph tags (@see http://ogp.me/) -->
 	<meta property="og:site_name" content="The Brain" />
+	<meta property="og:description" content="<?php echo $description ?>"/>
 	<meta property="og:title" content="The Brain <?php echo $nomEmission ?>" />
 	<meta property="og:image" content="<?php echo $radioclashHome.$imageEmission ?>" />
 	<meta property="og:audio" content="<?php echo $radioclashHome.$audioEmission ?>" />
