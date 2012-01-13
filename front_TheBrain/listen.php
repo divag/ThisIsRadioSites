@@ -61,15 +61,15 @@ else
 	<?php	
 		$playlist = dbGetPlaylist($idEmission);
 		$i = 0;
-		$description = "<u><b>The Brain ".$nomEmission." : </b></u><br />";
+		$description = "The Brain ".$nomEmission.". Playlist : ";
 		while($array=mysql_fetch_array($playlist))
 		{
 			if ($i == 0 && (toTime($array['time_min']) != "00" || toTime($array['time_sec']) != "00"))
 			{
-				$description .= "<span>00:00 Introduction</span><br />\n";
+				$description .= "00:00 Introduction";
 				$i++;
 			}
-			$description .= "<span>".str_replace(" class=\"upper\"", "", getNomMorceauEmission(toTime($array['time_min']), toTime($array['time_sec']), "<span class=\"upper\">".$array['nom_artiste']."</span>", $array['nom_morceau'], $array['nom_label'], $array['annee']))."</span><br />\n";
+			$description .= " // ".strip_tags(str_replace(" class=\"upper\"", "", getNomMorceauEmission(toTime($array['time_min']), toTime($array['time_sec']), $array['nom_artiste'], $array['nom_morceau'], $array['nom_label'], $array['annee'])));
 			$i++;
 		}
 	?>
@@ -81,9 +81,11 @@ else
 	<meta property="og:title" content="The Brain <?php echo $nomEmission ?>" />
 	<meta property="og:image" content="<?php echo $radioclashHome.$imageEmission ?>" />
 	<meta property="og:audio" content="<?php echo $radioclashHome.$audioEmission ?>" />
+	
 	<meta property="og:audio:title" content="The Brain <?php echo $nomEmission ?>" />
 	<meta property="og:audio:artist" content="<?php echo $nomParticipants ?>" />
 	<meta property="og:audio:album" content="The Brain" />
+	
 	<meta property="og:audio:type" content="application/mp3" />
 
 	<!-- special IE-only canvas fix -->
