@@ -107,7 +107,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 	{
 		if ($siteHaveParticipants)
 		{
-			if ($nomUtilisateurEnCours != strtoupper($array['nom_utilisateur']))
+			if ($nomUtilisateurEnCours != strtoupper(htmlencode($array['nom_utilisateur'])))
 			{
 				$utilisateurEnCours = dbGetUtilisateur(urlencode(addslashes($array['nom_utilisateur'])));
 				$nomUtilisateurEnCours = strtoupper(htmlencode($array['nom_utilisateur']));
