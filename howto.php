@@ -61,24 +61,14 @@ writeEntete('howto');
 
 <div class="pageContent">
 
-<h2 class="gris">RADIOCLASH MODE D'EMPLOI</h2>
-<h3 class="gris">THIS IS RADIOCLASH EST UN PROJET PARTICIPATIF !!!</h3>
-<p class="italique">
-A ce titre vous &ecirc;tes libre (et m&ecirc;me chaleureusement invit&eacute;) de lancer un th&egrave;me &agrave; n'importe quel moment de l'ann&eacute;e, de jour comme de nuit.<br /> 
-Ceci ne vous engage qu'&agrave; r&eacute;colter le diff&eacute;rentes parties aupr&egrave;s de vos coll&egrave;gues de th&egrave;me et &agrave; faire le montage final (mais vous pouvez aussi d&eacute;l&eacute;guer &ccedil;a &agrave; quelqu'un de votre &eacute;quipe). M&ecirc;me chose pour la "pochette" - juste respecter le format (346 X 346) et indiquer "This is Radioclash n&deg; x" et le th&egrave;me.<br />
-Vous &ecirc;tes tout aussi libre de vous rallier &agrave; n'importe quel th&egrave;me lanc&eacute; du moment qu'il reste de la place.<br />
-4 &agrave; 5 participants pour une heure semble un bon ratio. Enfin si le coeur vous en dit vous pouvez participer &agrave; 2 ou plus Radioclash en m&ecirc;me temps ou encore lancer un th&egrave;me tout en participant &agrave; un autre, mais rappelez vous que une fois l'&eacute;quipe constitu&eacute;e vous avez un mois pour rendre votre partie.<br /> 
-(Jurisprudence dite de Schling).<br />
-une seule obligation : coller au th&egrave;me.
-</p>
-<p class="gris italique">THIS IS RADIOCLASH EST UN PROJET AUTOGERE QUI S'ECRIT EN DIRECT AVEC VOUS</p>
-<p class="big gras">
-LE GENERIQUE EST <a href="mp3/generiqueradioclash.mp3" target="blank" title="G&eacute;n&eacute;rique de THIS IS RADIOCLASH"><span>ICI</span></a><br />
-FAITES VOTRE PROPRE GENERIQUE AVEC LES ELEMENTS SEPARES QUI SONT <a href="mp3/elementsgeneriqueradioclash.zip" target="blank" title="El&eacute;ments s&eacute;par&eacute;s du g&eacute;n&eacute;rique de THIS IS RADIOCLASH"><span>ICI</span></a><br />
-LA TAILLE DES POCHETTES<br />
-EST <span class="gris">346 X 346 pixels</span>
-</p>
 <?php
+
+$contenu = dbGetContenuPageSite($id_site, 'howto', 'contenu');
+if ($contenu != 0)
+{
+	echo $contenu['contenu_fr']."\n";
+}
+
 writePiedDePage('howto');
 ?>
 </div>
