@@ -9,139 +9,18 @@ $listeEmissions = dbGetListeEmissions($id_site);
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>.::: prototop.be :::.</title>
-<style type="text/css">
+<?php 
+	echo "<meta name=\"author\" content=\"Prototop &amp; Divag\" />\n";
+	echo "<meta name=\"keywords\" content=\"prototop, radio, music, crotal, torturo, musique, émission, radioshow, mix, free mp3, musiques incongrues\" />\n";
+	echo "<meta name=\"description\" content=\"Prototop radioshows and more.\" />\n";
+	echo "<meta name=\"robots\" content=\"all\" />\n";
+	echo "<title>.::: prototop.be :::.</title>";
+	echo "<link rel=\"shortcut icon\" type=\"image/png\" href=\"css/favicon.png\" />\n";
+	echo "<link rel=\"alternate\" type=\"application/rss+xml\" href=\"".$lienPodcast."\" />\n";
+	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/prototop.css\" />\n";
+	echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"css/mailing.css\" />\n";
+?>
 
-body {
-	font-family: sans-serif;
-	font-size: 9pt;
-	font-weight: bold;
-	background-color: rgb(0, 0, 0);
-	background-image: url("css/background.jpg");
-	background-repeat: repeat-y;
-	background-position: 10px 0px;
-	padding-top: 0px;
-	margin-top: 0px;
-}
-
-#dsr {
-	position:absolute;
-	text-align: center;
-	margin-left: 2px;
-	top: 50px;
-	margin-top: 0px;
-	background-image: url("css/logo_big.jpg");
-	background-repeat: no-repeat;
-	background-position: left top;
-	height: 425px;
-	width: 284px;
-}
-
-#container {
-	color:#0B3E41;
-	margin-left: 300px;
-	padding: 5px;
-	margin-top: 10px;
-	background-repeat: no-repeat;
-	background-position: left top;
-	background-color: #A67240;
-	border-color:#749C56;
-	border-width:5px;
-	border-style:solid;
-}
-
-#container ul, #container ul li {
-	list-style: none; 
-	padding-left:0px;
-	margin-left:0px;
-}
-
-.workInProgress {
-	text-align:center;
-	font-weight:normal;
-}
-
-#container ul li h3 {
-	background-color:#749C56; 
-	padding-left:10px;
-	margin-left:-10px;
-	margin-right:-10px;
-	padding-top:10px;
-	padding-bottom:10px;
-}
-td {
-	vertical-align:top;
-}
-td img {
-padding-right:5px;
-}
-
-#container {
-	border-color: rgb(0, 0, 0);
-	background-color: transparent;
-	color: rgb(51, 191, 130);
-}
-
-#content ul li h3 {
-	background-color: #BA7F42;
-	color: #000000;
-}
-
-.metadataShortCut {
-	padding:0px;
-	padding-left:5px;
-	padding-right:5px;
-	background-color: transparent;
-	color: rgb(51, 191, 130);
-}
-.metadataShortCutPlaying {
-	padding:1px;
-	padding-left:5px;
-	padding-right:5px;
-	background-color: rgb(51, 191, 130);
-	color: black;
-}
-
-.black {
-	color:black;
-}
-
-.red {
-	color:red;
-}
-
-.gris {
-	color:gray;
-}
-
-.gras {
-	font-weight:bold;
-}
-
-.italique {
-	font-style:italic;
-}
-
-.big {
-	font-size:14px;
-}
-
-.right {
-	text-align:right;
-	margin-right:5px;
-}
-
-.center {
-	text-align:center;
-}
-
-.top {
-	vertical-align:top;
-}
-
-
-
-</style>
 <!-- required -->
 <link rel="stylesheet" type="text/css" href="<?php echo $soundmanager ?>css/360player.css" />
 <link rel="stylesheet" type="text/css" href="<?php echo $soundmanager ?>css/360player-visualization.css" />
@@ -206,6 +85,10 @@ background-image:url(css/player/button-play-light.png);
 	text-decoration:underline;
 }
 
+.presentation {
+	font-weight:normal;
+}
+
 </style>
 
 <!-- special IE-only canvas fix -->
@@ -254,7 +137,16 @@ if (threeSixtyPlayer.config.usePeakData) {
 </div>
 <div id="container">
 	<div id="content">
-	<span class="workInProgress">Bonjour et bienvenue sur l'Internet. <br />Ce site est en cours de construction, mais en attendant, voici tout de même les émissions :</span>
+	<span class="workInProgress">
+	<?php 
+		$contenuEntete = dbGetContenuPageSite($id_site, 'index', 'texte_entete_site');
+		if ($contenuEntete != 0)
+		{
+			echo $contenuEntete['contenu_fr']."\n";
+		}
+	?>
+		<br />Pour s'inscrire au <a href="<?php echo $lienPodcast; ?>">podcast</a> par mail, cliquez <a href="#" onclick="window.open('http://feedburner.google.com/fb/a/mailverify?uri=TheBrainRadioshow', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">ici</a>.
+	</span>
 	<!--
 	<span class="workInProgress">Bonjour et bienvenue sur l'Internet.<br /><br />Ce site est en cours de construction. <br />En attendant, voici tout de même les émissions :</span>
 	-->
@@ -265,6 +157,7 @@ if (threeSixtyPlayer.config.usePeakData) {
 			{
 				$idEmission = $emission['id'];
 				$texteEmission = getReferenceEmission($emission['numero'], null, null);
+				
 				$nomFichierEmission = getNomFichierEmission($emission['numero'], null, null);
 				$imageEmission = $pics.$nomFichierEmission.".jpg";
 				$mp3Emission = $mp3s.$nomFichierEmission.".mp3";
@@ -297,9 +190,19 @@ if (threeSixtyPlayer.config.usePeakData) {
 					if ($iEmission != 0)
 						echo "<br /><a name=\"".($iEmission+1)."\"></a>";
 					echo "  <h3><a class=\"myShortcut\" cible=\"lecteur".$iEmission."\"><span class=\"nomEmission\"><font>&nbsp;".$texteEmission."&nbsp;</font></span></a><span class=\"mp3link\"> (<a href=\"".$mp3Emission."\" target=\"blank\"><span class=\"black\">Download MP3</span></a>)</h3>";
+					
+					if ($emission['id_contenu_texte'] != '')
+					{
+						$contenuTexteEmission = dbGetContenu($emission['id_contenu_texte']);
+						$presentationEmission = $contenuTexteEmission['contenu_fr'];
+
+						if ($presentationEmission != '')
+							echo "<span class=\"presentation\">".$presentationEmission."</span>";
+					}
 					//echo "  <a href=\"".$mp3Emission."\">";
 					//echo "    <h3><span class=\"lienEmission\"><b>".$texteEmission."</b></span> (cliquez ici pour télécharger l'émission à partir de l'Internet)</h3>";
 					//echo "  </a>";
+					
 					echo "  <table><tr><td>";
 					echo "  <img src=\"".$imageEmission."\" title=\"".$texteEmission."\"/><br />";
 					echo "  </td><td>";
@@ -320,5 +223,18 @@ if (threeSixtyPlayer.config.usePeakData) {
 	</div>
 </div>
 <div style="height:400px"></div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-28345251-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 </body>
 </html>

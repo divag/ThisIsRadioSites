@@ -147,7 +147,7 @@ else
 		<input id="buttonMenunews" type="button" class="button" value="News" onclick="display('home');display('news');" />
 		<input id="buttonMenunewsletter" type="button" class="button" value="Mailing list" onclick="display('home');display('newsletter');" />
 		<input id="buttonMenuusers" type="button" class="button" value="Utilisateurs" onclick="display('home');display('users');" />
-		<input id="buttonMenuartistesLabels" type="button" class="button" value="Artistes / Labels" onclick="display('home');display('artistesLabels');" />
+		<input id="buttonMenuartistesLabels" type="button" class="button" value="Artistes / Labels" onclick="display('home');display('artistesLabels');" style="display:none;" />
 		<input id="buttonMenubonus" type="button" class="button" value="Bonus" onclick="display('home');display('bonus');" />
 		<input id="buttonMenucontenuPageSite" type="button" class="button" value="Contenu des pages" onclick="display('home');display('contenuPageSite');" />
 		<a href="<?php echo $radioclashHome ?>" id="lienVisiterSite" target="blank" alt="Visiter sur le site (dans un nouvel onglet)"><input id="buttonVisiterSite"id="buttonMenucontenuPageSite" type="button" class="button" value="Voir le site (nouvel onglet)" /></a>

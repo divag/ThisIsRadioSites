@@ -14,7 +14,12 @@
 	
 	$ref_emission = getReferenceEmission($numero, $titre, $nomParticipants);
 	$nom_emission = getNomFichierEmission($numero, $titre, $nomParticipants);
-	$linkEmission = $radioclashHome.$pageEmission.".php?episode=".$numero;
+	
+	if ($pageEmission == '')
+		$linkEmission = $radioclashHome."#".$numero;
+	else
+		$linkEmission = $radioclashHome.$pageEmission.".php?episode=".$numero;
+		
     $chemin_destination = '../'.$zips;
 	
 	echo "/*";
@@ -40,12 +45,26 @@
 
 	// On genere le fichier de la playlist :	
 	$fichier_playlist = $nomSite." ".$ref_emission." : (".$linkEmission.")\r\n";
+	
+	/*
+	if ($emission['id_contenu_texte'] != '')
+	{
+		$contenuTexteEmission = dbGetContenu($emission['id_contenu_texte']);
+		$presentationEmission = $contenuTexteEmission['contenu_fr'];
+
+		if ($presentationEmission != '')
+			$fichier_playlist.= $presentationEmission."\r\n";
+	}
 	$fichier_playlist.= "\r\n";
 	$fichier_playlist.= "\r\n";
-			
+	*/
+	
 	$playlist = dbGetPlaylist($id);
 	$nomUtilisateurEnCours = "";
-	$chef = dbGetChefEmission($id);
+	
+	if ($siteHaveParticipants)
+		$chef = dbGetChefEmission($id);
+		
 	$i = 0;
 	while($array=mysql_fetch_array($playlist))
 	{
@@ -74,7 +93,8 @@
 
 	$fichier_playlist.="\r\n";
 	$fichier_playlist.="\r\n";
-	if ($chef != '')
+
+	if ($siteHaveParticipants && $chef != '')
 	    $fichier_playlist.="Une émission présidée par ".$chef."\r\n";
 		
 	$fichier_playlist.="\r\n";
