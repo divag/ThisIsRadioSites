@@ -56,13 +56,13 @@ define('TEMPLATE_NOM_MORCEAU_EMISSION',$templateNommageMorceauxEmission);
 //Pages/Liens du site web :
 //=========================
 
-$pageEmission = 'index';
 $pageNews = 'news';
 $pageHowto = 'howto';
 $pageListen = 'listen';
 $pageEpisode = 'playlist';
-$lienPodcast = 'http://feeds.feedburner.com/thisisradioclash';
-$rssFeed = 'http://feeds.feedburner.com/thisisradioclash';
+$pageEmission = '';
+$lienPodcast = 'http://feeds.feedburner.com/Prototop';
+$rssFeed = 'http://feeds.feedburner.com/Prototop';
 $lienForum = "http://www.musiques-incongrues.net/";
 $lienFacebook = "http://www.facebook.com/thisisradioclash?ref=mf";
 
@@ -82,28 +82,25 @@ $css = "modules/css/";
 $js = "modules/js/";
 //Envoi de mails :
 $urlSendMail = 'http://int-musicdestock.fr/radioclashMailing/sendMail.php';
-$urlSendMail = $radioclashHome.'dbFunctions/sendEmailFile.php'; 
 define('URL_SEND_MAIL',$urlSendMail);
 
 //==========
 //Dossiers :
 //==========
 
-$racine = "../";
-
 //Dossier des fichiers de contenus :
-$contenu = $racine.'contenu/';
+$contenu = 'contenu/';
 define('CONTENU',$contenu);
 //Dossier des pochettes :
-$pics = $racine.'pochettes/';
+$pics = 'pochettes/';
 define('PICS',$pics);
 //Dossier des mp3s :
-$mp3s = $racine.'mp3/';
+$mp3s = 'mp3/';
 define('MP3S',$mp3s);
 //Dossier des zips :
-$zips = $racine.'zip/';
+$zips = 'zip/';
 define('ZIPS',$zips);
 //Dossier des mails :
-define('PATH_MAIL',$racine."mails/");
+define('PATH_MAIL',"mails/");
 
 ?>

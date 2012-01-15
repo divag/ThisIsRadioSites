@@ -92,7 +92,12 @@ else
 	<script type="text/javascript" src="../modules/ckeditor/ckeditor.js"></script>
 	<script type="text/javascript" src="../modules/ckfinder/ckfinder.js"></script>
 	<script type="text/javascript">
-		var urlPreview = "<?php echo $radioclashHome.$pageEmission ?>.php?episode={numero}&preview=1";
+		<?php
+			if ($pageEmission == '')
+				echo "var urlPreview = \"".$radioclashHome."?preview=1#{numero}\";";
+			else
+				echo "var urlPreview = \"".$radioclashHome.$pageEmission.".php?episode={numero}&preview=1\";";
+		?>
 		var urlBaseFunction = "<?php echo $radioclashHome ?>dbFunctions/";
 		var id_site = '<?php echo $id_site ?>';
 		var id_utilisateur = '<?php echo $utilisateur['id'] ?>';
