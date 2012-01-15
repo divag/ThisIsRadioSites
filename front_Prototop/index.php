@@ -145,7 +145,7 @@ if (threeSixtyPlayer.config.usePeakData) {
 			echo $contenuEntete['contenu_fr']."\n";
 		}
 	?>
-		<br />Pour s'inscrire au <a href="<?php echo $lienPodcast; ?>">podcast</a> par mail, cliquez <a href="#" onclick="window.open('http://feedburner.google.com/fb/a/mailverify?uri=TheBrainRadioshow', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">ici</a>.
+		<br />Pour s'inscrire au <a href="<?php echo $lienPodcast; ?>">podcast</a> par mail, cliquez <a href="#" onclick="window.open('http://feedburner.google.com/fb/a/mailverify?uri=Prototop', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">ici</a>.
 	</span>
 	<!--
 	<span class="workInProgress">Bonjour et bienvenue sur l'Internet.<br /><br />Ce site est en cours de construction. <br />En attendant, voici tout de même les émissions :</span>
@@ -156,7 +156,7 @@ if (threeSixtyPlayer.config.usePeakData) {
 			while($emission=mysql_fetch_array($listeEmissions))
 			{
 				$idEmission = $emission['id'];
-				$texteEmission = getReferenceEmission($emission['numero'], null, null);
+				$texteEmission = $nomSite." ".getReferenceEmission($emission['numero'], null, null);
 				
 				$nomFichierEmission = getNomFichierEmission($emission['numero'], null, null);
 				$imageEmission = $pics.$nomFichierEmission.".jpg";

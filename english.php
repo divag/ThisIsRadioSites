@@ -43,6 +43,18 @@ if ($contenu != 0)
 }
 ?>
 
+<div class="texteAccueil">
+	<form action="http://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('http://feedburner.google.com/fb/a/mailverify?uri=thisisradioclash', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
+		You can subscribe to our mailing-list just here :	
+		<input type="text" style="width:200px;border:1px solid black;background-color:white;;color:black;" name="email"/>
+		<input type="hidden" value="thisisradioclash" name="uri"/>
+		<input type="hidden" name="loc" value="en_US"/>
+		<input type="submit" value="OK" style="width:30px;border:1px solid black;background-color:#EEEEEE;color:black;cursor:pointer;cursor:hand;" />
+		<!--Delivered by <a href="http://feedburner.google.com" target="_blank">FeedBurner</a>-->
+		<br /><br />
+	</form>
+</div>	
+
 <h2 class="gris">Ne HAISSEZ pas la Radioclash, <i>SOYEZ la Radioclash !</i></h2>
 <p>They are, they were, they will be so far : 
 <span class="italique"><?php echo $listeParticipants ?></span> &amp; YOU !</p>

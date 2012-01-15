@@ -109,6 +109,16 @@ writeEntete('');
 					Pros ou pas, fille ou pas, robot ou pas, houmpa ou pas !<br />
 					Plus de d&eacute;tails sur l'art et la mani&egrave;re ? Voir en page <a href="howto.php"><span>Mode d'emploi</span></a> 
 				</p>
+				<p class="presentation">
+					<form action="http://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('http://feedburner.google.com/fb/a/mailverify?uri=thisisradioclash', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
+						Pour s'inscrire à la mailing-list, c'est ici :	
+						<input type="text" style="width:200px;border:1px solid black;background-color:white;;color:black;" name="email"/>
+						<input type="hidden" value="thisisradioclash" name="uri"/>
+						<input type="hidden" name="loc" value="en_US"/>
+						<input type="submit" value="OK" style="width:30px;border:1px solid black;background-color:#EEEEEE;color:black;cursor:pointer;cursor:hand;" />
+						<!--Delivered by <a href="http://feedburner.google.com" target="_blank">FeedBurner</a>-->
+					</form>
+				</p>	
 				<p class="translate">
 					<span class="red">PARDON OUR FRENCH : </span><a href="english.php"><span>English translation</span></a>
 				</p>	
