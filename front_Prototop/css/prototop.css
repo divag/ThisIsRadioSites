@@ -4,12 +4,12 @@ body {
 	font-weight: bold;
 	background-color: rgb(0, 0, 0);
 	background-image: url(background.jpg);
-	background-repeat: repeat-y;
-	background-position: 10px 0px;
-	padding-top: 0px;
-	margin-top: 0px;
+	background-repeat: repeat;
+	/*background-position: 10px 0px;*/
+	padding: 0px;
+	margin: 0px;
 }
-
+/*
 #dsr {
 	position:absolute;
 	text-align: center;
@@ -22,12 +22,14 @@ body {
 	height: 425px;
 	width: 284px;
 }
-
+*/
 #container {
 	color:#0B3E41;
-	margin-left: 300px;
-	padding: 5px;
-	margin-top: 10px;
+	color:white;
+	color:rgb(178,221,97);
+	/*margin-left: 300px;*/
+	/*padding: 5px;*/
+	/*margin-top: 10px;*/
 	background-repeat: no-repeat;
 	background-position: left top;
 	background-color: #A67240;
@@ -36,7 +38,7 @@ body {
 	border-style:solid;
 }
 
-#container ul, #container ul li {
+ul.listeEmissions, ul.listeEmissions li.itemEmission {
 	list-style: none; 
 	padding-left:0px;
 	margin-left:0px;
@@ -51,7 +53,7 @@ body {
 	margin:0px;
 	padding:0px;
 }
-
+/*
 #container ul li h3 {
 	background-color:#749C56; 
 	padding-left:10px;
@@ -60,6 +62,8 @@ body {
 	padding-top:10px;
 	padding-bottom:10px;
 }
+*/
+
 td {
 	vertical-align:top;
 }
@@ -70,7 +74,21 @@ padding-right:5px;
 #container {
 	border-color: rgb(0, 0, 0);
 	background-color: transparent;
+	background-color: black;
 	color: rgb(51, 191, 130);
+	color:white;
+	width:100%;
+	text-align:center;
+	padding:0px;
+	margin:0px;
+}
+
+#content {
+	padding:0px;
+	margin-left:auto;
+	margin-right:auto;
+	width:709px;
+	text-align:left;
 }
 
 #content ul li h3 {
@@ -84,13 +102,19 @@ padding-right:5px;
 	padding-right:5px;
 	background-color: transparent;
 	color: rgb(51, 191, 130);
+	color:white;
+	color:rgb(178,221,97);
+	font-weight:normal;
 }
 .metadataShortCutPlaying {
 	padding:1px;
 	padding-left:5px;
 	padding-right:5px;
 	background-color: rgb(51, 191, 130);
+	background-color: transparent;
 	color: black;
+	color: yellow;
+	font-weight:bold;
 }
 
 .black {
@@ -128,4 +152,8 @@ padding-right:5px;
 
 .top {
 	vertical-align:top;
+}
+a {
+	color:yellow;
+	font-weight:bold;
 }

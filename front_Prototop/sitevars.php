@@ -64,7 +64,8 @@ $pageEmission = '';
 $lienPodcast = 'http://feeds.feedburner.com/Prototop';
 $rssFeed = 'http://feeds.feedburner.com/Prototop';
 $lienForum = "http://www.musiques-incongrues.net/";
-$lienFacebook = "http://www.facebook.com/thisisradioclash?ref=mf";
+$lienFacebook = "http://fr-fr.facebook.com/pages/Prototop/170953249591801";
+$lienTwitter = "https://www.twitter.com/Prototop_Radio";
 
 //=========
 //Modules :
