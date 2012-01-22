@@ -76,7 +76,7 @@ var Metadata = function(oSound) {
     }
     if (index !== metadata.currentItem) {
       // update
-      oSound._data.oLink.innerHTML = metadata.mainTitle+' <span class="metadata"><span class="sm2_divider"> | </span><span class="sm2_metadata">'+metadata[index].title+'</span></span>';
+      oSound._data.oLink.innerHTML = metadata.mainTitle+' <span class="metadata"><span class="sm2_divider">' + soundManager.metadataSeparator + '</span><span class="sm2_metadata">'+metadata[index].title+'</span></span>';
       
 	  if (index < metadata.length && soundManager.radioclashSpecialFeatures) {
 

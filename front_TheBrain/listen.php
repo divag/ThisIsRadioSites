@@ -119,6 +119,7 @@ else
 	soundManager.wmode = 'transparent'; // transparent SWF, if possible
 	soundManager.useFastPolling = true; // increased JS callback frequency
 	soundManager.url = '<?php echo $soundmanager ?>demo/swf/';
+	soundManager.metadataSeparator = ' | ';
 	soundManager.radioclashSpecialFeatures = true;
 	soundManager.radioclashSpecialRedirectUrl = '<?php echo $linkEmissionAutoRedirect ?>';
 	soundManager.radioclashSpecialFirstPlay = <?php echo $firstPlay ?>;
