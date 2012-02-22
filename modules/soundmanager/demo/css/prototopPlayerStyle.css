@@ -1,0 +1,138 @@
+/*
+div.player {
+	position:fixed;
+	bottom:0px;
+	left:0px;
+	width:100%;
+	z-index:99;
+}
+*/
+div.playerHeight {
+	height:60px;
+}
+
+ul.playlist li ul li {
+ position:relative;
+ margin:0px;
+ padding:2px 3px;
+ border:1px solid transparent;
+ -moz-border-radius:6px;
+ -khtml-border-radius:6px;
+ border-radius:6px;
+ margin-right:1em;
+ font-family:Arial, Helvetica, sans-serif; /**/
+ font-size:x-small; /**/
+ /*font-weight:lighter; /**/
+ letter-spacing:0px; /**/
+ background-color:transparent;
+ opacity:0.66;
+}
+
+ul.playlist li .note {
+ position:absolute;
+ display:none;
+ left:0px;
+ top:0px;
+ z-index:10;
+ font-size:x-small;
+ padding:2px 4px 2px 4px;
+ width:auto;
+ color:#666;
+ background-color:#fff;
+ border:1px solid #ccc;
+ border-radius:6px;
+ -moz-border-radius:6px;
+ -webkit-border-radius:6px;
+ font-style:normal;
+ font-weight:bold;
+ font-family:Arial, Helvetica, sans-serif;/**/
+ letter-spacing:0px;/**/
+ margin-top:1.1em;
+}
+
+ul.playlist li .sm2_divider {
+ /*font-size:0.75em;*/
+ display:none;
+}
+
+ul.playlist li .sm2_metadata {
+ /*font-size:0.65em;*/
+ font-size:1em;
+}
+
+span.sm2_metadata {
+	text-decoration:none;
+}
+
+ul.playlist li {
+ /* assume all items will be sounds rather than wait for onload etc. in this example.. may differ for your uses. */
+ position:relative;
+ display:block;
+ width:auto;
+ font-size:20px;
+ color:#666;
+ padding:0.25em 0.5em 0.25em 0.5em;
+ border:none;
+ background-color:#f9f9f9;
+ -webkit-transition-property: hover;
+ -webkit-transition: background-color 0.15s ease-in-out;
+ -moz-transition: background-color 0.15s linear 0s; /* firefox 4 */
+  -o-transition-property: background-color; /* opera 10.5 */
+  -o-transition-duration: 0.15s;
+ text-decoration:none;
+}
+
+
+ul.playlist li a {
+ display:block;
+ text-decoration:none;
+ font-weight:normal;
+ color:#000;
+ font-size:20px;
+ outline:none;
+ position:relative;
+ z-index:2;
+}
+/*
+ul.playlist li a span.titre {
+ display:none;
+}
+*/
+
+ul.playlist li .timing {
+ position:absolute;
+ display:none;
+ text-align:right;
+ right:1em;
+ top:1em;
+ width:auto;
+ height:1em;
+ padding:3px 5px;
+ background-color:#5588bb;
+ border:1px solid #99ccff;
+ -moz-border-radius:4px;
+ -khtml-border-radius:4px;
+ border-radius:4px;
+ font:44% monaco,"VT-100","lucida console",courier,system;
+ line-height:1em;
+ vertical-align:middle;
+}
+
+ul.playlist li.sm2_paused .timing,
+ul.playlist.use-peak li.sm2_paused .peak {
+ background-color:#888;
+ border-color:#ccc;
+}
+
+
+
+ul.playlist li.sm2_playing,
+ul.playlist li.sm2_playing:hover {
+ background-color:#343756;
+ background-color:#5588bb;
+}
+ul.playlist li.sm2_paused {
+ background-color:#555;
+ background-color:#888;
+}
+

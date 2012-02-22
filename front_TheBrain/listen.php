@@ -7,7 +7,7 @@ if ($_GET["episode"] == null)
 else
 {
 	define ('RE_INT','^[0-9]+$');
-	if (!ereg(RE_INT,$_GET["episode"]))
+	if (!@ereg(RE_INT,$_GET["episode"]))
 		echo "<script>window.location.href = '".$radioclashHome."';</script>";
 	else
 	{
@@ -119,7 +119,6 @@ else
 	soundManager.wmode = 'transparent'; // transparent SWF, if possible
 	soundManager.useFastPolling = true; // increased JS callback frequency
 	soundManager.url = '<?php echo $soundmanager ?>demo/swf/';
-	soundManager.metadataSeparator = ' | ';
 	soundManager.radioclashSpecialFeatures = true;
 	soundManager.radioclashSpecialRedirectUrl = '<?php echo $linkEmissionAutoRedirect ?>';
 	soundManager.radioclashSpecialFirstPlay = <?php echo $firstPlay ?>;

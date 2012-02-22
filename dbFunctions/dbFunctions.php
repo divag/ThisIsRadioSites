@@ -15,7 +15,7 @@ function dbGetContenu($id_contenu){
     $query = "SELECT id, id_type_contenu, url, contenu_fr, contenu_en, contenu_txt_fr, contenu_txt_en FROM CONTENU WHERE id = ".$id_contenu.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -32,7 +32,7 @@ function dbInsertContenu($id_type_contenu, $url, $contenu_fr, $contenu_en, $cont
     $query = "INSERT INTO CONTENU (id_type_contenu, url, contenu_fr, contenu_en, contenu_txt_fr, contenu_txt_en) VALUES (".$id_type_contenu.", '".urldecode($url)."', '".urldecode($contenu_fr)."', '".urldecode($contenu_en)."', '".urldecode($contenu_txt_fr)."', '".urldecode($contenu_txt_en)."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	$new_id = mysql_insert_id();
     mysql_close($link);
 	
@@ -71,7 +71,7 @@ function dbUpdateContenu($id, $id_type_contenu, $url, $contenu_fr, $contenu_en, 
     $query = "UPDATE CONTENU set id_type_contenu = ".$id_type_contenu.", url = '".urldecode($url)."', contenu_fr = '".urldecode($contenu_fr)."', contenu_en = '".urldecode($contenu_en)."', contenu_txt_fr = '".urldecode($contenu_txt_fr)."', contenu_txt_en = '".urldecode($contenu_txt_en)."' WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -107,7 +107,7 @@ function dbDeleteContenu($id){
     $query = "DELETE FROM CONTENU WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -123,7 +123,7 @@ function dbListeAllTypeContenu(){
     $query = "SELECT id, libelle FROM TYPE_CONTENU ORDER BY id ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -135,7 +135,7 @@ function dbGetLibelleTypeContenu($id_type_contenu){
 	$query = "SELECT libelle FROM TYPE_CONTENU WHERE id = ".$id_type_contenu.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -181,7 +181,7 @@ function dbGetContenuPageSiteById($id){
     $query = "SELECT CONTENU_PAGE_SITE.id, CONTENU_PAGE_SITE.id_site, CONTENU_PAGE_SITE.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, CONTENU_PAGE_SITE.page, CONTENU_PAGE_SITE.zone FROM CONTENU_PAGE_SITE, CONTENU WHERE CONTENU_PAGE_SITE.id_contenu = CONTENU.id AND CONTENU_PAGE_SITE.id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -198,7 +198,7 @@ function dbGetContenuPageSite($id_site, $page, $zone){
     $query = "SELECT CONTENU_PAGE_SITE.id, CONTENU_PAGE_SITE.id_site, CONTENU_PAGE_SITE.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, CONTENU_PAGE_SITE.page, CONTENU_PAGE_SITE.zone FROM CONTENU_PAGE_SITE, CONTENU WHERE CONTENU_PAGE_SITE.id_contenu = CONTENU.id AND CONTENU_PAGE_SITE.id_site = ".$id_site." AND CONTENU_PAGE_SITE.page = '".urldecode($page)."' AND CONTENU_PAGE_SITE.zone = '".urldecode($zone)."' ORDER BY CONTENU_PAGE_SITE.zone ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -215,7 +215,7 @@ function dbGetListeContenuPageSite($id_site, $page){
     $query = "SELECT CONTENU_PAGE_SITE.id, CONTENU_PAGE_SITE.id_site, CONTENU_PAGE_SITE.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, CONTENU_PAGE_SITE.page, CONTENU_PAGE_SITE.zone, TYPE_CONTENU.libelle FROM CONTENU_PAGE_SITE, CONTENU, TYPE_CONTENU WHERE CONTENU_PAGE_SITE.id_contenu = CONTENU.id AND CONTENU_PAGE_SITE.id_site = ".$id_site." AND CONTENU_PAGE_SITE.page = '".urldecode($page)."' AND CONTENU.id_type_contenu = TYPE_CONTENU.id ORDER BY CONTENU_PAGE_SITE.zone ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -233,7 +233,7 @@ function dbInsertContenuPageSite($id_site, $page, $zone){
     $query = "INSERT INTO CONTENU_PAGE_SITE (id_site, id_contenu, page, zone) VALUES (".$id_site.", ".$id_contenu.", '".urldecode($page)."', '".urldecode($zone)."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -245,7 +245,7 @@ function dbUpdateContenuPageSite($id, $page, $zone){
     $query = "UPDATE CONTENU_PAGE_SITE set page = '".urldecode($page)."', zone = '".urldecode($zone)."' WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -258,7 +258,7 @@ function dbDeleteContenuPageSite($id)
 	$query = "DELETE FROM CONTENU_PAGE_SITE WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
 	mysql_close($link);
 }
 
@@ -275,7 +275,7 @@ function dbGetListeGoodiesEmission($id_emission){
     $query = "SELECT GOODIES_EMISSION.id_emission, GOODIES_EMISSION.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, GOODIES_EMISSION.ordre, TYPE_CONTENU.libelle FROM GOODIES_EMISSION, CONTENU, TYPE_CONTENU WHERE GOODIES_EMISSION.id_contenu = CONTENU.id AND GOODIES_EMISSION.id_emission = ".$id_emission." AND CONTENU.id_type_contenu = TYPE_CONTENU.id ORDER BY GOODIES_EMISSION.ordre ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -288,7 +288,7 @@ function dbGetGoodiesEmission($id_emission, $id_contenu){
     $query = "SELECT GOODIES_EMISSION.id_emission, GOODIES_EMISSION.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, GOODIES_EMISSION.ordre, TYPE_CONTENU.libelle FROM GOODIES_EMISSION, CONTENU, TYPE_CONTENU WHERE GOODIES_EMISSION.id_contenu = CONTENU.id AND GOODIES_EMISSION.id_emission = ".$id_emission." AND GOODIES_EMISSION.id_contenu = ".$id_contenu." AND CONTENU.id_type_contenu = TYPE_CONTENU.id;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -309,7 +309,7 @@ function dbInsertGoodiesEmission($id_emission, $id_type_contenu, $url, $contenu_
     $query = "INSERT INTO GOODIES_EMISSION (id_emission, id_contenu, ordre) VALUES (".$id_emission.", ".$id_contenu.", 0);";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -324,7 +324,7 @@ function dbInsertAndGetGoodiesEmission($id_emission)
     $query = "INSERT INTO GOODIES_EMISSION (id_emission, id_contenu, ordre) VALUES (".$id_emission.", ".$id_contenu.", 0);";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);	
 
 	return dbGetGoodiesEmission($id_emission, $id_contenu);
@@ -338,7 +338,7 @@ function dbUpdateOrdreGoodiesEmission($id_emission, $id_contenu, $ordre)
 	$query = "UPDATE GOODIES_EMISSION SET ordre = ".$ordre." WHERE id_emission = ".$id_emission." AND  id_contenu = ".$id_contenu.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
 	mysql_close($link);
 }
 
@@ -351,7 +351,7 @@ function dbDeleteGoodiesEmission($id_emission, $id_contenu)
 	$query = "DELETE FROM GOODIES_EMISSION WHERE id_emission = ".$id_emission." AND id_contenu = ".$id_contenu.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
 	mysql_close($link);
 }
 
@@ -368,7 +368,7 @@ function dbGetNews($id){
     $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.id_contenu = CONTENU.id AND NEWS.id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -385,7 +385,7 @@ function dbGetLastNews($id_site){
     $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY date DESC LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -406,7 +406,7 @@ function dbGetListeNews($id_site){
     //$query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY NEWS.date ASC, NEWS.id DESC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -419,7 +419,7 @@ function dbGetListeNewsActives($id_site){
     $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.date <> '0000-00-00 00:00:00' AND NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY NEWS.date DESC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -436,7 +436,7 @@ function dbInsertNews($id_site, $titre, $id_utilisateur, $id_type_contenu, $url,
     $query = "INSERT INTO NEWS (id_site, titre, id_contenu, id_utilisateur, date) VALUES (".$id_site.", '".urldecode($titre)."', ".$id_contenu.", ".$id_utilisateur.", '0000-00-00 00:00:00');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -451,7 +451,7 @@ function dbInsertAndGetNews($id_site, $titre, $id_utilisateur)
     $query = "INSERT INTO NEWS (id_site, titre, id_contenu, id_utilisateur, date) VALUES (".$id_site.", '".urldecode($titre)."', ".$id_contenu.", ".$id_utilisateur.", '0000-00-00 00:00:00');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	$new_id = mysql_insert_id();
     mysql_close($link);
 
@@ -465,7 +465,7 @@ function dbPublishNews($id)
     $query = "UPDATE NEWS set date = '".date("Y-m-d H:i:s")."' WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -477,7 +477,7 @@ function dbUpdateTitreNews($id, $titre){
     $query = "UPDATE NEWS set titre = '".urldecode($titre)."' WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -489,7 +489,7 @@ function dbUpdateNews($id, $id_site, $titre, $id_contenu, $id_utilisateur, $date
     $query = "UPDATE NEWS set id_site = ".$id_site.", titre = '".urldecode($titre)."', id_contenu = ".$id_contenu.", id_utilisateur = ".$id_utilisateur.", date = '".urldecode($date)."' WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -502,7 +502,7 @@ function dbDeleteNews($id)
 	$query = "DELETE FROM NEWS WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
 	mysql_close($link);
 }
 
@@ -519,7 +519,7 @@ function dbGetBonus($id){
     $query = "SELECT BONUS.id, BONUS.id_site, BONUS.titre, BONUS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, BONUS.id_utilisateur, BONUS.date FROM BONUS, CONTENU WHERE BONUS.id_contenu = CONTENU.id AND BONUS.id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -536,7 +536,7 @@ function dbGetListeBonus($id_site){
     $query = "SELECT BONUS.id, BONUS.id_site, BONUS.titre, BONUS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, BONUS.id_utilisateur, BONUS.date, TYPE_CONTENU.libelle FROM BONUS, CONTENU, TYPE_CONTENU WHERE BONUS.id_contenu = CONTENU.id AND BONUS.id_site = ".$id_site." AND CONTENU.id_type_contenu = TYPE_CONTENU.id ORDER BY date DESC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -553,7 +553,7 @@ function dbInsertBonus($id_site, $titre, $id_utilisateur, $date, $id_type_conten
     $query = "INSERT INTO BONUS (id_site, titre, id_contenu, id_utilisateur, zone) VALUES (".$id_site.", '".urldecode($titre)."', ".$id_contenu.", ".$id_utilisateur.", '".date("Y-m-d H:i:s")."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -565,7 +565,7 @@ function dbUpdateBonus($id, $id_site, $titre, $id_contenu, $id_utilisateur, $dat
     $query = "UPDATE BONUS set id_site = ".$id_site.", titre = '".urldecode($titre)."', id_contenu = ".$id_contenu.", id_utilisateur = ".$id_utilisateur.", date = '".urldecode($date)."' WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -578,7 +578,7 @@ function dbDeleteBonus($id)
 	$query = "DELETE FROM BONUS WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
 	mysql_close($link);
 }
 
@@ -595,7 +595,7 @@ function dbGetListeArtiste(){
     $query = "SELECT nom, url FROM ARTISTE ORDER BY nom ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -609,7 +609,7 @@ function dbInsertArtiste($nom, $url){
     $query = "INSERT INTO ARTISTE (nom, url) VALUES ('".urldecode($nom)."', '".urldecode($url)."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -622,7 +622,7 @@ function dbUpdateArtiste($nom, $url){
     $query = "UPDATE ARTISTE set url = '".urldecode($url)."' WHERE nom = '".urldecode($nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -639,7 +639,7 @@ function dbGetListeLabel(){
     $query = "SELECT nom, url FROM LABEL ORDER BY nom ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -653,7 +653,7 @@ function dbInsertLabel($nom, $url){
     $query = "INSERT INTO LABEL (nom, url) VALUES ('".urldecode($nom)."', '".urldecode($url)."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -666,7 +666,7 @@ function dbUpdateLabel($nom, $url){
     $query = "UPDATE LABEL set url = '".urldecode($url)."' WHERE nom = '".urldecode($nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -683,7 +683,7 @@ function dbGetListeMailingList($id_site){
     $query = "SELECT mail, id_site, est_annule FROM MAILING_LIST WHERE id_site = ".$id_site." ORDER BY mail ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -696,7 +696,7 @@ function dbGetListeMailingListActive($id_site){
     $query = "SELECT mail, id_site, est_annule FROM MAILING_LIST WHERE id_site = ".$id_site." AND est_annule = 0 ORDER BY mail ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -709,7 +709,7 @@ function dbCancelMailingList($id_site, $mail){
     $query = "UPDATE MAILING_LIST set est_annule = 1 WHERE id_site = ".$id_site." AND mail = '".urldecode($mail)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -722,7 +722,7 @@ function dbInsertMailingList($mail, $id_site){
     $query = "INSERT INTO MAILING_LIST (mail, id_site, est_annule) VALUES ('".urldecode($mail)."', ".$id_site.", 0);";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -735,7 +735,7 @@ function dbUpdateMailingList($old_mail, $new_mail){
     $query = "UPDATE MAILING_LIST set mail = '".urldecode($new_mail)."' WHERE mail = '".urldecode($old_mail)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -752,7 +752,7 @@ function dbGetListeNewsletter($id_site){
     $query = "SELECT id, id_site, destinataires, titre, contenu_fr, contenu_en, contenu_txt_fr, contenu_txt_en, date_envoi FROM NEWSLETTER, CONTENU WHERE NEWSLETTER.id_contenu = CONTENU.id AND NEWSLETTER.id_site = ".$id_site." ORDER BY date_envoi DESC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -765,7 +765,7 @@ function dbGetLastNewsletter($id_site){
     $query = "SELECT id, id_site, destinataires, titre, contenu_fr, contenu_en, contenu_txt_fr, contenu_txt_en, date_envoi FROM NEWSLETTER, CONTENU WHERE NEWSLETTER.id_contenu = CONTENU.id AND NEWSLETTER.id_site = ".$id_site." ORDER BY date_envoi DESC LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -782,7 +782,7 @@ function dbGetNewsletter($id){
     $query = "SELECT id, id_site, destinataires, titre, contenu_fr, contenu_en, contenu_txt_fr, contenu_txt_en, date_envoi FROM NEWSLETTER, CONTENU WHERE NEWSLETTER.id_contenu = CONTENU.id AND NEWSLETTER.id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -803,7 +803,7 @@ function dbInsertNewsletter($id_site, $destinataires, $titre, $contenu_fr, $cont
     $query = "INSERT INTO NEWSLETTER (id_site, destinataires, titre, id_contenu, date_envoi) VALUES (".$id_site.", '".urldecode($destinataires)."', '".urldecode($titre)."', ".$id_contenu.", '".date("Y-m-d H:i:s")."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -820,7 +820,7 @@ function dbGetListeSites(){
     $query = "SELECT id, nom, url, accroche_fr, accroche_en, est_actif FROM SITE ORDER BY ID ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -833,7 +833,8 @@ function dbGetSite($id){
     $query = "SELECT id, nom, url, accroche_fr, accroche_en, est_actif FROM SITE WHERE id=".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	//$res=mysql_query ($query, $link);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -850,7 +851,7 @@ function dbUpdateSite($id, $nom, $url, $accroche_fr, $accroche_en, $est_actif){
     $query = "UPDATE SITE set nom = '".urldecode($nom)."', url = '".urldecode($url)."', accroche_fr = '".urldecode($accroche_fr)."', accroche_en = '".urldecode($accroche_en)."', est_actif = ".$est_actif." WHERE id=".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -862,7 +863,7 @@ function dbUpdateStatutSite($id, $est_actif){
     $query = "UPDATE SITE set est_actif = ".$est_actif." WHERE id=".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -879,7 +880,7 @@ function dbGetListeSitesAdministrateur($id_utilisateur){
     $query = "SELECT id, nom, url, accroche_fr, accroche_en, est_actif FROM SITE, ADMINISTRATEUR WHERE SITE.id = ADMINISTRATEUR.id_site AND ADMINISTRATEUR.id_utilisateur = ".$id_utilisateur.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -892,7 +893,7 @@ function dbGetListeAdministrateursSite($id_site){
     $query = "SELECT UTILISATEUR.id, UTILISATEUR.nom FROM UTILISATEUR, ADMINISTRATEUR WHERE UTILISATEUR.id = ADMINISTRATEUR.id_utilisateur AND ADMINISTRATEUR.id_site = ".$id_site.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -905,7 +906,7 @@ function dbDeleteAllAdministrateursSite($id_site){
     $query = "DELETE FROM ADMINISTRATEUR WHERE id_site = ".$id_site.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -917,7 +918,7 @@ function dbAddAdministrateurSite($id_site, $id_utilisateur){
     $query = "INSERT INTO ADMINISTRATEUR (id_site, id_utilisateur) VALUES (".$id_site.", ".$id_utilisateur.");";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -928,7 +929,7 @@ function dbCheckAdministrateur($id_site, $id_utilisateur){
     $query = "SELECT id_site, id_utilisateur FROM ADMINISTRATEUR WHERE id_site = ".$id_site." AND id_utilisateur = ".$id_utilisateur.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -949,7 +950,7 @@ function dbCheckSuperAdministrateur($id_utilisateur){
     $query = "SELECT id_super_administrateur FROM PARAMETRES_APPLICATION;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -971,7 +972,7 @@ function dbGetParametresSite($id_site) {
 	$query = "SELECT id_site, mail_admin, have_titre, have_texte, have_participants, id_default_participant, have_image_jpg, have_image_jpg_toprint, have_image_gif, have_teaser_mp3, have_teaser_video, have_goodies, have_bonus, have_news, have_newsletter, have_zip, have_contenu_pages, have_statut_announced, template_reference_emission, template_nommage_fichiers_emission, template_nommage_morceaux_emission FROM PARAMETRES_SITE WHERE id_site = ".$id_site.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -986,7 +987,7 @@ function dbUpdateParametresSite($id_site, $mail_admin, $have_titre, $have_texte,
 	$query = "INSERT INTO PARAMETRES_SITE (id_site, mail_admin, have_titre, have_texte, have_participants, id_default_participant, have_image_jpg, have_image_jpg_toprint, have_image_gif, have_teaser_mp3, have_teaser_video, have_goodies, have_bonus, have_news, have_newsletter, have_zip, have_contenu_pages, have_statut_announced, template_reference_emission, template_nommage_fichiers_emission, template_nommage_morceaux_emission) VALUES (".$id_site.", '".urldecode($mail_admin)."', ".$have_titre.", ".$have_texte.", ".$have_participants.", ".$id_default_participant.", ".$have_image_jpg.", ".$have_image_jpg_toprint.", ".$have_image_gif.", ".$have_teaser_mp3.", ".$have_teaser_video.", ".$have_goodies.", ".$have_bonus.", ".$have_news.", ".$have_newsletter.", ".$have_zip.", ".$have_contenu_pages.", ".$have_statut_announced.", '".urldecode($template_reference_emission)."' , '".urldecode($template_nommage_fichiers_emission)."' , '".urldecode($template_nommage_morceaux_emission)."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -1004,7 +1005,7 @@ function dbGetLastEmission($id_site){
 	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." AND etat=3 ORDER BY date_sortie DESC LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	$row=mysql_fetch_array($res);
@@ -1022,7 +1023,7 @@ function dbListeEmissionsForFeed($id_site){
 	
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	return $res;
@@ -1035,7 +1036,7 @@ function dbGetMaxNumberEmission($id_site){
 	$query = "SELECT numero FROM EMISSION WHERE id_site = ".$id_site." ORDER BY numero DESC LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	$row=mysql_fetch_array($res);
@@ -1051,7 +1052,7 @@ function dbGetNomsParticipantsActifs($id_site){
 //	$query = "SELECT DISTINCT login_forum FROM UTILISATEUR, PARTICIPANT, EMISSION WHERE UTILISATEUR.nom = PARTICIPANT.nom_utilisateur AND PARTICIPANT.id_emission = EMISSION.id AND EMISSION.id_site = ".$id_site." AND EMISSION.etat = 3;";
     $link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -1065,7 +1066,7 @@ function dbGetNomsParticipantsEmission($id){
 	$query = "SELECT DISTINCT nom FROM UTILISATEUR, PARTICIPANT, EMISSION WHERE UTILISATEUR.nom = PARTICIPANT.nom_utilisateur AND PARTICIPANT.id_emission = EMISSION.id AND EMISSION.id = ".$id.";";
     $link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -1115,7 +1116,7 @@ function dbGetListeEmissionsComingSoon($id_site){
 	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." AND etat = 2 ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	return $res;
@@ -1129,7 +1130,7 @@ function dbGetParticipantsEmission($p_id_emission){
     $query = "SELECT id_emission, nom_utilisateur, ordre, est_chef FROM PARTICIPANT WHERE id_emission = ".$p_id_emission." ORDER BY ORDRE ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -1142,7 +1143,7 @@ function dbGetParticipant($p_nom){
     $query = "SELECT id_emission, nom_utilisateur, ordre, est_chef FROM PARTICIPANT WHERE nom_utilisateur = '".urldecode($p_nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 
 	if ($row=mysql_fetch_array($res))
@@ -1158,7 +1159,7 @@ function dbGetChefFlag($p_nom){
     $query = "SELECT PARTICIPANT.id_emission FROM PARTICIPANT WHERE PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($p_nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
 
 	if ($row=mysql_fetch_array($res))
@@ -1194,7 +1195,7 @@ function dbGetListeEmissions($id_site){
 	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	return $res;
@@ -1208,7 +1209,7 @@ function dbGetListeEmissionsByDate($id_site){
 	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." ORDER BY date_sortie DESC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	return $res;
@@ -1227,7 +1228,7 @@ function dbGetEmission($p_id){
 	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id = ".$p_id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -1243,7 +1244,7 @@ function dbGetEmissionByNumero($p_id_site, $p_numero){
 	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$p_id_site." AND numero = ".$p_numero.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -1260,7 +1261,7 @@ function dbGetNextEmission($id_site, $p_numero){
 	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." AND etat = 3 AND numero < ".$p_numero." ORDER BY numero DESC LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -1270,7 +1271,7 @@ function dbGetNextEmission($id_site, $p_numero){
 		$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." AND etat = 3 ORDER BY numero DESC LIMIT 0,1;";
 		$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 		$select_base=mysql_selectdb($db);
-		$res=mysql_db_query ($db, $query);	
+		$res=mysql_query ($query, $link);	
 		mysql_close($link);	
 		$row=mysql_fetch_array($res);
 		return $row;	
@@ -1285,7 +1286,7 @@ function dbGetPrevEmission($id_site, $p_numero){
 	$query = "SELECT id, id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION WHERE id_site = ".$id_site." AND etat = 3 AND numero < ".$p_numero." ORDER BY numero ASC LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -1302,7 +1303,7 @@ function dbGetTitreEmission($id_site, $p_numero){
 	$query = "SELECT titre FROM EMISSION WHERE id_site = ".$id_site." AND numero = ".$p_numero." LIMIT 0,1;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -1320,7 +1321,7 @@ function dbGetUtilisateur($p_nom_utilisateur){
 	$link=mysql_connect($hote,$login,$passwd); 
 	mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -1338,7 +1339,7 @@ function dbGetUtilisateurById($p_id_utilisateur){
 	$link=mysql_connect($hote,$login,$passwd); 
 	mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -1356,7 +1357,7 @@ function dbGetUtilisateurByLogin($p_login_utilisateur){
 	$link=mysql_connect($hote,$login,$passwd); 
 	mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -1374,7 +1375,7 @@ function dbGetUtilisateurByMail($p_mail_utilisateur){
 	$link=mysql_connect($hote,$login,$passwd); 
 	mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -1392,7 +1393,7 @@ function dbCheckPass($p_nom_utilisateur, $p_password_utilisateur){
 	$link=mysql_connect($hote,$login,$passwd); 
 	mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -1410,7 +1411,7 @@ function dbExistsMail($p_mail_utilisateur){
 	$link=mysql_connect($hote,$login,$passwd); 
 	mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -1426,7 +1427,7 @@ function dbDeleteUtilisateur($p_nom_utilisateur){
 	$query = "DELETE FROM UTILISATEUR WHERE nom = '".urldecode($p_nom_utilisateur)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
 	mysql_close($link);
 }
 
@@ -1438,7 +1439,7 @@ function dbGetPlaylist($p_id_emission){
 	$query = "SELECT id, id_emission, nom_utilisateur, time_min, time_sec, nom_artiste, nom_morceau, nom_label, annee FROM MORCEAU WHERE id_emission = ".$p_id_emission." ORDER BY time_min, time_sec ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	return $res;
@@ -1452,7 +1453,7 @@ function dbGetPlaylistParticipant($p_id_emission, $nom_participant){
 	$query = "SELECT id, id_emission, nom_utilisateur, time_min, time_sec, nom_artiste, nom_morceau, nom_label, annee FROM MORCEAU WHERE id_emission = ".$p_id_emission." AND nom_utilisateur = '".urldecode($nom_participant)."' ORDER BY time_min, time_sec ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	return $res;
@@ -1465,7 +1466,7 @@ function dbGetMorceauxEmissionFlag($p_id_emission){
 	$query = "SELECT id FROM MORCEAU WHERE id_emission = ".$p_id_emission.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	return ($row=mysql_fetch_array($res));
@@ -1497,7 +1498,7 @@ function dbListeAllEtatEmission(){
     $query = "SELECT id, libelle FROM ETAT_EMISSION ORDER BY id ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -1509,7 +1510,7 @@ function dbGetLibelleEtatEmission($id_etat){
 	$query = "SELECT libelle FROM ETAT_EMISSION WHERE id = ".$id_etat.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -1525,7 +1526,7 @@ function dbListeAllEmission($id_site){
     $query = "SELECT EMISSION.id, EMISSION.id_site, numero, titre, id_contenu_texte, date_sortie, etat, libelle, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION, ETAT_EMISSION WHERE EMISSION.id_site = ".$id_site." AND EMISSION.etat = ETAT_EMISSION.id ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -1537,7 +1538,7 @@ function dbListeAllEmissionForChef($id_site, $admin){
     $query = "SELECT DISTINCT EMISSION.id, EMISSION.id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION, PARTICIPANT WHERE EMISSION.id_site = ".$id_site." AND EMISSION.etat = 2 AND EMISSION.id = PARTICIPANT.id_emission AND PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($admin)."' ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -1549,7 +1550,7 @@ function dbListeAllEmissionForChefSansAnnonce($id_site, $admin){
     $query = "SELECT DISTINCT EMISSION.id, EMISSION.id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec, teaser_video, url_lien_forum FROM EMISSION, PARTICIPANT WHERE EMISSION.id_site = ".$id_site." AND EMISSION.etat = 1 AND EMISSION.id = PARTICIPANT.id_emission AND PARTICIPANT.est_chef = 1 AND PARTICIPANT.nom_utilisateur = '".urldecode($admin)."' ORDER BY numero ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
     mysql_close($link);
     return $res;
 }
@@ -1561,7 +1562,7 @@ function dbDeleteEmission($id){
     $query = "DELETE FROM EMISSION WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -1572,7 +1573,7 @@ function dbDeletePlaylistParticipant($id, $nom){
     $query = "DELETE FROM MORCEAU WHERE id_emission = ".$id." AND nom_utilisateur = '".urldecode($nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -1582,7 +1583,7 @@ function dbInsertMorceau($id, $nom, $time_min, $time_sec, $nom_artiste, $nom_mor
     $query = "INSERT INTO MORCEAU (id_emission, nom_utilisateur, time_min, time_sec, nom_morceau, nom_artiste, nom_label, annee) VALUES (".$id.", '".urldecode($nom)."', ".$time_min.", ".$time_sec.", '".urldecode($nom_morceau)."', '".urldecode($nom_artiste)."', '".urldecode($nom_label)."', '".urldecode($annee)."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -1598,25 +1599,25 @@ function dbDeleteCascadeEmission($id){
     $query = "DELETE FROM MORCEAU WHERE id_emission = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
     mysql_close($link);
 
     $query = "DELETE FROM PARTICIPANT WHERE id_emission = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
     mysql_close($link);
 
     $query = "DELETE FROM CONTENU WHERE id = ".$emission['id_contenu_texte'].";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
     mysql_close($link);
 		
     $query = "DELETE FROM EMISSION WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
     mysql_close($link);
 		
 	$referenceEmission = getReferenceEmission($numero, $titre, $nomParticipants);
@@ -1651,7 +1652,7 @@ function dbInsertEmission($id_site, $numero, $titre, $date_sortie, $etat, $time_
     $query = "INSERT INTO EMISSION (id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec) VALUES (".$id_site.", ".$numero.", '".urldecode($titre)."', ".$id_contenu.", '".$date_sortie."', ".$etat.", ".$time_min.", ".$time_sec.");";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -1662,7 +1663,7 @@ function dbUpdateTimeEmission($id, $time_min, $time_sec){
     $query = "UPDATE EMISSION SET time_min = ".$time_min.", time_sec = ".$time_sec." WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -1673,7 +1674,7 @@ function dbUpdateTeaserVideoEmission($id, $teaser_video){
     $query = "UPDATE EMISSION SET teaser_video = '".urldecode($teaser_video)."' WHERE id = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -1685,7 +1686,7 @@ function dbUpdateEmission($id, $id_site, $numero, $titre, $date_sortie, $etat, $
     //$query = "UPDATE EMISSION SET titre = '".$titre."', date_sortie = '".$date_sortie."', WHERE numero = ".$numero.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -1700,7 +1701,7 @@ function dbUpdateEtatEmission($id_emission, $id_etat){
 
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
 	mysql_close($link);
 
 }
@@ -1855,7 +1856,7 @@ function dbGetListeAllParticipantsAndUsers(){
 	$query = "SELECT DISTINCT allUsers.nom FROM ((SELECT nom FROM UTILISATEUR) UNION (SELECT nom_utilisateur as nom FROM PARTICIPANT)) as allUsers ORDER BY allUsers.nom ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	return $res;
@@ -1868,7 +1869,7 @@ function dbInsertParticipant($id, $nom, $ordre, $est_chef){
     $query = "INSERT INTO PARTICIPANT (id_emission, nom_utilisateur, ordre, est_chef) VALUES (".$id.", '".urldecode($nom)."', ".$ordre.", ".$est_chef.");";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -1881,7 +1882,7 @@ function dbDeleteParticipant($id, $nom){
     $query = "DELETE FROM PARTICIPANT WHERE id_emission = ".$id." AND nom_utilisateur = '".urldecode($nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
     mysql_close($link);
 }
 
@@ -1893,7 +1894,7 @@ function dbGetListeParticipantsEmission($id){
 	$link=mysql_connect($hote,$login,$passwd); 
 	mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res=mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	return $res;
@@ -1906,7 +1907,7 @@ function dbGetChefEmission($id)
 	$query = "SELECT nom_utilisateur FROM PARTICIPANT WHERE est_chef = 1 AND id_emission = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res = mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 
 	if ($row=mysql_fetch_array($res))
@@ -1924,13 +1925,13 @@ function dbUpdateChefEmission($id, $nom)
 	$query = "UPDATE PARTICIPANT SET est_chef = 0 WHERE id_emission = ".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
 	mysql_close($link);
 
 	$query = "UPDATE PARTICIPANT SET est_chef = 1 WHERE id_emission = ".$id." AND  nom_utilisateur = '".urldecode($nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
 	mysql_close($link);
 }
 
@@ -1942,7 +1943,7 @@ function dbUpdateOrdreParticipant($id, $nom, $ordre)
 	$query = "UPDATE PARTICIPANT SET ordre = ".$ordre." WHERE id_emission = ".$id." AND  nom_utilisateur = '".urldecode($nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
 	mysql_close($link);
 }
 
@@ -1954,7 +1955,7 @@ function dbUpdateNomParticipant($nom, $newvalue)
 	$query = "UPDATE PARTICIPANT SET nom_utilisateur = '".urldecode($newvalue)."' WHERE nom_utilisateur = '".urldecode($nom)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
 	mysql_close($link);
 }
 
@@ -1968,7 +1969,7 @@ function dbInsertUtilisateur($nom, $login_forum, $url_site, $mail, $password)
 	$query = "INSERT INTO UTILISATEUR (id, nom, login_forum, url_site, mail, password) VALUES (null,'".urldecode($nom)."', '".urldecode($login_forum)."', '".urldecode($url_site)."', '".urldecode($mail)."', '".urldecode($password)."');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
 	mysql_close($link);
 }
 
@@ -1980,7 +1981,7 @@ function dbUpdateUtilisateur($nomWhere, $nom, $login_forum, $url_site, $mail, $p
 	$query = "UPDATE UTILISATEUR SET nom = '".urldecode($nom)."', login_forum = '".urldecode($login_forum)."', url_site = '".urldecode($url_site)."', mail = '".urldecode($mail)."', password = '".urldecode($password)."' WHERE nom = '".urldecode($nomWhere)."';";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	mysql_db_query ($db, $query);	
+	mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	if ($nomWhere != $nom)
@@ -1990,7 +1991,7 @@ function dbUpdateUtilisateur($nomWhere, $nom, $login_forum, $url_site, $mail, $p
 		$query = "UPDATE MORCEAU SET nom_utilisateur = '".urldecode($nom)."' WHERE nom_utilisateur = '".urldecode($nomWhere)."';";
 		$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 		$select_base=mysql_selectdb($db);
-		mysql_db_query ($db, $query);	
+		mysql_query ($query, $link);	
 		mysql_close($link);
 	}
 }
@@ -2002,7 +2003,7 @@ function dbGetListeAllUtilisateurs()
 	$query = "SELECT nom, login_forum, url_site, mail, password FROM UTILISATEUR ORDER BY nom ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
-	$res = mysql_db_query ($db, $query);	
+	$res=mysql_query ($query, $link);	
 	mysql_close($link);
 	
 	return $res;

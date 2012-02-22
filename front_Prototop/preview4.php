@@ -99,16 +99,6 @@ $listeEmissions = dbGetListeEmissionsByDate($id_site);
 	<link rel="stylesheet" type="text/css" href="css/prototop.css" />
 <style>
 
-body {
-	margin-bottom:0px;
-	padding-bottom:0px;
-	border-color:black;
-	border-style:solid;
-	border-width:0px;
-	border-top-width:1px;
-	border-bottom-width:1px;
-}
-
 ul.playlist li
 {
 	-moz-border-radius:6px;
@@ -321,6 +311,7 @@ li.itemNews
 .currentItem {
 	text-decoration:none;
 }
+
 </style>
 <script language="javascript">
 	function showContenu (item) {
@@ -411,36 +402,29 @@ li.itemNews
 			</li>
 		</ul>
 		<ul class="listeEmissions contenu">
-			<!-- Exemple de news / bonus -->
-			<li class="itemEmission itemAutre itemNews item news">
-				<div class="titreNews">
-				<?php
-					$contenuEntete = dbGetContenuPageSite($id_site, 'index', 'titre_entete_site');
-					if ($contenuEntete != 0)
-					{
-						echo $contenuEntete['contenu_fr']."\n";
-					}
-				?>
-				</div>
-				<div class="presentation">
-				<?php
-					$contenuEntete = dbGetContenuPageSite($id_site, 'index', 'texte_entete_site');
-					if ($contenuEntete != 0)
-					{
-						echo $contenuEntete['contenu_fr']."\n";
-					}
-				?>
-				</div>
-			</li>
 
+			<?php
+			
+			$listeNews = dbGetListeNewsActives($id_site);
+			$haveNewsForFeed = false;
+
+			if($news=mysql_fetch_array($listeNews))
+			{	
+				$haveNewsForFeed = true;
+				$dateNewsToCompare = strtotime($news['date']);
+			}
+			
+			?>
+			
 			<!-- Mixes -->
 			<?php 
 				$iEmission = 0;
 				while($emission=mysql_fetch_array($listeEmissions))
 				{
 					$idEmission = $emission['id'];
+					$dateEmissionToCompare = strtotime($emission['date_sortie']);
+	
 					$texteEmission = $nomSite." ".getReferenceEmission($emission['numero'], null, null);
-					
 					$nomFichierEmission = getNomFichierEmission($emission['numero'], null, null);
 					$imageEmission = $pics.$nomFichierEmission.".jpg";
 					$mp3Emission = $mp3s.$nomFichierEmission.".mp3";
@@ -448,7 +432,27 @@ li.itemNews
 					$commentsEmission = $emission['url_lien_forum'];
 					$playlist = dbGetPlaylist($idEmission);
 					$playlistForTiming = dbGetPlaylist($idEmission);
+
+					//Affichage des news ayant été publiées avant cette émission :
+					while ($haveNewsForFeed && $dateEmissionToCompare < $dateNewsToCompare)
+					{
+						echo '<!-- News / Bonus -->';
+						echo '<li class="itemEmission itemAutre itemNews item news">';
+						echo '	<div class="titreNews">';
+						echo $news['titre'];
+						echo '	</div>';
+						echo '	<div class="presentation">';
+						echo str_replace("href=\"/", "href=\"".$radioclashHome."/", str_replace("src=\"/", "src=\"".$radioclashHome."/", $news['contenu_fr']));
+						echo '		</div>';
+						echo '	</li>';
+						
+						if ($news=mysql_fetch_array($listeNews))
+							$dateNewsToCompare = strtotime($news['date']);
+						else
+							$haveNewsForFeed = false;				
+					}
 					
+					//Affichage de l'émission :
 					echo "<li class=\"itemEmission item mixes\">";
 					if ($emission['etat'] == 3 || $_GET["preview"] != null)
 					{ 
@@ -505,6 +509,25 @@ li.itemNews
 					}
 					echo "</li>";
 					$iEmission++;
+				}
+				
+				//Affichage des news restantes :
+				while ($haveNewsForFeed)
+				{
+					echo '<!-- News / Bonus -->';
+					echo '<li class="itemEmission itemAutre itemNews item news">';
+					echo '	<div class="titreNews">';
+					echo $news['titre'];
+					echo '	</div>';
+					echo '	<div class="presentation">';
+					echo str_replace("href=\"/", "href=\"".$radioclashHome."/", str_replace("src=\"/", "src=\"".$radioclashHome."/", $news['contenu_fr']));
+					echo '		</div>';
+					echo '	</li>';
+					
+					if ($news=mysql_fetch_array($listeNews))
+						$dateNewsToCompare = strtotime($news['date']);
+					else
+						$haveNewsForFeed = false;				
 				}
 			?>
 			

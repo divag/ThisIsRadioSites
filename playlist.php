@@ -7,7 +7,7 @@ if ($_GET["episode"] == null)
 else
 {
 	define ('RE_INT','^[0-9]+$');
-	if (!ereg(RE_INT,$_GET["episode"]))
+	if (!@ereg(RE_INT,$_GET["episode"]))
 		echo "<script>window.location.href = '".$radioclashHome."';</script>";
 	else
 	{

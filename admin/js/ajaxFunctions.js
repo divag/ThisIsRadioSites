@@ -757,6 +757,7 @@ function refreshGoodiesEmission()
 				window.location.href = "#top";
 			}
 			displayFormEditContenu(newGoodiesEmission, postAction, postActionCancel, true);
+			document.getElementById('boutonValiderContenu').disabled = false;
 		}
 
 		while (document.getElementById('listeGoodiesEmission').hasChildNodes())
@@ -945,6 +946,7 @@ function createLigneGoodiesEmission(goodiesEmissionData)
 			window.location.href = "#top";
 		}
 		displayFormEditContenu(goodiesEmissionData, postAction, postActionCancel, true);
+		document.getElementById('boutonValiderContenu').disabled = false;
 	}
 	
 	td4.appendChild(boutonModifier);
@@ -1083,8 +1085,8 @@ function refreshTextePresentation()
 					window.location.href = "#top";
 				}
 				displayFormEditContenu(contenuTextePresentation, postAction, postActionCancel, true);
+				document.getElementById('boutonValiderContenu').disabled = false;
 			}
-
 		}
 	}
 }
@@ -1434,6 +1436,7 @@ function createLigneContenuPageSite(contenuPageSiteData, nomPage)
 				window.location.href = "#top";
 			}
 			displayFormEditContenu(contenuPageSiteData, postAction, postActionCancel, false);
+			document.getElementById('boutonValiderContenu').disabled = false;
 		}
 		
 		td4.appendChild(boutonModifier);

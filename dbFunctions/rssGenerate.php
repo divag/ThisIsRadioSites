@@ -46,7 +46,7 @@ while($emission=mysql_fetch_array($listeEmissions))
 			echo '      <title>News : '.$news['titre'].'</title>';
 			echo '      <link>'.$radioclashHome.'</link>';
 			echo '      <description><![CDATA[';	
-			echo '          <span>'.$news['contenu_fr'].'</span>';
+			echo '          <span>'.str_replace("href=\"/", "href=\"".$radioclashHome."/", str_replace("src=\"/", "src=\"".$radioclashHome."/", $news['contenu_fr'])).'</span>';
 			echo '      ]]></description>';
 			echo '      <pubDate>'.$dateNews.'</pubDate>';
 			echo '    </item>';
@@ -159,7 +159,7 @@ if ($siteHaveNews)
 		echo '      <title>News : '.$news['titre'].'</title>';
 		echo '      <link>'.$radioclashHome.'</link>';
 		echo '      <description><![CDATA[';	
-		echo '          <span>'.$news['contenu_fr'].'</span>';
+		echo '          <span>'.str_replace("href=\"/", "href=\"".$radioclashHome."/", str_replace("src=\"/", "src=\"".$radioclashHome."/", $news['contenu_fr'])).'</span>';
 		echo '      ]]></description>';
 		echo '      <pubDate>'.$dateNews.'</pubDate>';
 		echo '    </item>';
