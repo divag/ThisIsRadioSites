@@ -3,7 +3,7 @@ body {
 	background:#95A0F9 url(background.jpg) top left repeat-y;
 	font-size: 14px;
 	color: #FFFFFF;
-	overflow:hidden;
+	overflow-x:hidden;
 }
 
 body.index {
