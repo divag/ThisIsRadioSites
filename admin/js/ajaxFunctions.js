@@ -559,7 +559,7 @@ function createLigneNews(newsData)
 	
 	var td1 = document.createElement('td');
 	td1.className = 'padded';
-	if (newsData.date == '0000-00-00 00:00:00')
+	if (newsData.date == '01/01/2000 00:00:00')
 	{
 		tr.className = 'etat11';
 		td1.innerHTML = "<i>Non publiée</i><br />";
@@ -757,7 +757,6 @@ function refreshGoodiesEmission()
 				window.location.href = "#top";
 			}
 			displayFormEditContenu(newGoodiesEmission, postAction, postActionCancel, true);
-			document.getElementById('boutonValiderContenu').disabled = false;
 		}
 
 		while (document.getElementById('listeGoodiesEmission').hasChildNodes())
@@ -946,7 +945,6 @@ function createLigneGoodiesEmission(goodiesEmissionData)
 			window.location.href = "#top";
 		}
 		displayFormEditContenu(goodiesEmissionData, postAction, postActionCancel, true);
-		document.getElementById('boutonValiderContenu').disabled = false;
 	}
 	
 	td4.appendChild(boutonModifier);
@@ -1085,8 +1083,8 @@ function refreshTextePresentation()
 					window.location.href = "#top";
 				}
 				displayFormEditContenu(contenuTextePresentation, postAction, postActionCancel, true);
-				document.getElementById('boutonValiderContenu').disabled = false;
 			}
+
 		}
 	}
 }
@@ -1436,7 +1434,6 @@ function createLigneContenuPageSite(contenuPageSiteData, nomPage)
 				window.location.href = "#top";
 			}
 			displayFormEditContenu(contenuPageSiteData, postAction, postActionCancel, false);
-			document.getElementById('boutonValiderContenu').disabled = false;
 		}
 		
 		td4.appendChild(boutonModifier);
@@ -2829,7 +2826,7 @@ function createLigneEmission(emissionData)
 function dateForDB(date)
 {
 	if (date == '??/??/????')
-		return '0000-00-00 00:00:00';
+		return '2000-01-01 00:00:00';
 	else
 		return date.substring(6,10) + '-' + date.substring(3,5) + '-' + date.substring(0,2) + ' 00:00:00';
 }
@@ -3399,7 +3396,7 @@ function Verif_Numero(control)
 function encode(texte)
 {
 	//return texte;
-	return escape( encodeURIComponent( texte ) );
+	return escape( encodeURIComponent( texte.replace('\'', '\\\'') ) );
 	//return escape(texte);
 }
 

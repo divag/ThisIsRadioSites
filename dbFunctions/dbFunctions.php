@@ -399,9 +399,9 @@ function dbGetListeNews($id_site){
 
     include('var.php');
 
-    $query  = "(SELECT \"A\" AS ordreUnion, NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.date = '0000-00-00 00:00:00' AND NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site.") ";
+    $query  = "(SELECT \"A\" AS ordreUnion, NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.date = '2000-01-01 00:00:00' AND NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site.") ";
     $query .= "UNION ";
-    $query .= "(SELECT \"B\" AS ordreUnion, NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.date != '0000-00-00 00:00:00' AND NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site.") ";
+    $query .= "(SELECT \"B\" AS ordreUnion, NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.date != '2000-01-01 00:00:00' AND NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site.") ";
     $query .= "ORDER BY ordreUnion, date DESC , id DESC;";
     //$query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY NEWS.date ASC, NEWS.id DESC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
@@ -416,7 +416,7 @@ function dbGetListeNewsActives($id_site){
 
     include('var.php');
 
-    $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.date <> '0000-00-00 00:00:00' AND NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY NEWS.date DESC;";
+    $query = "SELECT NEWS.id, NEWS.id_site, NEWS.titre, NEWS.id_contenu, CONTENU.id_type_contenu, CONTENU.url, CONTENU.contenu_fr, CONTENU.contenu_en, CONTENU.contenu_txt_fr, CONTENU.contenu_txt_en, NEWS.id_utilisateur, NEWS.date FROM NEWS, CONTENU WHERE NEWS.date <> '2000-01-01 00:00:00' AND NEWS.id_contenu = CONTENU.id AND NEWS.id_site = ".$id_site." ORDER BY NEWS.date DESC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_query ($query, $link);	
@@ -433,7 +433,7 @@ function dbInsertNews($id_site, $titre, $id_utilisateur, $id_type_contenu, $url,
     $id_contenu = dbInsertContenu($id_type_contenu, $url, $contenu_fr, $contenu_en, $contenu_txt_fr, $contenu_txt_en);
 
 	//Enregistrement de la news :
-    $query = "INSERT INTO NEWS (id_site, titre, id_contenu, id_utilisateur, date) VALUES (".$id_site.", '".urldecode($titre)."', ".$id_contenu.", ".$id_utilisateur.", '0000-00-00 00:00:00');";
+    $query = "INSERT INTO NEWS (id_site, titre, id_contenu, id_utilisateur, date) VALUES (".$id_site.", '".urldecode($titre)."', ".$id_contenu.", ".$id_utilisateur.", '2000-01-01 00:00:00');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_query ($query, $link);	
@@ -448,7 +448,7 @@ function dbInsertAndGetNews($id_site, $titre, $id_utilisateur)
     $id_contenu = dbInsertContenu(1, '', '', '', '', '');
 
 	//Enregistrement de la newsletter :
-    $query = "INSERT INTO NEWS (id_site, titre, id_contenu, id_utilisateur, date) VALUES (".$id_site.", '".urldecode($titre)."', ".$id_contenu.", ".$id_utilisateur.", '0000-00-00 00:00:00');";
+    $query = "INSERT INTO NEWS (id_site, titre, id_contenu, id_utilisateur, date) VALUES (".$id_site.", '".urldecode($titre)."', ".$id_contenu.", ".$id_utilisateur.", '2000-01-01 00:00:00');";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_query ($query, $link);	
@@ -830,6 +830,7 @@ function dbGetSite($id){
 
     include('var.php');
 
+
     $query = "SELECT id, nom, url, accroche_fr, accroche_en, est_actif FROM SITE WHERE id=".$id.";";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
@@ -973,6 +974,7 @@ function dbGetParametresSite($id_site) {
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
 	$res=mysql_query ($query, $link);	
+        // Set SQL MODE (http://stackoverflow.com/questions/35565128/mysql-incorrect-datetime-value-0000-00-00-000000)
     mysql_close($link);
 	
 	if ($row=mysql_fetch_array($res))
@@ -1435,7 +1437,6 @@ function dbDeleteUtilisateur($p_nom_utilisateur){
 function dbGetPlaylist($p_id_emission){
 
     include('var.php');
-
 	$query = "SELECT id, id_emission, nom_utilisateur, time_min, time_sec, nom_artiste, nom_morceau, nom_label, annee FROM MORCEAU WHERE id_emission = ".$p_id_emission." ORDER BY time_min, time_sec ASC;";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
@@ -1652,8 +1653,9 @@ function dbInsertEmission($id_site, $numero, $titre, $date_sortie, $etat, $time_
     $query = "INSERT INTO EMISSION (id_site, numero, titre, id_contenu_texte, date_sortie, etat, time_min, time_sec) VALUES (".$id_site.", ".$numero.", '".urldecode($titre)."', ".$id_contenu.", '".$date_sortie."', ".$etat.", ".$time_min.", ".$time_sec.");";
 	$link=mysql_connect($hote,$login,$passwd); mysql_query("SET NAMES UTF8");
 	$select_base=mysql_selectdb($db);
+        mysql_query('SET sql_mode=""');	
 	mysql_query ($query, $link);	
-    mysql_close($link);
+        mysql_close($link);
 }
 
 function dbUpdateTimeEmission($id, $time_min, $time_sec){
