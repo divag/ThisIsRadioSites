@@ -276,12 +276,15 @@ while($array=mysql_fetch_array($listeGoodies))
 	{
 		if (strstr($array['url'],"youtube.com"))
 		{
+			echo "<iframe width=\"400\" height=\"350\" style=\"float:left;\" src=\"".str_replace("http://", "https://", str_replace("/v/", "/embed/", $array['url']))."\" frameborder=\"0\" allow=\"accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture\" allowfullscreen></iframe>";
+			/*
 			echo "<object width=\"400\" height=\"350\" style=\"float:left;\">";
 			echo "	<param name=\"movie\" value=\"".$array['url']."\"></param>";
 			echo "	<param name=\"allowFullScreen\" value=\"true\"></param>";
 			echo "	<param name=\"allowscriptaccess\" value=\"always\"></param>";
 			echo "	<embed src=\"".$array['url']."\" type=\"application/x-shockwave-flash\" allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"400\" height=\"350\"></embed>";
 			echo "</object>";
+			*/
 		}
 		if (strstr($array['url'],"http://player.vimeo.com"))
 		{
